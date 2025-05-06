@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 @theme {
     --color-primary: #4281a4ff;
     --color-secondary: #0f192eff;
@@ -11,3 +12,4 @@
     max-width: 1160px;
     padding: 0 1.25rem;
 }
+
