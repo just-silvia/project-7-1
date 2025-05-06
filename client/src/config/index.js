@@ -1,7 +1,7 @@
 export const config = {
     PATH_TO_EXCLUDE: {
-        navbar: ["/login", "/register"],
-        footer: ["/login", "/register"]
+        navbar: ["/login", "/register", "/forgot-password"],
+        footer: ["/login", "/register", "/forgot-password"]
     },
     DEFAULT_PASSWORD_OPTIONS: {
         minLength: 8,

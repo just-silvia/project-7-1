@@ -70,7 +70,7 @@ const Home = () => {
               <img
                 src={calculator}
                 alt="sostanze chimiche con pc"
-                class="rounded-xl shadow-md object-cover w-full h-auto"
+                className="rounded-xl shadow-md object-cover w-full h-auto"
               />
             </div>
           </div>
@@ -84,7 +84,7 @@ const Home = () => {
               <img
                 src={plants}
                 alt="piante varie in acquario"
-                class="rounded-xl shadow-md object-cover w-full h-auto"
+                className="rounded-xl shadow-md object-cover w-full h-auto"
               />
             </div>
             <div className="w-full md:w-5/12 flex flex-col md:text-left gap-4">
@@ -136,7 +136,7 @@ const Home = () => {
               <img
                 src={lighting}
                 alt="acquario con illuminazione"
-                class="rounded-xl shadow-md object-cover  w-full h-auto"
+                className="rounded-xl shadow-md object-cover  w-full h-auto"
               />
             </div>
           </div>
@@ -147,7 +147,7 @@ const Home = () => {
           <div className="m-container flex gap-8 items-center justify-center">
             {/* Parte dell'immagine da mettere*/}
             <div className="w-full md:w-5/12">
-              <img src="" alt="" className="w-full h-auto object-cover" />
+              <img src={lighting} alt="luce" className="w-full h-auto object-cover" />
             </div>
             <div className="w-full md:w-5/12 flex flex-col md:text-left gap-4">
               <div>
