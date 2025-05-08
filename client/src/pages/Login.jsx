@@ -27,7 +27,7 @@ const Login = () => {
             <form onSubmit={handleSubmit}>
               <div className="mb-6">
                 <label htmlFor="email" className="block text-gray-600 mb-2">
-                  Email Address
+                  Email Address <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
@@ -41,7 +41,7 @@ const Login = () => {
 
               <div className="mb-6">
                 <label htmlFor="password" className="block text-gray-600 mb-2">
-                  Password
+                  Password <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="password"
