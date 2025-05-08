@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 // Importa il logo (esempio)
 import logo from "../assets/img-nav-footer/logosara.png";
-import CustomButton from "./shared/CustomButton"; // Importa il CustomButton
+import CustomButton from "../components/shared/CustomButton"; // Importa il CustomButton
 
 const Navbar = () => {
     // Stato per gestire la visibilità del menu
@@ -14,6 +14,7 @@ const Navbar = () => {
         setIsOpen(false);
     }, [location.pathname]);
     
+   
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
@@ -24,7 +25,7 @@ const Navbar = () => {
                 {/* Sezione Logo */}
                 <div className="flex items-center space-x-2">
                     <img 
-                        src={logo}
+                        src={logo} 
                         alt="Logo Aquatic Paradise"
                         className="h-8 w-8" 
                     />

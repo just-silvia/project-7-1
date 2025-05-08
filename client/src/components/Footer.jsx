@@ -1,9 +1,9 @@
 import React from "react";
-import imgFb from "../assets/img-nav-footer/fbicon.webp";
+import imgFb from "../assets/img-nav-footer/fbicon (1).webp";
 import imgInsta from "../assets/img-nav-footer/instaicon.webp";
-import imgYt from "../assets/img-nav-footer/youicon.webp";
-import imgTt from "../assets/img-nav-footer/tikicon.webp";
-import imgWts from "../assets/img-nav-footer/whatsicon.webp";
+import imgYt from "../assets/img-nav-footer/yuoicon.webp";
+import imgTt from "../assets/img-nav-footer/tikicon (1).webp";
+import imgWts from "../assets/img-nav-footer/whaticon.webp";
 import imgLogo from "../assets/img-nav-footer/logosara.png";
 
 
@@ -38,27 +38,27 @@ const Footer = () => {
 
                     <div className="w-full md:w-1/3 flex flex-col items-start md:items-center">
                          <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
-                        <div className="flex space-x-4">
+                        <div className="flex space-x-4 items-center">
                             {/* SEZIONE ICONE SOCIAL AGGIORNATA */}
                             {/* Sostituisci il valore dell'attributo src="" con il percorso reale di ogni logo */}
 
                             <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity duration-300">
-                                <img src={imgFb} alt="Facebook Logo" className="h-8 w-8" /> {/* Aumentato leggermente dimensioni h-8 w-8 */}
+                                <img src={imgFb} alt="Facebook Logo" className="h-12 w-auto" /> {/* Aumentato leggermente dimensioni h-8 w-auto */}
                             </a>
 
                             <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity duration-300">
-                                <img src={imgInsta} alt="Instagram Logo" className="h-8 w-8" /> {/* Aumentato leggermente dimensioni */}
+                                <img src={imgInsta} alt="Instagram Logo" className="h-8 w-auto" /> {/* Aumentato leggermente dimensioni */}
                             </a>
 
                             <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity duration-300">
-                                <img src={imgWts} alt="Twitter Logo" className="h-8 w-8" /> {/* Aumentato leggermente dimensioni */}
+                                <img src={imgWts} alt="Twitter Logo" className="h-8 w-auto" /> {/* Aumentato leggermente dimensioni */}
                             </a>
 
                              <a href="https://x.com/" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity duration-300">
-                                <img src={imgTt} alt="X Logo" className="h-8 w-8" /> {/* Aumentato leggermente dimensioni */}
+                                <img src={imgTt} alt="X Logo" className="h-8 w-auto" /> {/* Aumentato leggermente dimensioni */}
                             </a>
                             <a href="https://x.com/" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity duration-300">
-                                <img src={imgYt} alt="X Logo" className="h-8 w-8" /> {/* Aumentato leggermente dimensioni */}
+                                <img src={imgYt} alt="X Logo" className="h-12 w-auto" /> {/* Aumentato leggermente dimensioni */}
                             </a>
 
                         </div>
