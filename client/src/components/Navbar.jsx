@@ -1,60 +1,87 @@
-import { Link } from "react-router-dom";
-import React from "react";
-import imgLogo from "../assets/img-nav-footer/logosara.png";
-import imgicon2 from "../assets/img-nav-footer/icon2.png";
-import imgicon from "../assets/img-nav-footer/icon.png";
-
-
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+// Importa il logo (esempio)
+import logo from "../assets/img-nav-footer/logosara.png";
+import CustomButton from "../components/shared/CustomButton"; // Importa il CustomButton
 
 const Navbar = () => {
-
-  return (
+    // Stato per gestire la visibilità del menu
+    const [isOpen, setIsOpen] = useState(false);
+    const location = useLocation();
     
-      <>
-        
-        <nav className="flex flex-col fixed bg-[#0f192eff] w-full text-[#4281a4ff] p-20 columns-3 gap-8">
-        <div className="flex flex-col items-center gap-8 p-2 m-4 border-[#f5f5f5ff] bg-[#0f192eff] text-[#4281a4ff] hover:bg-[#0f192eff] hover:text-[#4281a4ff] w-[1060px]">
-        </div>
-        <div className="flex flex-col items-center gap-8 p-2 m-4 border-[#f5f5f5ff] bg-[#0f192eff] text-[#4281a4ff] hover:bg-[#0f192eff] hover:text-[#4281a4ff] w-[1060px]">
-          
+    // Chiudi il menu quando cambia la route
+    useEffect(() => {
+        setIsOpen(false);
+    }, [location.pathname]);
+    
+   
+    const toggleMenu = () => {
+        setIsOpen(!isOpen);
+    };
+    
+    return (
+        <nav className="relative z-10 border-b py-4 bg-white">
+            <div className="w-[1168px] px-5 mx-auto flex items-center justify-between">
+                {/* Sezione Logo */}
+                <div className="flex items-center space-x-2">
+                    <img 
+                        src={logo} 
+                        alt="Logo Aquatic Paradise"
+                        className="h-8 w-8" 
+                    />
+                    <span className="text-xl font-bold text-[#4281a4ff] hover:text-[#50b99aff] cursor-pointer">
+                        Aquatic Paradise
+                    </span>
+                </div>
+                
+                {/* Sezione Hamburger Menu (visibile su schermi piccoli) */}
+                <div className="md:hidden flex items-center">
+                    <button 
+                        onClick={toggleMenu} 
+                        className="text-[#4281a4ff] hover:text-[#50b99aff] focus:outline-none"
+                        aria-label="Toggle mobile menu"
+                    >
+                        {/* Icona hamburger o X in base allo stato */}
+                        {isOpen ? (
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        ) : (
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        )}
+                    </button>
+                </div>
+                
+                {/* Sezione Link (desktop) */}
+                <div className="hidden md:flex items-center space-x-6">
+                    <Link to="/" className="text-gray-700 hover:text-[#50b99aff] transition-colors">Home</Link>
+                    <Link to="/login" className="text-gray-700 hover:text-[#50b99aff] transition-colors">
+                        <CustomButton type="default">Login</CustomButton>
+                    </Link>
+                    <Link to="/register" className="text-gray-700 hover:text-[#50b99aff] transition-colors">
+                        <CustomButton type="inverse">Register</CustomButton>
+                    </Link>
+                </div>
+            </div>
             
-            <button>Search here!</button>
-            
-          
-        </div>
-        <div className="flex flex-col items-center gap-8 p-2 m-4 border-[#f5f5f5ff] bg-[#0f192eff] text-[#4281a4ff] hover:bg-[#0f192eff] hover:text-[#4281a4ff] w-[1060px]">
-          <button></button>
-          <button></button>
-          <button></button>
-          <button></button>
-        </div>
-        <div className="flex flex-col items-center gap-8 p-2 m-4 border-[#f5f5f5ff] bg-[#0f192eff] text-[#4281a4ff] hover:bg-[#0f192eff] hover:text-[#4281a4ff] w-[1060px]">
-          <h1></h1>
-          <h2></h2>
-          <img src={imgLogo} />
-        </div>
-        <div className="flex flex-col items-center gap-8 p-2 m-4 border-[#f5f5f5ff] bg-[#0f192eff] text-[#4281a4ff] hover:bg-[#0f192eff] hover:text-[#4281a4ff] w-[1060px]">
-          <div>
-          <span className="p-4 margin-4  flex flex-row ">
-            <img src={imgicon} className="p-20 w-50" alt="logo" />
-            <Link to="/">Home</Link>
-          </span>
-        </div>
-        <div>
-          <span className="p-4 margin-4  flex flex-row ">
-            <img src={imgicon2} className="p-20 w-50" alt="logo" />
-            <Link to="/login">Login</Link>
-          </span>
-        </div>
-        <div>
-          <span className="p-4 margin-4 bg-[#0f192eff] text-[#4281a4ff] flex flex-row ">
-            <img src={imgicon} className="p-20 w-50" alt="logo" />
-            <Link to="/register">Register</Link>
-          </span>
-        </div>
-        </div>
-      </nav>
-    </>
-  )
-}
+            {/* Menu mobile (visibile solo se isOpen è true) */}
+            {isOpen && (
+                <div className="md:hidden fixed inset-x-0 top-16 bg-white border-t border-gray-200 shadow-lg">
+                    <div className="flex flex-col items-center py-4 space-y-4">
+                        <Link to="/" className="text-gray-700 hover:text-[#50b99aff] transition-colors">Home</Link>
+                        <Link to="/login">
+                            <CustomButton type="default">Login</CustomButton>
+                        </Link>
+                        <Link to="/register">
+                            <CustomButton type="inverse">Register</CustomButton>
+                        </Link>
+                    </div>
+                </div>
+            )}
+        </nav>
+    );
+};
+
 export default Navbar;
