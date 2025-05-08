@@ -1,13 +1,21 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import { checkPath } from "../utilities/path";
+import { config } from "../config";
 
 const Public = () => {
-    return(
+    const location = useLocation();
+
+    return (
         <>
-            <Navbar />
+            {
+                checkPath(location.pathname, config.PATH_TO_EXCLUDE.navbar) && <Navbar />
+            }
             <Outlet />
-            <Footer />
+            {
+                checkPath(location.pathname, config.PATH_TO_EXCLUDE.footer) && <Footer />
+            }
         </>
     )
 }
