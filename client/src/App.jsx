@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Public from "./layout/Public";
 import ForgotPassword from "./pages/ForgotPassword";
+import DashboardHome from "./pages/dashboard/DashboardHome";
 
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="dashboard-home" element={<DashboardHome />} />
         </Route>
       </Routes>
     </>
