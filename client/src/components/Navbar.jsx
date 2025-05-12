@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-// Importa il logo (esempio)
+
 import logo from "../assets/img-nav-footer/logosara.png";
-import CustomButton from "../components/shared/CustomButton"; // Importa il CustomButton
+import CustomButton from "../components/shared/CustomButton";
 
 const Navbar = () => {
     // Stato per gestire la visibilità del menu
