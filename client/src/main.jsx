@@ -1,10 +1,21 @@
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import './index.css'
+import { Provider as ReduxProvider } from 'react-redux'
+import { ApiProvider } from './providers/api.jsx'
+import { ToastContainer } from 'react-toastify'
+
 import App from './App.jsx'
 
+import './index.css'
+import store from './store/index.js'
+
 createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
-      <App />
-  </BrowserRouter>
+    <ReduxProvider store={store}>
+        <ApiProvider>
+            <BrowserRouter>
+                <App />
+                <ToastContainer />
+            </BrowserRouter>
+        </ApiProvider>
+    </ReduxProvider>
 )
