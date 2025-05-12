@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
+import { logout } from '../../store/slices/authSlice';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const DashboardNavbar = ({ onToggleSidebar, sidebarOpen }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -74,6 +80,11 @@ const DashboardNavbar = ({ onToggleSidebar, sidebarOpen }) => {
     closeSearchModal();
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/")
+  }
+
   return (
     <>
       <div>
@@ -143,15 +154,15 @@ const DashboardNavbar = ({ onToggleSidebar, sidebarOpen }) => {
               
               {userMenuOpen && (
                 <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 w-48">
-                  <a 
-                    href="#" 
+                  <button
+                    onClick={handleLogout}
                     className="flex items-center px-4 py-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
                     <span>Sign Out</span>
-                  </a>
+                  </button>
                 </div>
               )}
             </div>
