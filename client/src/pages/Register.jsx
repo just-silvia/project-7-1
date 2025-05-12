@@ -56,9 +56,9 @@ const Register = () => {
                 <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
                     <h2 className="text-center">Register</h2>
                     <div>
-                        <label className="block text-dark font-medium mb-1">
+                        <label className="block font-medium mb-1">
                             First Name
-                            <span className="text-red-500">*</span>
+                            <span className="!text-red-500">*</span>
                         </label>
                         <input
                             type="text"
@@ -71,9 +71,9 @@ const Register = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-dark font-medium mb-1">
+                        <label className="block font-medium mb-1">
                             Last Name
-                            <span className="text-red-500">*</span>
+                            <span className="!text-red-500">*</span>
                         </label>
                         <input
                             type="text"
@@ -86,9 +86,9 @@ const Register = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-dark font-medium mb-1">
+                        <label className="block font-medium mb-1">
                             Email
-                            <span className="text-red-500">*</span>
+                            <span className="!text-red-500">*</span>
                         </label>
                         <input
                             type="email"
@@ -101,9 +101,9 @@ const Register = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-dark font-medium mb-1">
+                        <label className="block font-medium mb-1">
                             Password
-                            <span className="text-red-500">*</span>
+                            <span className="!text-red-500">*</span>
                         </label>
                         <RevealValidatePassword
                             name="password"
@@ -116,8 +116,8 @@ const Register = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-dark font-medium mb-1">
-                            Conferma Password <span className="text-red-500">*</span>
+                        <label className="block font-medium mb-1">
+                            Conferma Password <span className="!text-red-500">*</span>
                         </label>
                         <RevealInput
                             name="confirmPassword"
@@ -130,7 +130,7 @@ const Register = () => {
                         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
                     </div>
                     <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
-                        <p className="text-dark text-sm">
+                        <p className="text-sm">
                             Have an account? <Link to="/login" className="text-accent hover:text-primary transition-colors">Login</Link>
                         </p>
                         <CustomButton
