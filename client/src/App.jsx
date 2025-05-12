@@ -5,7 +5,9 @@ import Login from "./pages/Login";
 import Public from "./layout/Public";
 import PrivateDashboard from "./layout/PrivateDashboard";
 import ForgotPassword from "./pages/ForgotPassword";
-import Dashboard from "./pages/dashboard/Dashboard";
+import DashboardHome from "./pages/dashboard/DashboardHome";
+import Aquariums from "./pages/dashboard/Aquariums";
+import Consultancy from "./pages/dashboard/Consultancy";
 import { useSelector } from "react-redux";
 
 const ProtectedRoute = ({ children }) => {
@@ -33,7 +35,9 @@ const App = () => {
                         <PrivateDashboard />
                     </ProtectedRoute>
                 }>
-                    <Route path="" element={<Dashboard />} />
+                    <Route path="" element={<DashboardHome />} />
+                    <Route path="/tanks" element={<Aquariums />} />
+                    <Route path="/consultancy" element={<Consultancy />} />
                 </Route>
             </Routes>
         </>
