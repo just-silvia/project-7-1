@@ -1,26 +1,43 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Public from "./layout/Public";
+import PrivateDashboard from "./layout/PrivateDashboard";
 import ForgotPassword from "./pages/ForgotPassword";
-import DashboardHome from "./pages/dashboard/DashboardHome";
+import Dashboard from "./pages/dashboard/Dashboard";
+import { useSelector } from "react-redux";
 
+const ProtectedRoute = ({ children }) => {
+    const { token } = useSelector((state) => state.auth);
+
+    if (token == null) return <Navigate to="/login" />
+
+    return children;
+}
 
 const App = () => {
-  return (
-    <>
-      <Routes>
-        <Route path="/" element={<Public />}>
-          <Route path="" element={<Home />} />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="forgot-password" element={<ForgotPassword />} />
-          <Route path="dashboard-home" element={<DashboardHome />} />
-        </Route>
-      </Routes>
-    </>
-  )
-}
+    return (
+        <>
+            <Routes>
+                {/* Public route */}
+                <Route path="/" element={<Public />}>
+                    <Route path="" element={<Home />} />
+                    <Route path="login" element={<Login />} />
+                    <Route path="register" element={<Register />} />
+                    <Route path="forgot-password" element={<ForgotPassword />} />
+                </Route>
+                {/* Private route */}
+                <Route path="/app" element={
+                    <ProtectedRoute>
+                        <PrivateDashboard />
+                    </ProtectedRoute>
+                }>
+                    <Route path="" element={<Dashboard />} />
+                </Route>
+            </Routes>
+        </>
+    );
+};
 
 export default App;
