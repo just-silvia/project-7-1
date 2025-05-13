@@ -36,8 +36,8 @@ const App = () => {
                     </ProtectedRoute>
                 }>
                     <Route path="" element={<DashboardHome />} />
-                    <Route path="/tanks" element={<Aquariums />} />
-                    <Route path="/consultancy" element={<Consultancy />} />
+                    <Route path="tanks" element={<Aquariums />} />
+                    <Route path="consultancy" element={<Consultancy />} />
                 </Route>
             </Routes>
         </>
