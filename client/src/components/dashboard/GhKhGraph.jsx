@@ -60,7 +60,7 @@ export default function GhKhGraph({ tanks, history, selectedTank, setSelectedTan
   };
 
   return (
-    <div className="w-full h-[300px] md:h-[400px]">
+    <div className="w-full">
       <h2 className="text-xl  mb-4">Storico GH/KH</h2>
       <select
         className="mb-4 border border-gray-300 rounded p-2 w-full md:w-auto"
@@ -73,7 +73,7 @@ export default function GhKhGraph({ tanks, history, selectedTank, setSelectedTan
           </option>
         ))}
       </select>
-      <div className="h-full">
+      <div className="h-[300px] md:h-[400px]">
         <Line data={data} options={options} />
       </div>
     </div>
