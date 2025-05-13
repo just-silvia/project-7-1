@@ -9,7 +9,7 @@ import HistoryTable from '../../components/dashboard/HistoryTable';
 const tanks = [
   {
     user: "60a6c3b4e1b4d83f3c8a4b71",
-    name: "Tropical Paradise",
+    name: "Tank 1",
     type: "TROPICAL",
     volume: 120,
     dimensions: { h: 50, l: 80, d: 30 },
@@ -18,7 +18,7 @@ const tanks = [
   },
   {
     user: "60a6c3b4e1b4d83f3c8a4b71",
-    name: "Amazon Basin",
+    name: "Tank 2",
     type: "FRESH",
     volume: 200,
     dimensions: { h: 60, l: 100, d: 40 },
