@@ -1,6 +1,6 @@
 export default function TanksTable({ tanks }) {
   return (
-    <div>
+    <div className="bg-white">
       <h2 className="text-xl mb-4">I miei acquari</h2>
       <table className="w-full border border-gray-200 text-sm">
         <thead className="bg-gray-100">

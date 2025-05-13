@@ -1,5 +1,3 @@
-import React from "react";
-
 {/*Dati acquari*/}
 const tanks = [
   {
@@ -25,8 +23,8 @@ const tanks = [
 
 const AquariumList = () => {
   return (
-    <div className="p-4 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center">Aquarium List</h1>
+    <div className="p-4 max-w-7xl mx-auto bg-white">
+      <h1 className="text-3xl mb-6 text-center">Aquarium List</h1>
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {tanks.map((tank, index) => (
           <div
@@ -44,7 +42,7 @@ const AquariumList = () => {
             </p>
             <p>
               <span className="font-medium">Dimensions:</span>{" "}
-              {tank.dimensions.h}h x {tank.dimensions.l}l x {tank.dimensions.d}d
+              {tank?.dimensions?.h}h x {tank?.dimensions?.l}l x {tank?.dimensions?.d}d
             </p>
           </div>
         ))}

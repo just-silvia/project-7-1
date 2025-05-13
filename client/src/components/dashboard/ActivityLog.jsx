@@ -6,7 +6,7 @@ function ActivityLog() {
   ];
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-white">
       <h2 className="text-xl mb-4">Registro attività</h2>
       {activities.length === 0 ? (
         <p>Nessuna attività registrata.</p>
