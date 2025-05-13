@@ -29,12 +29,12 @@ const tanks = [
 
 {/* Storico GH/KH per ciascun acquario*/}
 const history = {
-  "Tropical Paradise": [
+  "Tank 1": [
     { date: '2025-01-01', gh: 7, kh: 5 },
     { date: '2025-02-01', gh: 8, kh: 6 },
     { date: '2025-03-01', gh: 6, kh: 5 }
   ],
-  "Amazon Basin": [
+  "Tank 2": [
     { date: '2025-01-01', gh: 4, kh: 3 },
     { date: '2025-02-01', gh: 5, kh: 3 },
     { date: '2025-03-01', gh: 4, kh: 2 }
