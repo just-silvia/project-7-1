@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { logout } from '../../store/slices/authSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 const DashboardNavbar = ({ onToggleSidebar, sidebarOpen }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.auth);
 
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
@@ -85,6 +87,10 @@ const DashboardNavbar = ({ onToggleSidebar, sidebarOpen }) => {
     navigate("/")
   }
 
+  const getInitialsName = (first_name, last_name) => {
+    return `${first_name.charAt(0)}${last_name.charAt(0)}`
+  }
+
   return (
     <>
       <div>
@@ -106,7 +112,7 @@ const DashboardNavbar = ({ onToggleSidebar, sidebarOpen }) => {
             {/* Search Icon Button */}
             <button
               onClick={openSearchModal}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
             >
               <svg 
                 className="w-5 h-5 text-accent" 
@@ -124,7 +130,7 @@ const DashboardNavbar = ({ onToggleSidebar, sidebarOpen }) => {
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleDarkMode}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
             >
               {darkMode ? (
                 <svg className="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -140,13 +146,13 @@ const DashboardNavbar = ({ onToggleSidebar, sidebarOpen }) => {
             {/* User Menu */}
             <div className="relative">
               <button 
-                className="flex items-center space-x-2 focus:outline-none"
+                className="flex items-center space-x-2 focus:outline-none cursor-pointer"
                 onClick={toggleUserMenu}
               >
                 <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white">
-                  UN
+                  {getInitialsName(user.first_name, user.last_name)}
                 </div>
-                <span className="font-medium hidden sm:inline">User Name</span>
+                <span className="font-medium hidden sm:inline">{user.first_name} {user.last_name}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
@@ -156,7 +162,7 @@ const DashboardNavbar = ({ onToggleSidebar, sidebarOpen }) => {
                 <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 w-48">
                   <button
                     onClick={handleLogout}
-                    className="flex items-center px-4 py-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+                    className="flex w-full items-center px-4 py-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
                   >
                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -173,10 +179,10 @@ const DashboardNavbar = ({ onToggleSidebar, sidebarOpen }) => {
       {/* Search Modal */}
       {searchModalOpen && (
         <div 
-          className="fixed inset-0 bg-black/[0.09] flex justify-center z-50" 
+          className="fixed inset-0 bg-black/[0.09] z-50" 
           onClick={closeSearchModal}
         >
-          <div className="mt-16 w-full max-w-2xl mx-4" onClick={(e) => e.stopPropagation()}>
+          <div className="mt-16 w-full max-w-2xl mx-auto" onClick={(e) => e.stopPropagation()}>
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl overflow-hidden">
               {/* Search form */}
               <form className="border-b border-gray-200 dark:border-gray-700 p-4" onSubmit={handleSearch}>
