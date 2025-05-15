@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TanksTable from '../../components/dashboard/TanksTable';
 import GhKhGraph from '../../components/dashboard/GhKhGraph';
 import ActivityLog from '../../components/dashboard/ActivityLog';
@@ -6,43 +6,23 @@ import AquariumList from '../../components/dashboard/AquariumList';
 import HistoryTable from '../../components/dashboard/HistoryTable';
 
 {/*Dati degli acquari*/}
-const tanks = [
-  {
-    user: "60a6c3b4e1b4d83f3c8a4b71",
-    name: "Tank 1",
-    type: "TROPICAL",
-    volume: 120,
-    dimensions: { h: 50, l: 80, d: 30 },
-    plants: [],
-    lights: []
-  },
-  {
-    user: "60a6c3b4e1b4d83f3c8a4b71",
-    name: "Tank 2",
-    type: "FRESH",
-    volume: 200,
-    dimensions: { h: 60, l: 100, d: 40 },
-    plants: [],
-    lights: []
-  }
-];
-
-{/* Storico GH/KH per ciascun acquario*/}
-const history = {
-  "Tank 1": [
-    { date: '2025-01-01', gh: 7, kh: 5 },
-    { date: '2025-02-01', gh: 8, kh: 6 },
-    { date: '2025-03-01', gh: 6, kh: 5 }
-  ],
-  "Tank 2": [
-    { date: '2025-01-01', gh: 4, kh: 3 },
-    { date: '2025-02-01', gh: 5, kh: 3 },
-    { date: '2025-03-01', gh: 4, kh: 2 }
-  ]
-};
 
 const DashboardHome = () => {
-  const [selectedTank, setSelectedTank] = useState(tanks[0]?.name || '');
+  const [tanks, setTanks] = useState([]);
+  const [history, setHistory] = useState({});
+  const [selectedTank, setSelectedTank] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        
+      } catch (err) {
+        console.error('Errore nel caricamento dei dati', err);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="bg-light min-h-screen py-8">

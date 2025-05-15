@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react';
+
 function ActivityLog() {
-  const activities = [
-    { date: '2025-03-05', action: 'Cambio acqua 20% - Tank 1' },
-    { date: '2025-03-03', action: 'Misurazione parametri - Tank 2' },
-    { date: '2025-03-01', action: 'Pulizia filtro - Tank 1' },
-  ];
+  const [activities, setActivities] = useState([]);
+
+  useEffect(() => {
+
+  });
 
   return (
     <div className="w-full bg-white">

@@ -1,17 +1,12 @@
-const history = {
-  "Tank 1": [
-    { date: '2025-01-01', gh: 7, kh: 5 },
-    { date: '2025-02-01', gh: 8, kh: 6 },
-    { date: '2025-03-01', gh: 6, kh: 5 }
-  ],
-  "Tank 2": [
-    { date: '2025-01-01', gh: 4, kh: 3 },
-    { date: '2025-02-01', gh: 5, kh: 3 },
-    { date: '2025-03-01', gh: 4, kh: 2 }
-  ]
-};
+import { useEffect, useState } from "react";
 
 const HistoryTable = () => {
+  const [history, setHistory] = useState({});
+
+  useEffect(() => {
+
+  });
+
   return (
     <div className="space-y-8">
       {Object.entries(history).map(([tankName, records]) => (
