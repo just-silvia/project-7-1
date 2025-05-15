@@ -20,8 +20,9 @@ const Navbar = () => {
     };
     
     return (
-        <nav className="relative z-10 border-b py-4 bg-white">
-            <div className="w-[1168px] px-5 mx-auto flex items-center justify-between">
+        <div className="fixed top-0 w-full z-50">
+            <nav className="relative z-10 shadow-sm py-4 bg-white">
+            <div className=" w-full max-w-[1168px] px-5 mx-auto flex items-center justify-between">
                 {/* Sezione Logo */}
                 <div className="flex items-center space-x-2">
                     <img 
@@ -29,7 +30,7 @@ const Navbar = () => {
                         alt="Logo Aquatic Paradise"
                         className="h-8 w-8" 
                     />
-                    <span className="text-xl font-bold text-[#4281a4ff] hover:text-[#50b99aff] cursor-pointer">
+                    <span className=" sm:text-lg md:text-xl font-bold !text-primary hover:!text-accent active:!text-accent cursor-pointer">
                         Aquatic Paradise
                     </span>
                 </div>
@@ -38,7 +39,7 @@ const Navbar = () => {
                 <div className="md:hidden flex items-center">
                     <button 
                         onClick={toggleMenu} 
-                        className="text-[#4281a4ff] hover:text-[#50b99aff] focus:outline-none"
+                        className="text-primary hover:!text-accent active:!text-accent focus:outline-none"
                         aria-label="Toggle mobile menu"
                     >
                         {/* Icona hamburger o X in base allo stato */}
@@ -56,11 +57,11 @@ const Navbar = () => {
                 
                 {/* Sezione Link (desktop) */}
                 <div className="hidden md:flex items-center space-x-6">
-                    <Link to="/" className="text-gray-700 hover:text-[#50b99aff] transition-colors">Home</Link>
-                    <Link to="/login" className="text-gray-700 hover:text-[#50b99aff] transition-colors">
+                    <Link to="/" className="!text-gray-700 hover:!text-accent active:!text-accent transition-colors">Home</Link>
+                    <Link to="/login" className="!text-gray-700 hover:!text-accent transition-colors">
                         <CustomButton type="default">Login</CustomButton>
                     </Link>
-                    <Link to="/register" className="text-gray-700 hover:text-[#50b99aff] transition-colors">
+                    <Link to="/register" className="!text-gray-700 hover:!text-accent transition-colors">
                         <CustomButton type="inverse">Register</CustomButton>
                     </Link>
                 </div>
@@ -68,9 +69,9 @@ const Navbar = () => {
             
             {/* Menu mobile (visibile solo se isOpen è true) */}
             {isOpen && (
-                <div className="md:hidden fixed inset-x-0 top-16 bg-white border-t border-gray-200 shadow-lg">
+                <div className="md:hidden fixed inset-x-0 top-16 bg-white border-t border-gray-200 shadow-lg z-40">
                     <div className="flex flex-col items-center py-4 space-y-4">
-                        <Link to="/" className="text-gray-700 hover:text-[#50b99aff] transition-colors">Home</Link>
+                        <Link to="/" className="!text-gray-700 hover:!text-accent active:!text-accent transition-colors">Home</Link>
                         <Link to="/login">
                             <CustomButton type="default">Login</CustomButton>
                         </Link>
@@ -81,6 +82,8 @@ const Navbar = () => {
                 </div>
             )}
         </nav>
+        </div>
+        
     );
 };
 
