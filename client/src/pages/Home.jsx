@@ -23,18 +23,18 @@ const Home = () => {
 
             {/* Call to Action */}
             <div className="mt-8">
-              <Link to="/register">
+              <Link to="/register" className="hover:opacity-70 active:opacity-70 transition-colors duration-200">
                 <CustomButton>Inizia ora!</CustomButton>
               </Link>
             </div>
           </div>
 
           {/* Parte dell'immagine da mettere*/}
-          <div className="flex-1">
+          <div className="flex-1 w-full md:w-5/12">
             <img
               src={acquarium}
               alt="acquario in esposizione"
-              className="w-full h-auto mx-auto rounded-xl object-cover"
+              className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full"
             />
           </div>
         </div>
@@ -60,7 +60,7 @@ const Home = () => {
                 base al volume della vasca e ai bisogni delle piante e pesci. È
                 fondamentale per mantenere l'equilibrio chimico dell'acqua.
               </p>
-              <div className="w-full md:w-auto">
+              <div className="w-full md:w-auto hover:opacity-70 active:opacity-70 transition-colors duration-200">
                 <CustomButton>Scopri di più!</CustomButton>
               </div>
             </div>
@@ -70,7 +70,7 @@ const Home = () => {
               <img
                 src={calculator}
                 alt="sostanze chimiche con pc"
-                className="rounded-xl shadow-md object-cover w-full h-auto"
+                className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full"
               />
             </div>
           </div>
@@ -84,7 +84,7 @@ const Home = () => {
               <img
                 src={plants}
                 alt="piante varie in acquario"
-                className="rounded-xl shadow-md object-cover w-full h-auto"
+                className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full"
               />
             </div>
             <div className="w-full md:w-5/12 flex flex-col md:text-left gap-4">
@@ -102,7 +102,7 @@ const Home = () => {
                 compatibili con l'ambiente e monitorare eventuali carenze
                 nutrizionali o alghe.
               </p>
-              <div className="w-full md:w-auto">
+              <div className="w-full md:w-auto hover:opacity-70 active:opacity-70 transition-colors duration-200">
                 <CustomButton>Scopri di più!</CustomButton>
               </div>
             </div>
@@ -127,7 +127,7 @@ const Home = () => {
                 adatte e regolare fotoperiodo e intensità in base alla tipologia
                 di acquario.
               </p>
-              <div className="w-full md:w-auto">
+              <div className="w-full md:w-auto hover:opacity-70 active:opacity-70 transition-colors duration-200">
                 <CustomButton>Scopri di più!</CustomButton>
               </div>
             </div>
@@ -136,7 +136,7 @@ const Home = () => {
               <img
                 src={lighting}
                 alt="acquario con illuminazione"
-                className="rounded-xl shadow-md object-cover  w-full h-auto"
+                className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full"
               />
             </div>
           </div>
@@ -147,7 +147,7 @@ const Home = () => {
           <div className="m-container flex gap-8 items-center justify-center">
             {/* Parte dell'immagine da mettere*/}
             <div className="w-full md:w-5/12">
-              <img src={lighting} alt="luce" className="w-full h-auto object-cover" />
+              <img src={lighting} alt="luce" className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full" />
             </div>
             <div className="w-full md:w-5/12 flex flex-col md:text-left gap-4">
               <div>
@@ -163,7 +163,7 @@ const Home = () => {
               </p>
               {/* Call to Action */}
               <div className="w-full md:w-auto text-center">
-                <Link to="/register">
+                <Link to="/register" className="hover:opacity-70 active:opacity-70 transition-colors duration-200">
                   <CustomButton>Inizia ora!</CustomButton>
                 </Link>
               </div>
