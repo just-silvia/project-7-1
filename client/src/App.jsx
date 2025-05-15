@@ -8,6 +8,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import Aquariums from "./pages/dashboard/Aquariums";
 import Consultancy from "./pages/dashboard/Consultancy";
+import Calcolatore from "./pages/dashboard/Calcolatore";
 import { useSelector } from "react-redux";
 
 const ProtectedRoute = ({ children }) => {
@@ -37,6 +38,7 @@ const App = () => {
                 }>
                     <Route path="" element={<DashboardHome />} />
                     <Route path="tanks" element={<Aquariums />} />
+                    <Route path="calcolatore" element={<Calcolatore />} />
                     <Route path="consultancy" element={<Consultancy />} />
                 </Route>
             </Routes>

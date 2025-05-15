@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const TankSchema = new Schema({
     user: {
@@ -41,6 +42,7 @@ const TankSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "Plant",
             requried: true,
+            unique: true,
         }],
         default: [],
     },
@@ -49,10 +51,13 @@ const TankSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "Light",
             requried: true,
+            unique: true,
         }],
         default: [],
     },
 }, { strict: true, timestamps: true, versionKey: false });
+
+TankSchema.plugin(mongoosePaginate);
 
 const Tank = model("Tank", TankSchema);
 

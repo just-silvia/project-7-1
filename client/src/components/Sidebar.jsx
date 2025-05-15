@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import logo from "../../assets/logo-sidebar/logo_sidebar.png";
+import logo from "../assets/logo-sidebar/logo_sidebar.png";
 
 function SidebarLink({ text, to }) {
   const location = useLocation();
@@ -33,7 +33,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       )}
       
       {/* Sidebar */}
-      <div className={`bg-white dark:bg-gray-900 w-60 flex-shrink-0 transition-all rounded-lg duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static h-full z-20 shadow-md`}>
+      <div className={`bg-white dark:bg-gray-900 w-60 flex-shrink-0 transition-all rounded-lg duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static h-full z-20 dark:shadow-gray-400 shadow-md `}>
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-4 flex justify-start items-center">

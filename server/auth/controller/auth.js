@@ -25,7 +25,7 @@ const login = async (req, res) => {
 
         if (!(await comparePassword(data.password, user.password))) return res.status(404).json({ message: "User Not Found 2" });
 
-        const token = generateToken({ _id: user._id });
+        const token = generateToken({ _id: user._id, role: user.role });
 
         const { password, is_active, ...userData } = user;
 
