@@ -21,7 +21,7 @@ const PrivateDashboard = () => {
                 <DashboardNavbar onToggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
                 <div className="flex-1 overflow-y-auto p-4 md:p-6">
                     <div className="container w-full max-w-[1240px] mx-auto min-h-full">
-                        <Outlet className=" bg-gray-100 dark" />
+                        <Outlet className="bg-gray-100 dark:bg-gray-900" />
                     </div>
                 </div>
             </div>
