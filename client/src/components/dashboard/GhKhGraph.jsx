@@ -20,7 +20,7 @@ ChartJS.register(
   Legend
 );
 
-export default function GhKhGraph({ tanks, history, selectedTank, setSelectedTank }) {
+export default function GhKhGraph({ tanks, history, selectedTank, setSelectedTank, darkMode}) {
   const tankHistory = history[selectedTank] || [];
 
   const data = {
@@ -47,23 +47,46 @@ export default function GhKhGraph({ tanks, history, selectedTank, setSelectedTan
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false, 
+    maintainAspectRatio: false,
     plugins: {
-      legend: { position: 'top' },
-      title: { display: false },
+      legend: {
+        position: 'top',
+        labels: {
+          color: darkMode ? '#fff' : '#000',
+        },
+      },
+      tooltip: {
+        backgroundColor: darkMode ? '#333' : '#f9f9f9',
+        titleColor: darkMode ? '#fff' : '#000',
+        bodyColor: darkMode ? '#ddd' : '#000',
+      },
     },
     scales: {
+      x: {
+        ticks: {
+          color: darkMode ? '#ccc' : '#000',
+        },
+        grid: {
+          color: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+        },
+      },
       y: {
-        beginAtZero: true
-      }
-    }
+        beginAtZero: true,
+        ticks: {
+          color: darkMode ? '#ccc' : '#000',
+        },
+        grid: {
+          color: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+        },
+      },
+    },
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full dark:text-white transition-colors duration-300">
       <h2 className="text-xl  mb-4">Storico GH/KH</h2>
       <select
-        className="mb-4 border border-gray-300 rounded p-2 w-full md:w-auto"
+        className="mb-4 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-black dark:text-white rounded p-2 w-full md:w-auto transition-colors duration-300"
         value={selectedTank}
         onChange={(e) => setSelectedTank(e.target.value)}
       >
@@ -73,7 +96,7 @@ export default function GhKhGraph({ tanks, history, selectedTank, setSelectedTan
           </option>
         ))}
       </select>
-      <div className="h-[300px] md:h-[400px]">
+      <div className="h-[300px] md:h-[400px] bg-white dark:bg-gray-800 rounded-2xl p-4 transition-colors duration-300">
         <Line data={data} options={options} />
       </div>
     </div>
