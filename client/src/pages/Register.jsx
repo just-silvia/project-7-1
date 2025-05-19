@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CustomButton from "../components/shared/CustomButton";
 import img_register from "../assets/img_form_register.JPG";
 import { validatePassword } from "../utilities/secure";
 import RevealInput from "../components/shared/RevealInput";
 import RevealValidatePassword from "../components/shared/RevealValidatePassword";
+import { useApi } from "../hooks/useApi";
+import { toast } from "react-toastify";
+import logo from "../assets/logo-sidebar/logo_sidebar.png"
 
 const Register = () => {
     const [form, setForm] = useState({
@@ -12,20 +15,20 @@ const Register = () => {
         lastName: "",
         email: "",
         password: "",
-        confirmPassword: "",
-        subscribeNews: false
+        confirmPassword: ""
     });
+
+    const { post } = useApi();
+    const navigate = useNavigate();
 
     const [error, setError] = useState(false);
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        const { name, value } = e.target;
 
-        const newValue = type === 'checkbox' ? checked : value;
-
-        setForm((_form) => ({
-            ..._form,
-            [name]: newValue
+        setForm((prevForm) => ({
+            ...prevForm,
+            [name]: value
         }));
     };
 
@@ -35,7 +38,7 @@ const Register = () => {
         }
     }, [form.password, form.confirmPassword]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (error) {
@@ -43,15 +46,37 @@ const Register = () => {
         }
 
         if (form.password !== form.confirmPassword) {
-            setError("Le password non coincidono.");
+            setError("Passwords do not match.");
+            return;
+        }
+
+        const passwordErrors = validatePassword(form.password);
+        if (passwordErrors.length > 0) {
+            setError("Password does not meet the required criteria.");
             return;
         }
 
         console.log("Dati registrazione:", form);
+
+        const { firstName, lastName, email, password } = form;
+        try {
+            await post("/register", { firstName, lastName, email, password }, "API");
+
+            toast.success("Register done successfully!");
+            navigate("/app");
+        } catch (error) {
+            console.log(error);
+            toast.error("Error during registration, try again!");
+        }
     };
 
     return (
-        <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
+        <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 dark:bg-gray-900 dark:text-white"> 
+            <div className="absolute top-6 left-6">
+                <Link to="/">
+                    <img src={logo} alt="Logo" className="h-10 w-auto" />
+                </Link>
+            </div>
             <div className="flex items-center justify-center bg-light px-4 py-10 sm:px-6 lg:px-8">
                 <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
                     <h2 className="text-center">Register</h2>

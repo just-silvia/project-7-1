@@ -3,17 +3,19 @@ import CustomButton from "../../components/shared/CustomButton";
 
 const initialRequests = [ // simulazione in attesa dati da API
     { name: "Silvia", requestType: "Consulenza per litraggio", date: "11/05", status: "Pending" },
+    { name: "Silvia", requestType: "Consulenza per litraggio", date: "11/05", status: "Completed" },
+    { name: "Silvia", requestType: "Consulenza per litraggio", date: "11/05", status: "Canceled" },
 ];
 
 const RequestsStatus = ({ status }) => {
     const statusColor =
         status === "Completed"
-            ? "bg-green-200 !text-green-600"
+            ? "bg-green-200 !text-green-600 dark:bg-green-400 dark:!text-green-800"
             : status === "Pending"
-                ? "bg-amber-200 !text-amber-600"
+                ? "bg-amber-200 !text-amber-600 dark:bg-amber-400 dark:!text-amber-800"
                 : status === "Canceled"
-                    ? "bg-red-200 !text-red-600"
-                    : "bg-gray-200 !text-gray-800";
+                    ? "bg-red-200 !text-red-600 dark:bg-red-400 dark:!text-red-800"
+                    : "bg-gray-200 !text-gray-800 dark:bg-gray-400 dark:!text-gray-800";
     return (
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColor}`}>
             {status}
@@ -26,7 +28,7 @@ const Consultancy = () => {
     const [filter, setFilter] = useState("All");
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
 
     // Nuovi stati per il form di aggiunta richiesta
     const [newName, setNewName] = useState("");
@@ -73,7 +75,7 @@ const Consultancy = () => {
 
     return (
         <>
-            <div className="w-full min-h-screen bg-light flex items-center justify-center px-2">
+            <div className="w-full min-h-screen bg-light flex items-center justify-center px-2 dark:bg-gray-900 dark:text-white">
                 <div className="w-full max-w-7xl">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
                         <h2 className="text-xl font-semibold">Consultancy Requests</h2>
@@ -86,7 +88,7 @@ const Consultancy = () => {
                                     setSearchTerm(e.target.value);
                                     setCurrentPage(1);
                                 }}
-                                className="border border-neutral-300 rounded-md px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-accent w-full sm:w-auto"
+                                className="border border-neutral-300 rounded-md px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-accent w-full sm:w-auto dark:bg-gray-800 dark:text-white dark:border-neutral-600"
                             />
                             <CustomButton>Search</CustomButton>
                         </div>
@@ -97,21 +99,21 @@ const Consultancy = () => {
                             placeholder="Name"
                             value={newName}
                             onChange={(e) => setNewName(e.target.value)}
-                            className="border border-neutral-300 rounded-md px-3 py-2 text-sm w-full sm:w-auto"
+                            className="border border-neutral-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent text-sm w-full sm:w-auto dark:bg-gray-800 dark:text-white dark:border-neutral-600"
                         />
                         <input
                             type="text"
                             placeholder="Request Type"
                             value={newRequestType}
                             onChange={(e) => setNewRequestType(e.target.value)}
-                            className="border border-neutral-300 rounded-md px-3 py-2 text-sm w-full sm:w-auto"
+                            className="border border-neutral-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent text-sm w-full sm:w-auto dark:bg-gray-800 dark:text-white dark:border-neutral-600"
                         />
                         <input
                             type="text"
                             placeholder="Date (dd/mm)"
                             value={newDate}
                             onChange={(e) => setNewDate(e.target.value)}
-                            className="border border-neutral-300 rounded-md px-3 py-2 text-sm w-full sm:w-auto"
+                            className="border border-neutral-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent text-sm w-full sm:w-auto dark:bg-gray-800 dark:text-white dark:border-neutral-600"
                         />
                         <CustomButton onClick={handleAddRequest}>Add Request</CustomButton>
                     </div>
@@ -124,8 +126,8 @@ const Consultancy = () => {
                                     setFilter(st);
                                     setCurrentPage(1);
                                 }}
-                                className={`whitespace-nowrap px-4 py-1 rounded-full text-sm border border-neutral-200 shadow-md
-                            ${filter === st ? "bg-black text-white" : "bg-light"}`}
+                                className={`whitespace-nowrap px-4 py-1 rounded-full text-sm border border-neutral-200 shadow-md dark:bg-gray-800 dark:text-white dark:border-neutral-600
+                            ${filter === st ? "bg-black text-white dark:text-light" : "bg-light dark:bg-neutral-950"}`}
                             >
                                 {st}
                             </button>
@@ -133,8 +135,8 @@ const Consultancy = () => {
                     </div>
 
                     <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
-                        <thead className="text-xs uppercase border-y border-neutral-200">
-                            <tr>
+                        <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
+                            <tr className="border-b border-neutral-200 dark:border-neutral-700">
                                 <th className="p-2">User</th>
                                 <th className="p-2 hidden md:table-cell">Request Type</th>
                                 <th className="p-2 hidden lg:table-cell">Date</th>
@@ -143,7 +145,7 @@ const Consultancy = () => {
                         </thead>
                         <tbody>
                             {paginatedRequests.map((r, i) => (
-                                <tr key={`${r.name}-${i}`} className="border-b border-neutral-200">
+                                <tr key={`${r.name}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
                                     <td className="p-3 font-medium">{r.name}</td>
                                     <td className="p-3 hidden md:table-cell">{r.requestType}</td>
                                     <td className="p-3 hidden lg:table-cell">{r.date}</td>
@@ -153,7 +155,7 @@ const Consultancy = () => {
                                 </tr>
                             ))}
                             {Array.from({ length: itemsPerPage - paginatedRequests.length }).map((_, i) => (
-                                <tr key={`empty-${i}`} className="border-b border-neutral-200 opacity-0">
+                                <tr key={`empty-${i}`} className="border-b border-neutral-200 opacity-0 dark:border-neutral-700">
                                     <td className="p-3">.</td>
                                     <td className="p-3 hidden md:table-cell">.</td>
                                     <td className="p-3 hidden lg:table-cell">.</td>
