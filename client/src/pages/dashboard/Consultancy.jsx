@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import CustomButton from "../../components/shared/CustomButton";
 
 const initialRequests = [ // simulazione in attesa dati da API
-    { name: "Silvia", requestType: "Consulenza per litraggio", date: "11/05", status: "Pending" },
-    { name: "Silvia", requestType: "Consulenza per litraggio", date: "11/05", status: "Completed" },
-    { name: "Silvia", requestType: "Consulenza per litraggio", date: "11/05", status: "Canceled" },
+    { id: "1", requestType: "Consulenza per litraggio", date: "11/05", status: "Pending" },
+    { id: "2", requestType: "Consulenza per litraggio", date: "11/05", status: "Completed" },
+    { id: "3", requestType: "Consulenza per litraggio", date: "11/05", status: "Canceled" },
 ];
 
 const RequestsStatus = ({ status }) => {
@@ -31,14 +31,14 @@ const Consultancy = () => {
     const itemsPerPage = 10;
 
     // Nuovi stati per il form di aggiunta richiesta
-    const [newName, setNewName] = useState("");
+    const [newId, setNewId] = useState("");
     const [newRequestType, setNewRequestType] = useState("");
     const [newDate, setNewDate] = useState("");
 
     // Filtro richieste
     const filteredRequests = requests
         .filter((r) => filter === "All" || r.status === filter)
-        .filter((r) => r.name.toLowerCase().includes(searchTerm.toLowerCase()));
+        .filter((r) => r.id.toLowerCase().includes(searchTerm.toLowerCase()));
 
     // Paginazione
     const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
@@ -56,18 +56,18 @@ const Consultancy = () => {
 
     // Funzione per aggiungere nuova richiesta
     const handleAddRequest = () => {
-        if (!newName.trim() || !newRequestType.trim() || !newDate.trim()) {
+        if (!newId.trim() || !newRequestType.trim() || !newDate.trim()) {
             alert("Please fill all fields");
             return;
         }
         const newRequest = {
-            name: newName.trim(),
+            id: newId.trim(),
             requestType: newRequestType.trim(),
             date: newDate.trim(),
             status: "Pending",
         };
         setRequests([newRequest, ...requests]);
-        setNewName("");
+        setNewId("");
         setNewRequestType("");
         setNewDate("");
         setCurrentPage(1);
@@ -96,9 +96,9 @@ const Consultancy = () => {
                     <div className="mb-6 flex flex-col sm:flex-row gap-2 items-center">
                         <input
                             type="text"
-                            placeholder="Name"
-                            value={newName}
-                            onChange={(e) => setNewName(e.target.value)}
+                            placeholder="Id"
+                            value={newId}
+                            onChange={(e) => setNewId(e.target.value)}
                             className="border border-neutral-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent text-sm w-full sm:w-auto dark:bg-gray-800 dark:text-white dark:border-neutral-600"
                         />
                         <input
@@ -137,7 +137,7 @@ const Consultancy = () => {
                     <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
                         <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
                             <tr className="border-b border-neutral-200 dark:border-neutral-700">
-                                <th className="p-2">User</th>
+                                <th className="p-2">Id</th>
                                 <th className="p-2 hidden md:table-cell">Request Type</th>
                                 <th className="p-2 hidden lg:table-cell">Date</th>
                                 <th className="p-2">Status</th>
@@ -145,8 +145,8 @@ const Consultancy = () => {
                         </thead>
                         <tbody>
                             {paginatedRequests.map((r, i) => (
-                                <tr key={`${r.name}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
-                                    <td className="p-3 font-medium">{r.name}</td>
+                                <tr key={`${r.id}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
+                                    <td className="p-3 font-medium">{r.id}</td>
                                     <td className="p-3 hidden md:table-cell">{r.requestType}</td>
                                     <td className="p-3 hidden lg:table-cell">{r.date}</td>
                                     <td className="p-3">
