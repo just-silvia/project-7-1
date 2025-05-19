@@ -1,16 +1,14 @@
-const AquariumList = ({tanks}) => {
+const AquariumList = ({ tanks = [] }) => {
   return (
-    <div className="p-4 max-w-7xl mx-auto bg-white">
+    <div className="p-4 max-w-7xl mx-auto bg-white dark:bg-gray-800 text-black dark:text-white rounded-2xl transition-colors duration-300">
       <h2 className="text-xl mb-4">Aquarium List</h2>
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {tanks.map((tank, index) => (
           <div
             key={index}
-            className="bg-white shadow-md rounded-2xl p-4 border border-gray-200"
+            className="bg-white dark:bg-gray-700 shadow-md rounded-2xl p-4 border border-gray-200 dark:border-gray-600 transition-colors duration-300"
           >
-            <h3 className="text-xl mb-2">
-              {tank.name}
-            </h3>
+            <h3 className="text-xl mb-2">{tank.name}</h3>
             <p>
               <span className="font-medium">Type:</span> {tank.type}
             </p>
@@ -29,6 +27,7 @@ const AquariumList = ({tanks}) => {
 };
 
 export default AquariumList;
+
 
 
 
