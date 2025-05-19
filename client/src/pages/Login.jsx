@@ -7,6 +7,7 @@ import { useApi } from '../hooks/useApi';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { login } from '../store/slices/authSlice';
+import logo from "../assets/logo-sidebar/logo_sidebar.png";
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -31,23 +32,34 @@ const Login = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-light">
+        <div className="flex justify-center items-center min-h-screen bg-light dark:bg-dark">
+            {/* Logo in alto a sinistra */}
+            <div className="absolute top-4 left-4">
+                <Link to="/">
+                    <img 
+                        src={logo} 
+                        alt="Logo" 
+                        className="h-12 w-auto"
+                    />
+                </Link>
+            </div>
+
             <div className="flex flex-col md:flex-row w-full">
                 {/* Lato sinistro - Form */}
-                <div className="w-full md:w-1/2 flex  items-center justify-center">
+                <div className="w-full md:w-1/2 flex items-center justify-center">
                     <div className="max-w-md min-w-[448px]">
-                        <h1 className=" mb-10">Welcome back!</h1>
+                        <h1 className="mb-10">Welcome back!</h1>
 
                         <form onSubmit={handleSubmit}>
                             <div className="mb-6">
-                                <label htmlFor="email" className="block  mb-2">
+                                <label htmlFor="email" className="block mb-2">
                                     Email Address <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                     placeholder="Email"
                                     type="email"
                                     id="email"
-                                    className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-accent"
+                                    className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-accent dark:bg-gray-700 dark:text-white"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
@@ -62,7 +74,7 @@ const Login = () => {
                                     placeholder="Password"
                                     name="password"
                                     id="password"
-                                    className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-accent"
+                                    className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-accent dark:bg-gray-700 dark:text-white"
                                     value={password}
                                     onInput={(e) => setPassword(e.target.value)}
                                     required
@@ -70,7 +82,7 @@ const Login = () => {
                             </div>
 
                             <div className="flex justify-between items-center mb-8">
-                                <Link to="/forgot-password" className="">
+                                <Link to="/forgot-password" className="text-accent dark:text-accent hover:text-dark dark:hover:text-gray-300">
                                     Forgot Password ?
                                 </Link>
                                 <CustomButton
@@ -83,9 +95,9 @@ const Login = () => {
                         </form>
 
                         <div className="mt-6">
-                            <p className="text-gray-600">
+                            <p className="text-dark dark:text-gray-200">
                                 Don't you have an account? {' '}
-                                <Link to="/register" className="">
+                                <Link to="/register" className="text-accent dark:text-accent hover:text-dark dark:hover:text-gray-300">
                                     Sign Up
                                 </Link>
                             </p>

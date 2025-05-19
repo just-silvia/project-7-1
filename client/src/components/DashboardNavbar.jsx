@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { logout } from '../../store/slices/authSlice';
+import { logout } from '../store/slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -94,7 +94,7 @@ const DashboardNavbar = ({ onToggleSidebar, sidebarOpen }) => {
   return (
     <>
       <div>
-        <div className="bg-light dark:bg-gray-800 border-b dark:border-gray-700 h-16 flex items-center justify-between px-4">
+        <div className="bg-light dark:bg-gray-800 dark:shadow-gray-400 shadow-sm h-16 flex items-center justify-between px-4">
           {/* Mobile sidebar toggle */}
           <button className="md:hidden p-2" onClick={onToggleSidebar}>
             {sidebarOpen ? (
