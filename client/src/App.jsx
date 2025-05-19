@@ -8,8 +8,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import Aquariums from "./pages/dashboard/Aquariums";
 import Consultancy from "./pages/dashboard/Consultancy";
-import Calcolatore from "./pages/dashboard/Calcolatore";
 import { useSelector } from "react-redux";
+import Calcolatore from './pages/dashboard/Calcolatore';
 
 const ProtectedRoute = ({ children }) => {
     const { token } = useSelector((state) => state.auth);

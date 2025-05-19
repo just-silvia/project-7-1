@@ -4,28 +4,32 @@ import CustomButton from '../components/shared/CustomButton';
 import imgResetPSW from "../assets/immagini_progetto/immagine_forgot_psw.jpg";
 import logo from "../assets/logo-sidebar/logo_sidebar.png";
 import { useApi } from '../hooks/useApi';
-import { toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
 
 const ForgotPassword = () => {
   const [account, setAccount] = useState('');
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
-  const { post } = useApi(); 
+  const { post } = useApi();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
+      // Eseguo la richiesta POST all'endpoint di reset password
       const response = await post("/reset-password", { account, email }, "AUTH");
-      
-      // Se la richiesta ha successo, viene mostrato un messaggio di conferma all'utente
-      toast.success("Password reset instructions sent to your email");
-      
-      // Reindirizzo l'utente alla pagina di login
-      navigate("/login");
+
+      if (response.ok) {
+        // Se la richiesta ha successo, mostro un messaggio di conferma all'utente
+        toast.success("Password reset instructions sent to your email");
+
+        // Reindirizzo l'utente alla pagina di login
+        navigate("/login");
+      }
+
     } catch (err) {
       console.log(err);
-      // errore  gestito mostrando un messaggio appropriato
+      // Gestisco l'errore mostrando un messaggio appropriato
       toast.error("Account or email not found");
     }
   };
@@ -35,9 +39,9 @@ const ForgotPassword = () => {
       {/* Logo in alto a sinistra */}
       <div className="absolute top-4 left-4">
         <Link to="/">
-          <img 
-            src={logo} 
-            alt="Logo" 
+          <img
+            src={logo}
+            alt="Logo"
             className="h-12 w-auto"
           />
         </Link>
@@ -56,8 +60,8 @@ const ForgotPassword = () => {
 
             <form onSubmit={handleSubmit}>
               <div className="mb-6">
-                <label htmlFor="account" className="block mb-2">
-                  Account Name <span className="text-red-500">*</span>
+                <label htmlFor="account" className="block mb-2 text-dark dark:text-gray-200">
+                  Account Name <span className="!text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -70,8 +74,8 @@ const ForgotPassword = () => {
               </div>
 
               <div className="mb-6">
-                <label htmlFor="email" className="block mb-2">
-                  Email Address <span className="text-red-500">*</span>
+                <label htmlFor="email" className="block mb-2 text-dark dark:text-gray-200">
+                  Email Address <span className="!text-red-500">*</span>
                 </label>
                 <input
                   type="email"
