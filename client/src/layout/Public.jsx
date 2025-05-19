@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
-import Footer from "../pages/Footer";
-import Navbar from "../pages/Navbar";
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 import { checkPath } from "../utilities/path";
 import { config } from "../config";
 
@@ -12,7 +12,9 @@ const Public = () => {
             {
                 checkPath(location.pathname, config.PATH_TO_EXCLUDE.navbar) && <Navbar />
             }
-            <Outlet />
+            <div className="pt-10">
+                <Outlet />
+            </div>
             {
                 checkPath(location.pathname, config.PATH_TO_EXCLUDE.footer) && <Footer />
             }

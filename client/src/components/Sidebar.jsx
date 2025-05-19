@@ -46,12 +46,13 @@ const Sidebar = ({ isOpen, onClose }) => {
           <nav className="flex-1 overflow-y-auto p-2">
             <ul className="space-y-1">
               <SidebarLink text="Main Dashboard" to="/app" />
-              <SidebarLink text="Acquari" to="/app/acquari" />
-              <SidebarLink text="Richiesta consulenza" to="/app/consulenza" />
-              <SidebarLink text="Calcolatore" to="/app/calcolatore" />
-              <SidebarLink text="Piante" to="/app/piante" />
-              <SidebarLink text="Illuminazione" to="/app/illuminazione" />
-              <SidebarLink text="Impostazioni" to="/app/impostazioni" />
+              <SidebarLink text="Acquari" to="/app/tanks" />
+              <SidebarLink text="Richiesta consulenza" to="/app/consultancy" />
+              <SidebarLink text="Richiesta Brand" to="/app/brands" />
+              <SidebarLink text="Calcolatore" to="/app/calculator" />
+              <SidebarLink text="Piante" to="/app/plants" />
+              <SidebarLink text="Illuminazione" to="/app/lights" />
+              <SidebarLink text="Impostazioni" to="/app/settings" />
             </ul>
           </nav>
         </div>

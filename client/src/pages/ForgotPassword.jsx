@@ -7,25 +7,23 @@ import { useApi } from '../hooks/useApi';
 import { toast } from 'react-toastify';
 
 const ForgotPassword = () => {
-  const [account, setAccount] = useState('');
-  const [email, setEmail] = useState('');
-  const navigate = useNavigate();
   const { post } = useApi();
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       // Eseguo la richiesta POST all'endpoint di reset password
-      const response = await post("/reset-password", { account, email }, "AUTH");
+      await post("/reset-password", { email }, "AUTH");
 
-      if (response.ok) {
-        // Se la richiesta ha successo, mostro un messaggio di conferma all'utente
-        toast.success("Password reset instructions sent to your email");
+      // Se la richiesta ha successo, mostro un messaggio di conferma all'utente
+      toast.success("Password reset instructions sent to your email");
 
-        // Reindirizzo l'utente alla pagina di login
-        navigate("/login");
-      }
+      // Reindirizzo l'utente alla pagina di login
+      navigate("/login");
 
     } catch (err) {
       console.log(err);
@@ -53,26 +51,7 @@ const ForgotPassword = () => {
           <div className="max-w-md min-w-[448px]">
             <h1 className="mb-10">Reset Password</h1>
 
-            <p className="mb-6 text-dark dark:text-gray-200">
-              Please enter your account name and the email used during registration.
-              We'll send you instructions to reset your password.
-            </p>
-
             <form onSubmit={handleSubmit}>
-              <div className="mb-6">
-                <label htmlFor="account" className="block mb-2 text-dark dark:text-gray-200">
-                  Account Name <span className="!text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="account"
-                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-accent dark:bg-gray-700 dark:text-white"
-                  value={account}
-                  onChange={(e) => setAccount(e.target.value)}
-                  required
-                />
-              </div>
-
               <div className="mb-6">
                 <label htmlFor="email" className="block mb-2 text-dark dark:text-gray-200">
                   Email Address <span className="!text-red-500">*</span>

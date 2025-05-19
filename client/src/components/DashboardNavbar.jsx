@@ -2,27 +2,22 @@ import { useState, useEffect } from 'react';
 import { logout } from '../store/slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useSettings } from '../hooks/useSettings';
 
 const DashboardNavbar = ({ onToggleSidebar, sidebarOpen }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { settings: { darkMode }, toggleDarkMode } = useSettings();
 
   const { user } = useSelector((state) => state.auth);
 
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [recentSearches, setRecentSearches] = useState([]);
   const [recentPages, setRecentPages] = useState([]);
   
-  useEffect(() => {
-    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-    setDarkMode(savedDarkMode);
-    if (savedDarkMode) {
-      document.documentElement.classList.add('dark');
-    }
-    
+  useEffect(() => {  
     // Load recent searches from localStorage
     const savedSearches = localStorage.getItem('recentSearches');
     if (savedSearches) {
@@ -37,19 +32,6 @@ const DashboardNavbar = ({ onToggleSidebar, sidebarOpen }) => {
   
   const toggleUserMenu = () => {
     setUserMenuOpen(!userMenuOpen);
-  };
-
-  const toggleDarkMode = () => {
-    const newDarkMode = !darkMode;
-    setDarkMode(newDarkMode);
-    
-    if (newDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('darkMode', 'true');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('darkMode', 'false');
-    }
   };
 
   const openSearchModal = () => {
@@ -85,6 +67,10 @@ const DashboardNavbar = ({ onToggleSidebar, sidebarOpen }) => {
   const handleLogout = () => {
     dispatch(logout());
     navigate("/")
+  }
+
+  const handleToggleDarkMode = () => {
+    toggleDarkMode(!darkMode);
   }
 
   const getInitialsName = (first_name, last_name) => {
@@ -129,7 +115,7 @@ const DashboardNavbar = ({ onToggleSidebar, sidebarOpen }) => {
             
             {/* Dark Mode Toggle */}
             <button
-              onClick={toggleDarkMode}
+              onClick={handleToggleDarkMode}
               className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
             >
               {darkMode ? (
