@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import logo from "../../assets/logo-sidebar/logo_sidebar.png";
+import logo from "../assets/logo-sidebar/logo_sidebar.png";
 
 function SidebarLink({ text, to }) {
   const location = useLocation();
@@ -33,7 +33,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       )}
       
       {/* Sidebar */}
-      <div className={`bg-white dark:bg-gray-900 w-60 flex-shrink-0 transition-all rounded-lg duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static h-full z-20 shadow-md`}>
+      <div className={`bg-white dark:bg-gray-900 w-60 flex-shrink-0 transition-all rounded-lg duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static h-full z-20 dark:shadow-gray-400 shadow-md `}>
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-4 flex justify-start items-center">
@@ -46,12 +46,13 @@ const Sidebar = ({ isOpen, onClose }) => {
           <nav className="flex-1 overflow-y-auto p-2">
             <ul className="space-y-1">
               <SidebarLink text="Main Dashboard" to="/app" />
-              <SidebarLink text="Acquari" to="/app/acquari" />
-              <SidebarLink text="Richiesta consulenza" to="/app/consulenza" />
-              <SidebarLink text="Calcolatore" to="/app/calcolatore" />
-              <SidebarLink text="Piante" to="/app/piante" />
-              <SidebarLink text="Illuminazione" to="/app/illuminazione" />
-              <SidebarLink text="Impostazioni" to="/app/impostazioni" />
+              <SidebarLink text="Acquari" to="/app/tanks" />
+              <SidebarLink text="Richiesta consulenza" to="/app/consultancy" />
+              <SidebarLink text="Richiesta Brand" to="/app/brands" />
+              <SidebarLink text="Calcolatore" to="/app/calculator" />
+              <SidebarLink text="Piante" to="/app/plants" />
+              <SidebarLink text="Illuminazione" to="/app/lights" />
+              <SidebarLink text="Impostazioni" to="/app/settings" />
             </ul>
           </nav>
         </div>

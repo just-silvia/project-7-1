@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import CustomButton from "../../components/shared/CustomButton";
 
-import { NotesContext } from "../../providers/NotesContext";
-
 // Componente per lo stato degli acquari
 const TanksStatus = ({ status }) => {
     const statusColor =
@@ -33,7 +31,6 @@ const Aquariums = () => {
         { id: 3, tank: "Planted Tank", status: "Canceled" },
     ]);
 
-    const [notes, setNotes] = useState([""]);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [filter, setFilter] = useState("All");
@@ -136,23 +133,6 @@ const Aquariums = () => {
                             {st}
                         </button>
                     ))}
-                </div>
-
-                <div className="flex flex-col w-full md:w-auto dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
-                    <NotesContext.Provider value={{ notes, setNotes }}>
-                        <p className="mb-2">Search</p>
-                        <input
-                            type="text"
-                            placeholder="Search tanks..."
-                            value={searchTerm}
-                            onChange={(e) => {
-                                setSearchTerm(e.target.value);
-                                setCurrentPage(1);
-                            }}
-                            className="border border-neutral-300 rounded-md px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-accent"
-                        />
-                        
-                    </NotesContext.Provider>
                 </div>
             </div>
 

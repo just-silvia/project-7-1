@@ -1,31 +1,35 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CustomButton from "../components/shared/CustomButton";
 import img_register from "../assets/img_form_register.JPG";
 import { validatePassword } from "../utilities/secure";
 import RevealInput from "../components/shared/RevealInput";
 import RevealValidatePassword from "../components/shared/RevealValidatePassword";
+import { useApi } from "../hooks/useApi";
+import { toast } from "react-toastify";
+import logo from "../assets/logo-sidebar/logo_sidebar.png"
 
 const Register = () => {
     const [form, setForm] = useState({
-        firstName: "",
-        lastName: "",
+        first_name: "",
+        last_name: "",
         email: "",
         password: "",
-        confirmPassword: "",
-        subscribeNews: false
+        is_privacy_accepted: true,
+        confirmPassword: ""
     });
 
-    const [error, setError] = useState(false);
+    const { post } = useApi();
+    const navigate = useNavigate();
+
+    const [error, setError] = useState(null);
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        const { name, value } = e.target;
 
-        const newValue = type === 'checkbox' ? checked : value;
-
-        setForm((_form) => ({
-            ..._form,
-            [name]: newValue
+        setForm((prevForm) => ({
+            ...prevForm,
+            [name]: value
         }));
     };
 
@@ -35,7 +39,7 @@ const Register = () => {
         }
     }, [form.password, form.confirmPassword]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (error) {
@@ -43,15 +47,37 @@ const Register = () => {
         }
 
         if (form.password !== form.confirmPassword) {
-            setError("Le password non coincidono.");
+            setError("Passwords do not match.");
+            return;
+        }
+
+        const passwordErrors = validatePassword(form.password);
+        if (passwordErrors.length > 0) {
+            setError("Password does not meet the required criteria.");
             return;
         }
 
         console.log("Dati registrazione:", form);
+
+        const { first_name, last_name, email, password, is_privacy_accepted } = form;
+        try {
+            await post("/users", { first_name, last_name, email, password, is_privacy_accepted }, "API");
+
+            toast.success("Register done successfully!");
+            navigate("/app");
+        } catch (error) {
+            console.log(error);
+            toast.error("Error during registration, try again!");
+        }
     };
 
     return (
-        <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
+        <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 dark:bg-gray-900 dark:text-white"> 
+            <div className="absolute top-6 left-6">
+                <Link to="/">
+                    <img src={logo} alt="Logo" className="h-10 w-auto" />
+                </Link>
+            </div>
             <div className="flex items-center justify-center bg-light px-4 py-10 sm:px-6 lg:px-8">
                 <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
                     <h2 className="text-center">Register</h2>
@@ -62,9 +88,9 @@ const Register = () => {
                         </label>
                         <input
                             type="text"
-                            name="firstName"
+                            name="first_name"
                             placeholder="First Name"
-                            value={form.firstName}
+                            value={form.first_name}
                             onChange={handleChange}
                             required
                             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
@@ -77,9 +103,9 @@ const Register = () => {
                         </label>
                         <input
                             type="text"
-                            name="lastName"
+                            name="last_name"
                             placeholder="Last Name"
-                            value={form.lastName}
+                            value={form.last_name}
                             onChange={handleChange}
                             required
                             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
@@ -117,14 +143,14 @@ const Register = () => {
                     </div>
                     <div>
                         <label className="block font-medium mb-1">
-                            Conferma Password <span className="!text-red-500">*</span>
+                            Confirm Password <span className="!text-red-500">*</span>
                         </label>
                         <RevealInput
                             name="confirmPassword"
                             value={form.confirmPassword}
                             onInput={handleChange}
                             required
-                            placeholder="Conferma Password"
+                            placeholder="Confirm Password"
                             className="w-full p-3 border border-gray-300 focus:outline-none rounded-lg focus:ring-2 focus:ring-accent"
                         />
                         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}

@@ -34,6 +34,7 @@ const models = {
     Tank: require("./models/Tank"),
     Plant: require("./models/Plant"),
     Light: require("./models/Light"),
+    Consultancy: require("./models/Consultancy"),
 };
 
 module.exports = {
