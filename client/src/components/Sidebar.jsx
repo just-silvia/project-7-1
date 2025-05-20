@@ -48,7 +48,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               <SidebarLink text="Main Dashboard" to="/app" />
               <SidebarLink text="Acquari" to="/app/acquari" />
               <SidebarLink text="Richiesta consulenza" to="/app/consulenza" />
-              <SidebarLink text="Calcolatore" to="/app/calcolatore" />
+              <SidebarLink text="Calculator" to="/app/calculator" />
               <SidebarLink text="Piante" to="/app/piante" />
               <SidebarLink text="Illuminazione" to="/app/illuminazione" />
               <SidebarLink text="Impostazioni" to="/app/impostazioni" />
