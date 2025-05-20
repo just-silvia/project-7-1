@@ -11,10 +11,11 @@ import logo from "../assets/logo-sidebar/logo_sidebar.png"
 
 const Register = () => {
     const [form, setForm] = useState({
-        firstName: "",
-        lastName: "",
+        first_name: "",
+        last_name: "",
         email: "",
         password: "",
+        is_privacy_accepted: true,
         confirmPassword: ""
     });
 
@@ -58,9 +59,9 @@ const Register = () => {
 
         console.log("Dati registrazione:", form);
 
-        const { firstName, lastName, email, password } = form;
+        const { first_name, last_name, email, password, is_privacy_accepted } = form;
         try {
-            await post("/register", { firstName, lastName, email, password }, "API");
+            await post("/users", { first_name, last_name, email, password, is_privacy_accepted }, "API");
 
             toast.success("Register done successfully!");
             navigate("/app");
@@ -87,9 +88,9 @@ const Register = () => {
                         </label>
                         <input
                             type="text"
-                            name="firstName"
+                            name="first_name"
                             placeholder="First Name"
-                            value={form.firstName}
+                            value={form.first_name}
                             onChange={handleChange}
                             required
                             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
@@ -102,9 +103,9 @@ const Register = () => {
                         </label>
                         <input
                             type="text"
-                            name="lastName"
+                            name="last_name"
                             placeholder="Last Name"
-                            value={form.lastName}
+                            value={form.last_name}
                             onChange={handleChange}
                             required
                             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
