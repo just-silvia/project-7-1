@@ -12,7 +12,7 @@ const Public = () => {
             {
                 checkPath(location.pathname, config.PATH_TO_EXCLUDE.navbar) && <Navbar />
             }
-            <div className="pt-10">
+            <div>
                 <Outlet />
             </div>
             {

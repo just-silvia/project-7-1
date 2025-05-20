@@ -10,7 +10,7 @@ const Home = () => {
     <>
       {/* Header */}
 
-      <header className="bg-secondary dark:bg-gray-900 mx-auto py-20 px-4 sm:px-6 md:px-8">
+      <header className="bg-secondary dark:bg-gray-900 mx-auto py-20 px-4 sm:px-6 md:px-8 pt-30">
         <div className="m-container flex gap-8">
           <div className="flex flex-col flex-1 gap-4 pr-24">
             <h1 className="!text-light dark:text-gray-100 text-2xl sm:text-3xl md:text-4xl">
