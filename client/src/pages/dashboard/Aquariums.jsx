@@ -124,7 +124,7 @@ const Aquariums = () => {
                 <div className="flex flex-wrap gap-2 mb-4 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
                     <h3 className="w-full mb-2">Filter by Status:</h3>
                     {["All", "Last save", "First save", "Canceled", "Edit", "Delete"].map((st) => (
-                        <CustomButton
+                        <button
                             key={st}
                             onClick={() => {
                                 setFilter(st);
@@ -134,7 +134,7 @@ const Aquariums = () => {
                             ${filter === st ? "bg-black text-white" : "bg-light"}`}
                         >
                             {st}
-                        </CustomButton>
+                        </button>
                     ))}
                 </div>
 
@@ -157,21 +157,21 @@ const Aquariums = () => {
             </div>
 
             <div className="m-container dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
-                <table className="w-full border-1 text-dark bg-light dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200 dark:text-gray-200">
-                    <thead>
-                        <tr className="border-b border-neutral-200 dark:border-gray-700">
-                            <th className="font-medium text-left p-3">Name Tank</th>
-                            <th className="text-left p-3">Status</th>
+                <table className="w-full text-left border-spacing-y-3 overflow-hidden dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
+                    <thead className="text-xs uppercase border-y border-neutral-200 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
+                        <tr >
+                            <th >Name Tank</th>
+                            <th >Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         {paginatedTanks.length > 0 ? (
                             paginatedTanks.map((r) => (
-                                <tr key={r.id} className="border-b border-neutral-200 dark:border-gray-700">
-                                    <td className="p-3 flex items-center gap-3">
-                                        <span className="font-medium">{r.tank}</span>
+                                <tr key={r.id} className="border-b border-neutral-200 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
+                                    <td className="p-3 flex items-center gap-3 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
+                                        <span className="font-medium dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">{r.tank}</span>
                                     </td>
-                                    <td className="p-3">
+                                    <td className="p-3 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
                                         <TanksStatus status={r.status} />
                                     </td>
                                 </tr>
