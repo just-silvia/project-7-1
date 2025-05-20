@@ -49,6 +49,8 @@ const RequestNewBrands = () => {
                     New Request
                 </CustomButton>
             </div>
+            
+            { /* Custom modal - da non modificare */ }
             <CustomModal isOpen={isOpen} setIsOpen={setIsOpen}>
                 <h2 className="text-2xl font-semibold mb-4">Richiesta Nuovo Marchio</h2>
 
