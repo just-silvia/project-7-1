@@ -1,12 +1,12 @@
 export default function TanksTable({ tanks }) {
   return (
     <div className="bg-white dark:bg-gray-900 dark:text-white rounded-2xl shadow p-4 transition-colors duration-300">
-      <h2 className="text-xl mb-4">I miei acquari</h2>
+      <h2 className="text-xl mb-4">My aquariums</h2>
       <table className="w-full border border-gray-200 dark:border-gray-700 text-sm">
         <thead className="bg-gray-100 dark:bg-gray-800">
           <tr>
-            <th className="p-2 text-left border-b border-gray-200 dark:border-gray-700">Nome</th>
-            <th className="p-2 text-left border-b border-gray-200 dark:border-gray-700">Tipo</th>
+            <th className="p-2 text-left border-b border-gray-200 dark:border-gray-700">Name</th>
+            <th className="p-2 text-left border-b border-gray-200 dark:border-gray-700">Type</th>
             <th className="p-2 text-left border-b border-gray-200 dark:border-gray-700">Volume (L)</th>
           </tr>
         </thead>

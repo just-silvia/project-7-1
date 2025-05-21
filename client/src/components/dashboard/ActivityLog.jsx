@@ -13,9 +13,9 @@ function ActivityLog() {
 
   return (
     <div className="w-full bg-white dark:bg-gray-800 text-black dark:text-white rounded-2xl transition-colors duration-300 p-4">
-      <h2 className="text-xl mb-4 font-semibold">Registro attività</h2>
+      <h2 className="text-xl mb-4 font-semibold">Activity log</h2>
       {activities.length === 0 ? (
-        <p className="text-gray-500 dark:text-gray-400">Nessuna attività registrata.</p>
+        <p className="text-gray-500 dark:text-gray-400">No activity recorded</p>
       ) : (
         <ul className="space-y-3">
           {activities.map((item, index) => (

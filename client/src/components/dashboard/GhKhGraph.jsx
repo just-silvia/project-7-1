@@ -84,7 +84,7 @@ export default function GhKhGraph({ tanks, history, selectedTank, setSelectedTan
 
   return (
     <div className="w-full dark:text-white transition-colors duration-300">
-      <h2 className="text-xl  mb-4">Storico GH/KH</h2>
+      <h2 className="text-xl  mb-4">Historical GH/KH</h2>
       <select
         className="mb-4 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-black dark:text-white rounded p-2 w-full md:w-auto transition-colors duration-300"
         value={selectedTank}
