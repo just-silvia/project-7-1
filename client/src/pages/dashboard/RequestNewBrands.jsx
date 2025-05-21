@@ -52,17 +52,17 @@ const RequestNewBrands = () => {
             
             { /* Custom modal - da non modificare */ }
             <CustomModal isOpen={isOpen} setIsOpen={setIsOpen}>
-                <h2 className="text-2xl font-semibold mb-4">Richiesta Nuovo Marchio</h2>
+                <h2 className="text-2xl font-semibold mb-4">New Brand Request</h2>
 
                 {submitted && (
                     <div className="mb-4 p-3 bg-green-100 text-green-700 rounded">
-                        Richiesta inviata con successo!
+                        Riquest sent successfully!
                     </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium mb-1">Nome richiedente</label>
+                        <label className="block text-sm font-medium mb-1">Applicant name</label>
                         <input
                             type="text"
                             name="applicantName"
@@ -73,7 +73,7 @@ const RequestNewBrands = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">Nome marchio</label>
+                        <label className="block text-sm font-medium mb-1">Brand name</label>
                         <input
                             type="text"
                             name="trademarkName"
@@ -84,7 +84,7 @@ const RequestNewBrands = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">Descrizione</label>
+                        <label className="block text-sm font-medium mb-1">Description</label>
                         <textarea
                             name="description"
                             value={form.description}
@@ -95,7 +95,7 @@ const RequestNewBrands = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">Categoria</label>
+                        <label className="block text-sm font-medium mb-1">Category</label>
                         <input
                             type="text"
                             name="category"
@@ -106,7 +106,7 @@ const RequestNewBrands = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">Data di presentazione</label>
+                        <label className="block text-sm font-medium mb-1">Submission date</label>
                         <input
                             type="date"
                             name="submissionDate"
@@ -116,7 +116,7 @@ const RequestNewBrands = () => {
                         />
                     </div>
 
-                    <CustomButton type="submit">Invia Richiesta</CustomButton>
+                    <CustomButton type="submit">Send request</CustomButton>
                 </form>
             </CustomModal>
         </>
