@@ -12,6 +12,7 @@ import Aquariums from "./pages/dashboard/Aquariums";
 import Consultancy from "./pages/dashboard/Consultancy";
 import Calcolatore from './pages/dashboard/Calcolatore';
 import RequestNewBrands from "./pages/dashboard/RequestNewBrands";
+import Lights from "./pages/dashboard/Lights";
 
 const ProtectedRoute = ({ children }) => {
     const { token } = useSelector((state) => state.auth);
@@ -40,6 +41,7 @@ const App = () => {
                 }>
                     <Route path="" element={<DashboardHome />} />
                     <Route path="tanks" element={<Aquariums />} />
+                    <Route path="lights" element={<Lights />} />
                     <Route path="calculator" element={<Calcolatore />} />
                     <Route path="consultancy" element={<Consultancy />} />
                     <Route path="brands" element={<RequestNewBrands />} />
