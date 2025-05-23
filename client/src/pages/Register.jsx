@@ -72,19 +72,19 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 dark:bg-gray-900 dark:text-white"> 
+        <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 dark:bg-dark dark:text-gray-100"> 
             <div className="absolute top-6 left-6">
                 <Link to="/">
                     <img src={logo} alt="Logo" className="h-10 w-auto" />
                 </Link>
             </div>
-            <div className="flex items-center justify-center bg-light px-4 py-10 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-center bg-light dark:bg-dark px-4 py-10 sm:px-6 lg:px-8">
                 <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
-                    <h2 className="text-center">Register</h2>
+                    <h2 className="text-center dark:text-gray-100">Register</h2>
                     <div>
                         <label className="block font-medium mb-1">
                             First Name
-                            <span className="!text-red-500">*</span>
+                            <span className="!text-red-500 dark:!text-red-800">*</span>
                         </label>
                         <input
                             type="text"
@@ -93,13 +93,13 @@ const Register = () => {
                             value={form.first_name}
                             onChange={handleChange}
                             required
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
                         />
                     </div>
                     <div>
                         <label className="block font-medium mb-1">
                             Last Name
-                            <span className="!text-red-500">*</span>
+                            <span className="!text-red-500 dark:!text-red-800">*</span>
                         </label>
                         <input
                             type="text"
@@ -108,13 +108,13 @@ const Register = () => {
                             value={form.last_name}
                             onChange={handleChange}
                             required
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
                         />
                     </div>
                     <div>
                         <label className="block font-medium mb-1">
                             Email
-                            <span className="!text-red-500">*</span>
+                            <span className="!text-red-500 dark:!text-red-800">*</span>
                         </label>
                         <input
                             type="email"
@@ -123,13 +123,13 @@ const Register = () => {
                             value={form.email}
                             onChange={handleChange}
                             required
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
                         />
                     </div>
                     <div>
                         <label className="block font-medium mb-1">
                             Password
-                            <span className="!text-red-500">*</span>
+                            <span className="!text-red-500 dark:!text-red-800">*</span>
                         </label>
                         <RevealValidatePassword
                             name="password"
@@ -137,13 +137,13 @@ const Register = () => {
                             value={form.password}
                             onInput={handleChange}
                             required
-                            inputClassName="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+                            inputClassName="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
                             errorsClassName="flex flex-col gap-1 mt-1"
                         />
                     </div>
                     <div>
                         <label className="block font-medium mb-1">
-                            Confirm Password <span className="!text-red-500">*</span>
+                            Confirm Password <span className="!text-red-500 dark:!text-red-800">*</span>
                         </label>
                         <RevealInput
                             name="confirmPassword"
@@ -151,13 +151,13 @@ const Register = () => {
                             onInput={handleChange}
                             required
                             placeholder="Confirm Password"
-                            className="w-full p-3 border border-gray-300 focus:outline-none rounded-lg focus:ring-2 focus:ring-accent"
+                            className="w-full p-3 border border-gray-300 focus:outline-none rounded-lg focus:ring-2 focus:ring-accent dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
                         />
-                        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+                        {error && <p className="text-red-500 dark:!text-red-800 text-sm mt-1">{error}</p>}
                     </div>
                     <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
                         <p className="text-sm">
-                            Have an account? <Link to="/login" className="text-accent hover:text-primary transition-colors">Login</Link>
+                            Have an account? <Link to="/login" className="!text-accent hover:!text-primary transition-colors">Login</Link>
                         </p>
                         <CustomButton
                             type="submit" className="px-6 py-2">Register</CustomButton>
