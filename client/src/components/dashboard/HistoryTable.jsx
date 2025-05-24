@@ -1,5 +1,12 @@
-const HistoryTable = ({ history, selectedTank }) => {
-  if (!selectedTank || !history[selectedTank]) return <p>No activity available</p>;
+import { useSelector } from 'react-redux';
+
+const HistoryTable = () => {
+  const history = useSelector(state => state.history.data);
+  const selectedTank = useSelector(state => state.selectedTank);
+
+  if (!selectedTank || !history[selectedTank]) {
+    return <p className="dark:text-white">No activity available</p>;
+  }
 
   const records = history[selectedTank];
 
@@ -7,7 +14,7 @@ const HistoryTable = ({ history, selectedTank }) => {
     <div className="space-y-8 dark:text-white transition-colors duration-300">
       <h2 className="text-xl mb-4">History: {selectedTank}</h2>
       <div className="overflow-x-auto">
-        <table className="min-w-full table-auto border border-gray-300 dark:border-gray-700">
+        <table className="min-w-full table-auto border border-gray-300 dark:border-gray-700 text-sm">
           <thead className="bg-gray-100 dark:bg-gray-800">
             <tr>
               <th className="border border-gray-300 dark:border-gray-700 px-4 py-2 text-left">Date</th>
@@ -31,4 +38,5 @@ const HistoryTable = ({ history, selectedTank }) => {
 };
 
 export default HistoryTable;
+
 

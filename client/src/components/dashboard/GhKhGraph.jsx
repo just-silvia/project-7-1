@@ -9,10 +9,13 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useDispatch } from "react-redux";
+
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend);
 
 export default function GhKhGraph({ tanks, history, selectedTank, setSelectedTank, darkMode }) {
+  const dispatch = useDispatch();
   const tankHistory = history[selectedTank] || [];
 
   const data = {
@@ -75,6 +78,16 @@ export default function GhKhGraph({ tanks, history, selectedTank, setSelectedTan
     },
   };
 
+  const handleChange = (e) => {
+    const selectedId = e.target.value;
+   //usiamo il dispatch per integrare redux
+    if (setSelectedTank) {
+      setSelectedTank(selectedId);
+    } else {
+      dispatch(setSelectedTank(selectedId));
+    }
+  };
+
   return (
     <div className="w-full dark:text-white transition-colors duration-300">
       <h2 className="text-xl mb-4">GH/KH History</h2>
@@ -82,10 +95,10 @@ export default function GhKhGraph({ tanks, history, selectedTank, setSelectedTan
       <select
         className="mb-4 border border-gray-300 dark:border-gray-400 bg-white dark:bg-gray-800 text-black dark:text-white rounded p-2 w-full md:w-auto transition-colors duration-300"
         value={selectedTank}
-        onChange={(e) => setSelectedTank(e.target.value)}
+        onChange={handleChange}
       >
         {tanks.map((tank) => (
-          <option key={tank.name} value={tank.name}>
+          <option key={tank.id} value={tank.id}>
             {tank.name}
           </option>
         ))}
@@ -97,3 +110,4 @@ export default function GhKhGraph({ tanks, history, selectedTank, setSelectedTan
     </div>
   );
 }
+
