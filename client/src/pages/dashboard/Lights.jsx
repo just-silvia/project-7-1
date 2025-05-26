@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-import CustomButton from "../../components/shared/CustomButton";
+import React, { useEffect, useState } from "react";
 import { useApi } from "../../hooks/useApi";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
-import { addNewConsultancy, deleteOneConsultancy, setAllConsultancies } from "../../store/slices/consultanciesSlice";
+/* import { useDispatch, useSelector } from "react-redux";
+import { createLight, deleteLightById } from "../../../../server/api/controllers/lights"; */
+import CustomButton from "../../components/shared/CustomButton";
 import CustomModal from "../../components/dashboard/CustomModal";
+import { toast } from "react-toastify";
 
 const RequestsStatus = ({ status }) => {
     const statusColor =
@@ -21,23 +20,27 @@ const RequestsStatus = ({ status }) => {
             {status}
         </span>
     );
-};
+}
 
-const Consultancy = () => {
+
+const Lights = () => {
+    const [requests, setRequests] = useState([]);
+    const [light, setLight] = useState({ name: "Led" }); //finta luce
     const { get, post, del } = useApi();
-    const dispatch = useDispatch();
-    const { all: requests } = useSelector(state => state.consultancies);
+    /* const dispatch = useDispatch();
+    const { all: requests } = useSelector(state => state.lights);
     const { user } = useSelector(state => state.auth);
-
+ */
     const [form, setForm] = useState({
         request_type: "",
     });
-    const [isOpen, setIsOpen] = useState(false);
+
+    const [ isOpen, setIsOpen ] = useState(false);
     const [limit, setLimit] = useState(10);
-    const [page, setPage] = useState(1);
-    const [requestInfo, setRequestInfo] = useState({
-        hasNextPage: false,
-        hasPrevPage: false
+        const [page, setPage] = useState(1);
+        const [requestInfo, setRequestInfo] = useState({
+            hasNextPage: false,
+            hasPrevPage: false
     });
 
     const [filter, setFilter] = useState("All");
@@ -52,37 +55,39 @@ const Consultancy = () => {
     const handleChange = ({ target: { value, name } }) => {
         setForm((f) => ({ ...f, [name]: value }));
     }
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try {
-            const data = await post("/consultancies", { ...form });
-            dispatch(addNewConsultancy(data));
+        try{
+            const data = await post("/lights", { ...form });
+            setRequests(prev => [...prev, data]); //x aggiornare manualmente
+            /* dispatch(createLight(data)); */
             setIsOpen(false);
             clearForm();
         } catch (error) {
-            console.log(error);
             toast.error("Internal server error, try again later");
         }
     }
 
-    const handleDelete = async (consultancy_id) => {
-        if (!confirm("Are you sure to delete this consultancy request?")) return;
-        
+    const handleDelete = async (light_id) => {
+        if (!confirm("Are you sure to delete this light?")) return;
+
         try {
-            await del(`/consultancies/${consultancy_id}`);
-            dispatch(deleteOneConsultancy(consultancy_id));
+            await del(`/lights/${light_id}`);
+            setRequests(prev => prev.filter(r => r._id !== light_id)); //x rimuovere manualmente
+            /* dispatch(deleteLightById(light_id)); */
         } catch (error) {
             console.log(error);
             toast.error("Internal server error, try again later");
         }
     }
 
-    const fetchConsultancies = async () => {
+    const fetchLights = async () => {
         try {
-            const data = await get(`/consultancies?limit=${limit}&page=${page}${filter == "All" ? "" : `&status=${filter}`}`);
-            dispatch(setAllConsultancies(data.docs));
+            const data = await get(`/lights?limit=${limit}&${page}${filter == "All" ? "" : `&status=${filter}`}`);
+            setRequests(data.docs);
+            /* dispatch(setAllLights(data.docs)); */
             setRequestInfo({ hasNextPage: data.hasNextPage, hasPrevPage: data.hasPrevPage });
         } catch (error) {
             console.log(error);
@@ -91,15 +96,15 @@ const Consultancy = () => {
     }
 
     useEffect(() => {
-        fetchConsultancies();
+        fetchLights();
     }, [limit, page, filter]);
 
-    return (
+    return(
         <>
             <div className="w-full flex items-start justify-center px-2 dark:bg-gray-900 dark:text-white">
                 <div className="w-full max-w-7xl">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
-                        <h2 className="text-xl font-semibold">Consultancy Requests</h2>
+                        <h2 className="text-xl font-semibold">Lights</h2>
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                             <input
                                 type="text"
@@ -107,7 +112,7 @@ const Consultancy = () => {
                                 value={searchTerm}
                                 onChange={(e) => {
                                     setSearchTerm(e.target.value);
-                                    setCurrentPage(1);
+                                    setPage(1);;
                                 }}
                                 className="border border-neutral-300 rounded-md px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-accent w-full sm:w-auto dark:bg-gray-800 dark:text-white dark:border-neutral-600"
                             />
@@ -122,7 +127,7 @@ const Consultancy = () => {
                                     key={st}
                                     onClick={() => {
                                         setFilter(st);
-                                        setCurrentPage(1);
+                                        setPage(1);
                                     }}
                                     className={`whitespace-nowrap px-4 py-1 rounded-full text-sm border border-neutral-200 shadow-md dark:bg-gray-800 dark:text-white dark:border-neutral-600 cursor-pointer
                                 ${filter === st ? "bg-black text-white dark:text-light" : "bg-light dark:bg-neutral-950"}`}
@@ -132,7 +137,7 @@ const Consultancy = () => {
                             ))}
                         </div>
                         <div>
-                            <CustomButton onClick={() => setIsOpen(true)}>Add Request</CustomButton>
+                            <CustomButton onClick={() => setIsOpen(true)}>Add Light</CustomButton>
                         </div>
                     </div>
 
@@ -140,7 +145,7 @@ const Consultancy = () => {
                         <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
                             <tr className="border-b border-neutral-200 dark:border-neutral-700">
                                 <th className="p-2">Id</th>
-                                <th className="p-2 hidden md:table-cell">Request Type</th>
+                                <th className="p-2 hidden md:table-cell">Light Type</th>
                                 <th className="p-2 hidden lg:table-cell">Created At</th>
                                 <th className="p-2 hidden lg:table-cell">Last Update</th>
                                 <th className="p-2">Status</th>
@@ -185,30 +190,22 @@ const Consultancy = () => {
                 </div>
             </div>
 
-            <CustomModal isOpen={isOpen} setIsOpen={setIsOpen} className="dark:bg-gray-900 dark:text-white">
-                <h2 className="text-2xl font-semibold mb-4 dark:bg-gray-900 dark:text-white">Create new request</h2>
+            <CustomModal isOpen={isOpen} setIsOpen={setIsOpen}>
+                <h2 className="text-2xl font-semibold mb-4">Add new light</h2>
 
-                <form onSubmit={handleSubmit} className="space-y-4 dark:bg-gray-900 dark:text-white">
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-<<<<<<< HEAD
-                        <label className="block text-sm font-medium mb-1 dark:bg-gray-900 dark:text-white">Nome richiedente</label>
-=======
                         <label className="block text-sm font-medium mb-1">Your name</label>
->>>>>>> 4854d475dc6b2b2212d033e8a1514b090c09e668
                         <input
                             readOnly
                             type="text"
                             name="name"
-                            value={`${user.first_name} ${user.last_name}`}
-                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm dark:bg-gray-900 dark:text-white"
+                            value={light.name}
+                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
                         />
                     </div>
                     <div>
-<<<<<<< HEAD
-                        <label className="block text-sm font-medium mb-1 dark:bg-gray-900 dark:text-white">Testo della richiesta</label>
-=======
                         <label className="block text-sm font-medium mb-1">Elaborate your request</label>
->>>>>>> 4854d475dc6b2b2212d033e8a1514b090c09e668
                         <textarea
                             type="text"
                             name="request_type"
@@ -216,7 +213,7 @@ const Consultancy = () => {
                             onChange={handleChange}
                             required
                             rows={8}
-                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm dark:bg-gray-900 dark:text-white"
+                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
                         ></textarea>
                     </div>
                     <CustomButton type="submit">Submit</CustomButton>
@@ -226,4 +223,4 @@ const Consultancy = () => {
     );
 }
 
-export default Consultancy;
+export default Lights;

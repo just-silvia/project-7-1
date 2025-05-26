@@ -9,28 +9,26 @@ const Home = () => {
   return (
     <>
       {/* Header */}
-
-      <header className="bg-secondary dark:bg-gray-900 mx-auto py-20 px-4 sm:px-6 md:px-8 pt-30">
-        <div className="m-container flex gap-8">
-          <div className="flex flex-col flex-1 gap-4 pr-24">
+      <header className="bg-secondary dark:bg-gray-900 py-20 px-4 sm:px-6 md:px-8 pt-30">
+        <div className="m-container flex flex-col md:flex-row items-center justify-center gap-8">
+          <div className="w-full md:w-5/12 text-center md:text-left">
             <h1 className="!text-light dark:text-gray-100 text-2xl sm:text-3xl md:text-4xl">
-              Soluzioni Complete per il Tuo Acquario
+              Complete solutions for your Aquarium
             </h1>
-            <p className="!text-light dark:text-gray-200 text-sm sm:text-base md:text-lg max-w-3xl mx-auto">
-              Strumenti e consigli completi per aquariofili: gestiamo insieme il
-              tuo acquario per un ambiente sano e bilanciato.
+            <p className="!text-light dark:text-gray-200 text-sm sm:text-base md:text-lg mt-4">
+              Complete tools and advice for aquarists: let's manage your
+              aquarium together for a healthy and balanced environment.
             </p>
-
-            {/* Call to Action */}
             <div className="mt-8">
-              <Link to="/register" className="hover:opacity-70 active:opacity-70 transition-colors duration-200">
-                <CustomButton>Inizia ora!</CustomButton>
+              <Link
+                to="/register"
+                className="hover:opacity-70 active:opacity-70 transition-colors duration-200"
+              >
+                <CustomButton>Get started now!</CustomButton>
               </Link>
             </div>
           </div>
-
-          {/* Parte dell'immagine da mettere*/}
-          <div className="flex-1 w-full md:w-5/12">
+          <div className="w-full md:w-5/12">
             <img
               src={acquarium}
               alt="acquario in esposizione"
@@ -42,30 +40,23 @@ const Home = () => {
 
       {/* Main */}
       <main>
-        {/*1° sezione-Calcolatore */}
-        <section className="bg-light dark:bg-dark mx-auto flex flex-col md:flex-row items-center gap-8 px-4 sm:px-6 md:px-8 py-20">
-          <div className="m-container flex gap-8 items-center justify-center">
-            <div className="w-full md:w-5/12 flex flex-col md:text-left gap-4">
-              <div>
-                <h2 className="text-xl sm:text-2xl md:text-3xl">
-                  Calcolatore per vari dosaggi
-                </h2>
-                <h3 className="dark:text-gray-200 text-sm sm:text-md">
-                  Dosaggi precisi per un ecosistema equilibrato
-                </h3>
-              </div>
-              <p className="mb-6 text-sm sm:text-base text-dark dark:text-gray-200">
-                Il calcolatore in questione, aiuterà a determinare le quantità
-                corrette di fertilizzanti, CO₂ e integratori da aggiungere in
-                base al volume della vasca e ai bisogni delle piante e pesci. È
-                fondamentale per mantenere l'equilibrio chimico dell'acqua.
+        {/* Section 1: Calculator */}
+        <section className="bg-light dark:bg-dark py-20 px-4 sm:px-6 md:px-8">
+          <div className="m-container flex flex-col md:flex-row items-center justify-center gap-8">
+            <div className="w-full md:w-5/12 text-center md:text-left">
+              <h2 className="text-xl sm:text-2xl md:text-3xl">
+                Calculator for various dosages
+              </h2>
+              <h3 className="dark:text-gray-200 text-sm sm:text-md mt-2">
+                Precise dosages for a balanced ecosystem
+              </h3>
+              <p className="mb-6 text-sm sm:text-base text-dark dark:text-gray-200 mt-4">
+                The calculator will help you determine the correct amounts of
+                fertilizers, CO₂ and supplements to add based on the volume of
+                the tank.
               </p>
-              <div className="w-full md:w-auto hover:opacity-70 active:opacity-70 transition-colors duration-200">
-                <CustomButton>Scopri di più!</CustomButton>
-              </div>
+              <CustomButton>Find out more!</CustomButton>
             </div>
-
-            {/* Parte dell'immagine da mettere*/}
             <div className="w-full md:w-5/12">
               <img
                 src={calculator}
@@ -76,10 +67,23 @@ const Home = () => {
           </div>
         </section>
 
-        {/*2° sezione-Piante */}
-        <section className="mx-auto dark:bg-gray-800 flex flex-col md:flex-row items-center gap-8 px-4 sm:px-6 md:px-8 py-20">
-          <div className="m-container flex gap-8 items-center justify-center">
-            {/* Parte dell'immagine da mettere*/}
+        {/* Section 2: Plants */}
+        <section className="dark:bg-gray-800 py-20 px-4 sm:px-6 md:px-8">
+          <div className="m-container flex flex-col md:flex-row-reverse items-center justify-center gap-8">
+            <div className="w-full md:w-5/12 text-center md:text-left">
+              <h2 className="text-xl sm:text-2xl md:text-3xl">
+                Care of aquatic plants
+              </h2>
+              <h3 className="dark:text-gray-200 text-sm sm:text-md mt-2">
+                Optimal plant health and growth
+              </h3>
+              <p className="mb-6 text-sm sm:text-base text-dark dark:text-gray-200 mt-4">
+                Aquarium plants require regular fertilization, pruning, and
+                light control. Choose species that are compatible and monitor
+                for deficiencies or algae.
+              </p>
+              <CustomButton>Find out more!</CustomButton>
+            </div>
             <div className="w-full md:w-5/12">
               <img
                 src={plants}
@@ -87,51 +91,25 @@ const Home = () => {
                 className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full"
               />
             </div>
-            <div className="w-full md:w-5/12 flex flex-col md:text-left gap-4">
-              <div>
-                <h2 className="text-xl sm:text-2xl md:text-3xl">
-                  Cura delle piante acquatiche
-                </h2>
-                <h3 className=" dark:text-gray-200 text-sm sm:text-md">
-                  Salute e crescita ottimale delle piante
-                </h3>
-              </div>
-              <p className="mb-6 text-sm sm:text-base text-dark dark:text-gray-200">
-                Le piante in acquario richiedono fertilizzazione regolare,
-                potature e controllo della luce. È importante scegliere specie
-                compatibili con l'ambiente e monitorare eventuali carenze
-                nutrizionali o alghe.
-              </p>
-              <div className="w-full md:w-auto hover:opacity-70 active:opacity-70 transition-colors duration-200">
-                <CustomButton>Scopri di più!</CustomButton>
-              </div>
-            </div>
           </div>
         </section>
 
-        {/*3° sezione-Illuminazione */}
-        <section className="mx-auto flex flex-col bg-light dark:bg-dark md:flex-row items-center gap-8 px-4 sm:px-6 md:px-8 py-20">
-          <div className="m-container flex gap-8 items-center justify-center">
-            <div className="w-full md:w-5/12 flex flex-col md:text-left gap-4">
-              <div>
-                <h2 className="text-xl sm:text-2xl md:text-3xl">
-                  Gestione dell'illuminazione dell'acquario
-                </h2>
-                <h3 className=" dark:text-gray-200 text-sm sm:text-md">
-                  La luce giusta per un acquario rigoglioso
-                </h3>
-              </div>
-              <p className="mb-6 text-sm sm:text-base text-dark dark:text-gray-200">
-                Una corretta illuminazione favorisce la crescita delle piante e
-                mantiene il benessere degli organismi. Bisogna scegliere luci
-                adatte e regolare fotoperiodo e intensità in base alla tipologia
-                di acquario.
+        {/* Section 3: Lighting */}
+        <section className="bg-light dark:bg-dark py-20 px-4 sm:px-6 md:px-8">
+          <div className="m-container flex flex-col md:flex-row items-center justify-center gap-8">
+            <div className="w-full md:w-5/12 text-center md:text-left">
+              <h2 className="text-xl sm:text-2xl md:text-3xl">
+                Aquarium lighting management
+              </h2>
+              <h3 className="dark:text-gray-200 text-sm sm:text-md mt-2">
+                The right light for a flourishing aquarium
+              </h3>
+              <p className="mb-6 text-sm sm:text-base text-dark dark:text-gray-200 mt-4">
+                Correct lighting promotes plant growth and well-being. Choose
+                suitable lights and adjust based on the type of aquarium.
               </p>
-              <div className="w-full md:w-auto hover:opacity-70 active:opacity-70 transition-colors duration-200">
-                <CustomButton>Scopri di più!</CustomButton>
-              </div>
+              <CustomButton>Find out more!</CustomButton>
             </div>
-            {/* Parte dell'immagine da mettere*/}
             <div className="w-full md:w-5/12">
               <img
                 src={lighting}
@@ -142,31 +120,31 @@ const Home = () => {
           </div>
         </section>
 
-        {/*4° sezione uguale alla Header*/}
-        <section className="mx-auto flex flex-col bg-accent dark:bg-gray-700 md:flex-row items-center gap-8 px-4 sm:px-6 md:px-8 py-20">
-          <div className="m-container flex gap-8 items-center justify-center">
-            {/* Parte dell'immagine da mettere*/}
-            <div className="w-full md:w-5/12">
-              <img src={lighting} alt="luce" className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full" />
-            </div>
-            <div className="w-full md:w-5/12 flex flex-col md:text-left gap-4">
-              <div>
-                <h2 className="text-xl sm:text-2xl md:text-3xl dark:text-gray-100">
-                  Riepilogo gestione acquario
-                </h2>
-              </div>
-              <p className="mb-6 text-sm sm:text-base text-dark dark:text-gray-200">
-                Un acquario sano richiede equilibrio tra nutrienti,
-                illuminazione e cura delle piante. Monitoraggio costante e
-                interventi tempestivi assicurano un ambiente stabile e
-                visivamente gradevole.
+        {/* Section 4: Summary */}
+        <section className="bg-accent dark:bg-gray-700 py-20 px-4 sm:px-6 md:px-8">
+          <div className="m-container flex flex-col md:flex-row-reverse items-center justify-center gap-8">
+            <div className="w-full md:w-5/12 text-center md:text-left">
+              <h2 className="text-xl sm:text-2xl md:text-3xl dark:text-gray-100">
+                Aquarium Management Summary
+              </h2>
+              <p className="mb-6 text-sm sm:text-base text-dark dark:text-gray-200 mt-4">
+                A healthy aquarium requires a balance of nutrients, lighting and
+                plant care. Constant monitoring ensures a stable and pleasing
+                environment.
               </p>
-              {/* Call to Action */}
-              <div className="w-full md:w-auto text-center">
-                <Link to="/register" className="hover:opacity-70 active:opacity-70 transition-colors duration-200">
-                  <CustomButton>Inizia ora!</CustomButton>
-                </Link>
-              </div>
+              <Link
+                to="/register"
+                className="hover:opacity-70 active:opacity-70 transition-colors duration-200"
+              >
+                <CustomButton>Get started now!</CustomButton>
+              </Link>
+            </div>
+            <div className="w-full md:w-5/12">
+              <img
+                src={lighting}
+                alt="luce"
+                className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full"
+              />
             </div>
           </div>
         </section>

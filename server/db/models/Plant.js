@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const PlantSchema = new Schema({
     user: {
@@ -15,6 +16,8 @@ const PlantSchema = new Schema({
         required: true,
     },
 }, { strict: true, timestamps: true, versionKey: false });
+
+PlantSchema.plugin(mongoosePaginate);
 
 const Plant = model("Plant", PlantSchema);
 

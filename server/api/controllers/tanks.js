@@ -20,7 +20,15 @@ const getTanks = async (req, res) => {
     try {
         const { limit, page } = await schema.validateAsync(req.query);
 
-        const tanks = await Tank.paginate({ user: user._id }, { limit, page, lean: true, populate: ["plants", "lights"] });
+        let tanks;
+
+        if (limit == 0) {
+            tanks = await Tank.find({ user: user._id }, null, { lean: true })
+                .populate("plants")  
+                .populate("lights");  
+        } else {
+            tanks = await Tank.paginate({ user: user._id }, { limit, page, lean: true, populate: ["plants", "lights"] });
+        }
 
         return res.status(200).json(tanks);
     } catch (error) {
