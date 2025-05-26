@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
 
 const HistoryTable = () => {
-  const history = useSelector(state => state.history.data);
-  const selectedTank = useSelector(state => state.selectedTank);
+  const history = []; // useSelector(state => state.history.data);
+  const selectedTank = []; // useSelector(state => state.selectedTank);
 
   if (!selectedTank || !history[selectedTank]) {
     return <p className="dark:text-white">No activity available</p>;

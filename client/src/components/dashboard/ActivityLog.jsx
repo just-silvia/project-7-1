@@ -2,20 +2,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useApi } from "../../hooks/useApi";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import { setActivities } from ;
 
 const ActivityLog = () => {
   const { get } = useApi();
   const dispatch = useDispatch();
 
   // Prendo activities dallo store redux
-  const activities = useSelector(state => state.activitiesState.activities);
+  const activities = []; // useSelector(state => state.activitiesState.activities);
 
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const data = await get("/activities"); 
-        dispatch(setActivities(data)); 
+        const data = await get("/activities");
       } catch (error) {
         toast.error("Errore nel caricamento delle attività");
         console.error("Failed to fetch activities:", error);
@@ -23,7 +21,7 @@ const ActivityLog = () => {
     };
 
     fetchActivities();
-  }, [get, dispatch]);
+  }, []);
 
   if (!activities || activities.length === 0) {
     return (

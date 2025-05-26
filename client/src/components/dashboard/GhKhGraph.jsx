@@ -94,7 +94,7 @@ export default function GhKhGraph({ tanks, history, selectedTank, setSelectedTan
 
       <select
         className="mb-4 border border-gray-300 dark:border-gray-400 bg-white dark:bg-gray-800 text-black dark:text-white rounded p-2 w-full md:w-auto transition-colors duration-300"
-        value={selectedTank}
+        value=""
         onChange={handleChange}
       >
         {tanks.map((tank) => (

@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 
 const TanksTable = () => {
-  const tanks = useSelector(state => state.tanks.list);
+  const tanks = [];
 
   if (!tanks || tanks.length === 0) return <p>No tanks available</p>;
 

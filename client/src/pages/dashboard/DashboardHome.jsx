@@ -6,27 +6,19 @@ import ActivityLog from '../../components/dashboard/ActivityLog';
 import AquariumList from '../../components/dashboard/AquariumList';
 import HistoryTable from '../../components/dashboard/HistoryTable';
 
-// Action creators (da fare ancora)
-import { fetchTanks } from ;
-import { fetchHistory } from ;
-import { setSelectedTank } from ;
-
 const DashboardHome = () => {
   const dispatch = useDispatch();
 
-  const tanks = useSelector(state => state.tanks.list);
-  const history = useSelector(state => state.history.data);
-  const selectedTank = useSelector(state => state.selectedTank);
+  const tanks = [];// useSelector(state => state.tanks.list);
+  const history = [];// useSelector(state => state.history.data);
+  const selectedTank = [];// useSelector(state => state.selectedTank);
 
   useEffect(() => {
-    dispatch(fetchTanks());
-    dispatch(fetchHistory());
   }, [dispatch]);
 
   // Seleziona il primo tank di default se non si ha
   useEffect(() => {
     if (!selectedTank && tanks.length > 0) {
-      dispatch(setSelectedTank(tanks[0].id));
     }
   }, [selectedTank, tanks, dispatch]);
 

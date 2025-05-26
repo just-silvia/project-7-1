@@ -1,40 +1,22 @@
 import { useState, useEffect } from "react";
 import { useApi } from "../../hooks/useApi";
 import { useDispatch, useSelector } from "react-redux";
-import { createPlants, deletePlantsById } from "../../../../server/api/controllers/plants"; 
 import CustomButton from "../../components/shared/CustomButton";
 import CustomModal from "../../components/dashboard/CustomModal";
 import { toast } from "react-toastify";
-
-const RequestsStatus = ({ status }) => {
-  const statusColor =
-    status === "Completed"
-      ? "bg-green-200 !text-green-600 dark:bg-green-400 dark:!text-green-800"
-      : status === "Pending"
-      ? "bg-amber-200 !text-amber-600 dark:bg-amber-400 dark:!text-amber-800"
-      : status === "Canceled"
-      ? "bg-red-200 !text-red-600 dark:bg-red-400 dark:!text-red-800"
-      : "bg-gray-200 !text-gray-800 dark:bg-gray-400 dark:!text-gray-800";
-
-  return (
-    <span
-      className={`px-2 py-1 rounded-full text-xs font-medium ${statusColor}`}
-    >
-      {status}
-    </span>
-  );
-};
+import { addNewPlant, deleteOnePlant, setAllPlants } from "../../store/slices/plantsSlice";
+import { setAllTanks } from "../../store/slices/tanksSlice";
 
 const Plants = () => {
-  const [requests, setRequests] = useState([]);
-  const [plants, setPlants] = useState([]);
-  const { get, post, del } = useApi();
   const dispatch = useDispatch();
-  const { all: requests } = useSelector((state) => state.plants);
-  const { user } = useSelector((state) => state.auth);
+  const { get, post, del } = useApi();
+  const { all: tanks } = useSelector((state) => state.tanks);
+  const { all: plants } = useSelector((state) => state.plants);
 
   const [form, setForm] = useState({
-    request_type: "",
+    name: "",
+    description: "",
+    tank: "",
   });
 
   const [isOpen, setIsOpen] = useState(false);
@@ -50,7 +32,9 @@ const Plants = () => {
 
   const clearForm = () => {
     setForm({
-      request_type: "",
+      name: "",
+      description: "",
+      tank: "",
     });
   };
 
@@ -63,8 +47,7 @@ const Plants = () => {
 
     try {
       const data = await post("/plants", { ...form });
-      setRequests((prev) => [...prev, data]); //x aggiornare manualmente
-      dispatch(createPlants(data)); 
+      dispatch(addNewPlant(data));
       setIsOpen(false);
       clearForm();
     } catch (error) {
@@ -76,8 +59,7 @@ const Plants = () => {
     if (!confirm("Are you sure to delete this plant?")) return;
     try {
       await del(`/plants/${id}`);
-      setPlants((prev) => prev.filter((p) => p._id !== plants_id)); //per rimuovere manualmente
-      dispatch(deletePlantsById(plants_id));
+      dispatch(deleteOnePlant(id));
     } catch {
       console.log(error);
       toast.error("Internal server error, try again later");
@@ -87,113 +69,117 @@ const Plants = () => {
   const fetchPlants = async () => {
     try {
       const data = await get(
-        `/plants?limit=${limit}&${page}${
-          filter == "All" ? "" : `&status=${filter}`
+        `/plants?limit=${limit}&page=${page}${filter == "All" ? "" : `&status=${filter}`
         }`
       );
-      setRequests(data.docs);
       dispatch(setAllPlants(data.docs));
-      setRequestInfo({hasNextPage: data.hasNextPage, hasPrevPage: data.hasPrevPage});
+      setRequestInfo({ hasNextPage: data.hasNextPage, hasPrevPage: data.hasPrevPage });
     } catch (error) {
-        console.log(errore);
+      console.log(error);
       toast.error("Internal server error, try again later");
     }
-  }, 
+  };
+  
+  const fetchTanks = async () => {
+    try {
+      const data = await get(`/tanks?limit=0`);
+      dispatch(setAllTanks(data));
+      setRequestInfo({ hasNextPage: data.hasNextPage, hasPrevPage: data.hasPrevPage });
+    } catch (error) {
+      console.log(error);
+      toast.error("Internal server error, try again later");
+    }
+  };
 
   useEffect(() => {
+    fetchTanks();
     fetchPlants();
   }, [limit, page, filter]);
 
   return (
     <>
       <div className="w-full flex items-start justify-center px-2 dark:bg-gray-900 dark:text-white">
-                <div className="w-full max-w-7xl">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
-                        <h2 className="text-xl font-semibold">Plants</h2>
-                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                            <input
-                                type="text"
-                                placeholder="Search..."
-                                value={searchTerm}
-                                onChange={(e) => {
-                                    setSearchTerm(e.target.value);
-                                    setPage(1);;
-                                }}
-                                className="border border-neutral-300 rounded-md px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-accent w-full sm:w-auto dark:bg-gray-800 dark:text-white dark:border-neutral-600"
-                            />
-                            <CustomButton>Search</CustomButton>
-                        </div>
-                    </div>
-
-                    <div className="flex gap-2 overflow-x-auto pb-2 mb-4 justify-between">
-                        <div className="flex flex-wrap sm:flex-nowrap gap-2">
-                            {["All", "Pending", "Completed", "Canceled"].map((st) => (
-                                <button
-                                    key={st}
-                                    onClick={() => {
-                                        setFilter(st);
-                                        setPage(1);
-                                    }}
-                                    className={`whitespace-nowrap px-4 py-1 rounded-full text-sm border border-neutral-200 shadow-md dark:bg-gray-800 dark:text-white dark:border-neutral-600 cursor-pointer
-                                ${filter === st ? "bg-black text-white dark:text-light" : "bg-light dark:bg-neutral-950"}`}
-                                >
-                                    {st}
-                                </button>
-                            ))}
-                        </div>
-                        <div>
-                            <CustomButton onClick={() => setIsOpen(true)}>Add Plant</CustomButton>
-                        </div>
-                    </div>
-
-                    <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
-                        <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
-                            <tr className="border-b border-neutral-200 dark:border-neutral-700">
-                                <th className="p-2">Id</th>
-                                <th className="p-2 hidden md:table-cell">Plant Type</th>
-                                <th className="p-2 hidden lg:table-cell">Created At</th>
-                                <th className="p-2 hidden lg:table-cell">Last Update</th>
-                                <th className="p-2">Status</th>
-                                <th className="p-2">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {requests.map((r, i) => (
-                                <tr key={`${r.id}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
-                                    <td className="p-3 font-medium">{r._id}</td>
-                                    <td className="p-3 hidden md:table-cell">{r.request_type}</td>
-                                    <td className="p-3 hidden lg:table-cell">{new Date(r.createdAt).toLocaleString()}</td>
-                                    <td className="p-3 hidden lg:table-cell">{new Date(r.updatedAt).toLocaleString()}</td>
-                                    <td className="p-3">
-                                        <RequestsStatus status={r.status} />
-                                    </td>
-                                    <td className="p-3">
-                                        <i onClick={() => handleDelete(r._id)} className="fa fa-trash cursor-pointer"></i>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2 text-sm text-gray-600">
-                        <div className="text-center sm:text-left">
-
-                        </div>
-                        <div className="flex justify-center sm:justify-end gap-2">
-                            <CustomButton
-                                onClick={() => setPage(p => p - 1)}
-                                disabled={!requestInfo.hasPrevPage}
-                                className="px-3 py-1"
-                            >Previous</CustomButton>
-                            <CustomButton
-                                onClick={() => setPage(p => p + 1)}
-                                disabled={!requestInfo.hasNextPage}
-                                className="px-3 py-1"
-                            >Next</CustomButton>
-                        </div>
-                    </div>
-                </div>
+        <div className="w-full max-w-7xl">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+            <h2 className="text-xl font-semibold">Plants</h2>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setPage(1);;
+                }}
+                className="border border-neutral-300 rounded-md px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-accent w-full sm:w-auto dark:bg-gray-800 dark:text-white dark:border-neutral-600"
+              />
+              <CustomButton>Search</CustomButton>
             </div>
+          </div>
+
+          <div className="flex gap-2 overflow-x-auto pb-2 mb-4 justify-between">
+            <div className="flex flex-wrap sm:flex-nowrap gap-2">
+              {["All", "Pending", "Completed", "Canceled"].map((st) => (
+                <button
+                  key={st}
+                  onClick={() => {
+                    setFilter(st);
+                    setPage(1);
+                  }}
+                  className={`whitespace-nowrap px-4 py-1 rounded-full text-sm border border-neutral-200 shadow-md dark:bg-gray-800 dark:text-white dark:border-neutral-600 cursor-pointer
+                                ${filter === st ? "bg-black text-white dark:text-light" : "bg-light dark:bg-neutral-950"}`}
+                >
+                  {st}
+                </button>
+              ))}
+            </div>
+            <div>
+              <CustomButton onClick={() => setIsOpen(true)}>Add Plant</CustomButton>
+            </div>
+          </div>
+
+          <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
+            <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
+              <tr className="border-b border-neutral-200 dark:border-neutral-700">
+                <th className="p-2">Id</th>
+                <th className="p-2 hidden md:table-cell">Name</th>
+                <th className="p-2 hidden lg:table-cell">Description</th>
+                <th className="p-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {plants.map((plant, i) => (
+                <tr key={`${plant._id}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
+                  <td className="p-3 font-medium">{plant._id}</td>
+                  <td className="p-3 hidden md:table-cell">{plant.name}</td>
+                  <td className="p-3 hidden lg:table-cell">{plant.description}</td>
+                  <td className="p-3">
+                    <i onClick={() => handleDelete(plant._id)} className="fa fa-trash cursor-pointer"></i>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2 text-sm text-gray-600">
+            <div className="text-center sm:text-left">
+
+            </div>
+            <div className="flex justify-center sm:justify-end gap-2">
+              <CustomButton
+                onClick={() => setPage(p => p - 1)}
+                disabled={!requestInfo.hasPrevPage}
+                className="px-3 py-1"
+              >Previous</CustomButton>
+              <CustomButton
+                onClick={() => setPage(p => p + 1)}
+                disabled={!requestInfo.hasNextPage}
+                className="px-3 py-1"
+              >Next</CustomButton>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
       {/* MODAL */}
@@ -203,12 +189,12 @@ const Plants = () => {
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Your name</label>
+            <label className="block text-sm font-medium mb-1">Name</label>
             <input
               type="text"
               name="name"
               value={form.name}
-              onChange={handleChange}
+              onInput={handleChange}
               required
               className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
               placeholder="Es. Anubias barteri"
@@ -216,17 +202,35 @@ const Plants = () => {
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">
-              Elaborate your request: description
+              Description
             </label>
             <textarea
               name="description"
-              value={form.request_type}
-              onChange={handleChange}
+              value={form.description}
+              onInput={handleChange}
               rows={8}
               required
               className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
               placeholder="Es. Shade plant, slow growing, suitable for beginners"
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Tank</label>
+            <select
+              type="text"
+              name="tank"
+              value={form.tank}
+              onChange={handleChange}
+              required
+              className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+              placeholder="Es. Anubias barteri"
+            >
+              {
+                tanks?.map(tank => (
+                  <option key={tank._id} value={tank._id}>{tank.name}</option>
+                ))
+              }
+            </select>
           </div>
           <CustomButton type="submit">Submit</CustomButton>
         </form>

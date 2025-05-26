@@ -1,8 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
 
 const AquariumList = () => {
-  const tanks = useSelector(state => state.tanks.list);
-  const selectedTank = useSelector(state => state.selectedTank);
+  const tanks = []; // useSelector(state => state.tanks.list);
+  const selectedTank = []; // useSelector(state => state.selectedTank);
   const dispatch = useDispatch();
 
   const handleSelect = (id) => {
