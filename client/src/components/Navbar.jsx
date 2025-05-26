@@ -11,7 +11,6 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const location = useLocation();
     
-    
     useEffect(() => {
         setIsOpen(false);
     }, [location.pathname]);
@@ -89,7 +88,7 @@ const Navbar = () => {
                     
                     {/* Bottone Dark Mode (desktop) */}
                     <button 
-                        onClick={toggleDarkMode} 
+                        onClick={handleToggleDarkMode} 
                         className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
                         aria-label="Toggle Dark Mode"
                     >
