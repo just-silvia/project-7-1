@@ -116,7 +116,7 @@ const Consultancy = () => {
                     </div>
 
                     <div className="flex gap-2 overflow-x-auto pb-2 mb-4 justify-between">
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap sm:flex-nowrap gap-2">
                             {["All", "Pending", "Completed", "Canceled"].map((st) => (
                                 <button
                                     key={st}
@@ -190,7 +190,7 @@ const Consultancy = () => {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium mb-1">Nome richiedente</label>
+                        <label className="block text-sm font-medium mb-1">Your name</label>
                         <input
                             readOnly
                             type="text"
@@ -200,7 +200,7 @@ const Consultancy = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium mb-1">Testo della richiesta</label>
+                        <label className="block text-sm font-medium mb-1">Elaborate your request</label>
                         <textarea
                             type="text"
                             name="request_type"
@@ -211,7 +211,7 @@ const Consultancy = () => {
                             className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
                         ></textarea>
                     </div>
-                    <CustomButton type="submit">Invia</CustomButton>
+                    <CustomButton type="submit">Submit</CustomButton>
                 </form>
             </CustomModal>
         </>
