@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import logo from "../assets/logo-sidebar/logo_sidebar.png";
 
-function SidebarLink({ text, to }) {
+function SidebarLink({ iconClass, text, to }) {
   const location = useLocation();
   const active = location.pathname === to;
   
@@ -15,6 +15,7 @@ function SidebarLink({ text, to }) {
             : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
         }`}
       >
+        <i className={`fa-solid ${iconClass} w-5 h-5`}></i>
         <span className="font-medium">{text}</span>
       </Link>
     </li>
@@ -45,13 +46,14 @@ const Sidebar = ({ isOpen, onClose }) => {
           {/* Navigation Links */}
           <nav className="flex-1 overflow-y-auto p-2">
             <ul className="space-y-1">
-              <SidebarLink text="Main Dashboard" to="/app" />
-              <SidebarLink text="Acquari" to="/app/acquari" />
-              <SidebarLink text="Richiesta consulenza" to="/app/consulenza" />
-              <SidebarLink text="Calculator" to="/app/calculator" />
-              <SidebarLink text="Piante" to="/app/piante" />
-              <SidebarLink text="Illuminazione" to="/app/illuminazione" />
-              <SidebarLink text="Impostazioni" to="/app/impostazioni" />
+              <SidebarLink iconClass="fa-table-columns" text="Main Dashboard" to="/app" />
+              <SidebarLink iconClass="fa-fish-fins" text="Aquariums" to="/app/tanks" />
+              <SidebarLink iconClass="fa-comments" text="Consultancy" to="/app/consultancy" />
+              <SidebarLink iconClass="fa-user-tag" text="Request new Brands" to="/app/brands" />
+              <SidebarLink iconClass="fa-square-root-variable" text="Calculator" to="/app/calculator" />
+              <SidebarLink iconClass="fa-seedling" text="Plants" to="/app/plants" />
+              <SidebarLink iconClass="fa-lightbulb" text="Lights" to="/app/lights" />
+              <SidebarLink iconClass="fa-user-gear" text="Settings" to="/app/settings" />
             </ul>
           </nav>
         </div>

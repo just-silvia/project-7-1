@@ -26,4 +26,9 @@ app.use("/plants", require("./routes/plants"));
  */
 app.use("/lights", require("./routes/lights"));
 
+/**
+ * @path /api/consultancies
+ */
+app.use("/consultancies", require("./routes/consultancies"));
+
 module.exports = app;

@@ -8,14 +8,17 @@ import App from './App.jsx'
 
 import './index.css'
 import store from './store/index.js'
+import { SettingsProvider } from './providers/settings.jsx'
 
 createRoot(document.getElementById('root')).render(
     <ReduxProvider store={store}>
-        <ApiProvider>
-            <BrowserRouter>
-                <App />
-                <ToastContainer />
-            </BrowserRouter>
-        </ApiProvider>
+        <SettingsProvider>
+            <ApiProvider>
+                <BrowserRouter>
+                    <App />
+                    <ToastContainer />
+                </BrowserRouter>
+            </ApiProvider>
+        </SettingsProvider>
     </ReduxProvider>
 )

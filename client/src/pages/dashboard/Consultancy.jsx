@@ -1,48 +1,21 @@
 import React, { useState } from "react";
 import CustomButton from "../../components/shared/CustomButton";
+import { useApi } from "../../hooks/useApi";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { addNewConsultancy, deleteOneConsultancy, setAllConsultancies } from "../../store/slices/consultanciesSlice";
+import CustomModal from "../../components/dashboard/CustomModal";
 
-const requests = [ //simulazione in attesa dei dati da API
-    { id: 1, name: "Silvia", status: "Pending" },
-    { id: 2, name: "Manuel", status: "Completed" },
-    { id: 3, name: "Sara", status: "Canceled" },
-    { id: 4, name: "Alessia", status: "Pending" },
-    { id: 5, name: "Alessandro", status: "Pending" },
-    { id: 6, name: "Giulia", status: "Completed" },
-    { id: 7, name: "Luca", status: "Pending" },
-    { id: 8, name: "Francesco", status: "Canceled" },
-    { id: 9, name: "Marta", status: "Completed" },
-    { id: 10, name: "Elena", status: "Pending" },
-    { id: 11, name: "Paolo", status: "Completed" },
-    { id: 12, name: "Claudia", status: "Canceled" },
-    { id: 13, name: "Giorgio", status: "Pending" },
-    { id: 14, name: "Simona", status: "Completed" },
-    { id: 15, name: "Davide", status: "Pending" },
-    { id: 16, name: "Irene", status: "Canceled" },
-    { id: 17, name: "Emanuele", status: "Completed" },
-    { id: 18, name: "Martina", status: "Pending" },
-    { id: 19, name: "Chiara", status: "Completed" },
-    { id: 20, name: "Andrea", status: "Canceled" },
-    { id: 21, name: "Stefano", status: "Pending" },
-    { id: 22, name: "Federica", status: "Completed" },
-    { id: 23, name: "Roberto", status: "Canceled" },
-    { id: 24, name: "Lucia", status: "Pending" },
-    { id: 25, name: "Marco", status: "Completed" },
-    { id: 26, name: "Valeria", status: "Pending" },
-    { id: 27, name: "Enrico", status: "Canceled" },
-    { id: 28, name: "Serena", status: "Completed" },
-    { id: 29, name: "Matteo", status: "Pending" },
-    { id: 30, name: "Barbara", status: "Canceled" },
-];
-
-const RequestsStatus = ({ status }) => { //stato richieste
+const RequestsStatus = ({ status }) => {
     const statusColor =
         status === "Completed"
-            ? "bg-green-200 !text-green-600"
+            ? "bg-green-200 !text-green-600 dark:bg-green-400 dark:!text-green-800"
             : status === "Pending"
-                ? "bg-amber-200 !text-amber-600"
+                ? "bg-amber-200 !text-amber-600 dark:bg-amber-400 dark:!text-amber-800"
                 : status === "Canceled"
-                    ? "bg-red-200 !text-red-600"
-                    : "bg-gray-200 !text-gray-800";
+                    ? "bg-red-200 !text-red-600 dark:bg-red-400 dark:!text-red-800"
+                    : "bg-gray-200 !text-gray-800 dark:bg-gray-400 dark:!text-gray-800";
     return (
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColor}`}>
             {status}
@@ -50,112 +23,198 @@ const RequestsStatus = ({ status }) => { //stato richieste
     );
 };
 
-
-
 const Consultancy = () => {
+    const { get, post, del } = useApi();
+    const dispatch = useDispatch();
+    const { all: requests } = useSelector(state => state.consultancies);
+    const { user } = useSelector(state => state.auth);
+
+    const [form, setForm] = useState({
+        request_type: "",
+    });
+    const [isOpen, setIsOpen] = useState(false);
+    const [limit, setLimit] = useState(10);
+    const [page, setPage] = useState(1);
+    const [requestInfo, setRequestInfo] = useState({
+        hasNextPage: false,
+        hasPrevPage: false
+    });
+
     const [filter, setFilter] = useState("All");
     const [searchTerm, setSearchTerm] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
 
-    const filteredRequests = requests
-        .filter((r) => filter === "All" || r.status === filter)
-        .filter((r) => r.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    const clearForm = () => {
+        setForm({
+            request_type: "",
+        });
+    }
 
-    const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const paginatedRequests = filteredRequests.slice(startIndex, startIndex + itemsPerPage);
+    const handleChange = ({ target: { value, name } }) => {
+        setForm((f) => ({ ...f, [name]: value }));
+    }
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    const handlePrevious = () => {
-        if (currentPage > 1) setCurrentPage(currentPage - 1);
-    };
+        try {
+            const data = await post("/consultancies", { ...form });
+            dispatch(addNewConsultancy(data));
+            setIsOpen(false);
+            clearForm();
+        } catch (error) {
+            console.log(error);
+            toast.error("Internal server error, try again later");
+        }
+    }
 
-    const handleNext = () => {
-        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-    };
+    const handleDelete = async (consultancy_id) => {
+        if (!confirm("Are you sure to delete this consultancy request?")) return;
+        
+        try {
+            await del(`/consultancies/${consultancy_id}`);
+            dispatch(deleteOneConsultancy(consultancy_id));
+        } catch (error) {
+            console.log(error);
+            toast.error("Internal server error, try again later");
+        }
+    }
 
+    const fetchConsultancies = async () => {
+        try {
+            const data = await get(`/consultancies?limit=${limit}&page=${page}${filter == "All" ? "" : `&status=${filter}`}`);
+            dispatch(setAllConsultancies(data.docs));
+            setRequestInfo({ hasNextPage: data.hasNextPage, hasPrevPage: data.hasPrevPage });
+        } catch (error) {
+            console.log(error);
+            toast.error("Internal server error, try again later");
+        }
+    }
 
+    useEffect(() => {
+        fetchConsultancies();
+    }, [limit, page, filter]);
 
     return (
-        <div className="w-full min-h-screen bg-light flex items-center justify-center">
-            <div className="w-full max-w-7xl px-4">
-                <div className="flex flex-wrap items-center justify-between mb-4">
-                    <h2 className="mb-4">Consultancy Requests</h2>
-                    <div className="justify-between mb-4">
-                        <input
-                            type="text"
-                            placeholder="Search..."
-                            value={searchTerm}
-                            onChange={(e) => {
-                                setSearchTerm(e.target.value);
-                                setCurrentPage(1);
-                            }}
-                            className="border border-neutral-300 rounded-md px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-accent"
-                        />
-                        <CustomButton>Search</CustomButton>
+        <>
+            <div className="w-full flex items-start justify-center px-2 dark:bg-gray-900 dark:text-white">
+                <div className="w-full max-w-7xl">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+                        <h2 className="text-xl font-semibold">Consultancy Requests</h2>
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                            <input
+                                type="text"
+                                placeholder="Search..."
+                                value={searchTerm}
+                                onChange={(e) => {
+                                    setSearchTerm(e.target.value);
+                                    setCurrentPage(1);
+                                }}
+                                className="border border-neutral-300 rounded-md px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-accent w-full sm:w-auto dark:bg-gray-800 dark:text-white dark:border-neutral-600"
+                            />
+                            <CustomButton>Search</CustomButton>
+                        </div>
                     </div>
-                </div>
 
-                <div className="flex flex-wrap m-1">
-                    {["All", "Pending", "Completed", "Canceled"].map((st) => (
-                        <button
-                            key={st}
-                            onClick={() => {
-                                setFilter(st);
-                                setCurrentPage(1);
-                            }}
-                            className={`inline-flex items-center justify-center px-4 py-1 rounded-full text-sm border border-neutral-200 shadow-md
-                                ${filter === st ? "bg-black text-white" : "bg-light"
-                                }`}
-                        >
-                            {st}
-                        </button>
-                    ))}
-                </div>
+                    <div className="flex gap-2 overflow-x-auto pb-2 mb-4 justify-between">
+                        <div className="flex gap-2">
+                            {["All", "Pending", "Completed", "Canceled"].map((st) => (
+                                <button
+                                    key={st}
+                                    onClick={() => {
+                                        setFilter(st);
+                                        setCurrentPage(1);
+                                    }}
+                                    className={`whitespace-nowrap px-4 py-1 rounded-full text-sm border border-neutral-200 shadow-md dark:bg-gray-800 dark:text-white dark:border-neutral-600 cursor-pointer
+                                ${filter === st ? "bg-black text-white dark:text-light" : "bg-light dark:bg-neutral-950"}`}
+                                >
+                                    {st}
+                                </button>
+                            ))}
+                        </div>
+                        <div>
+                            <CustomButton onClick={() => setIsOpen(true)}>Add Request</CustomButton>
+                        </div>
+                    </div>
 
-                <table className="w-full text-left border-spacing-y-3 overflow-hidden">
-                    <thead className="text-xs uppercase border-y border-neutral-200">
-                        <tr>
-                            <th className="p-2">User</th>
-                            <th className="p-2">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {paginatedRequests.map((r) => (
-                            <tr key={r.id} className="border-b border-neutral-200">
-                                <td className="p-3 flex items-center gap-3">
-                                    <span className="font-medium">{r.name}</span>
-                                </td>
-                                <td className="p-3">
-                                    <RequestsStatus status={r.status} />
-                                </td>
+                    <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
+                        <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
+                            <tr className="border-b border-neutral-200 dark:border-neutral-700">
+                                <th className="p-2">Id</th>
+                                <th className="p-2 hidden md:table-cell">Request Type</th>
+                                <th className="p-2 hidden lg:table-cell">Created At</th>
+                                <th className="p-2 hidden lg:table-cell">Last Update</th>
+                                <th className="p-2">Status</th>
+                                <th className="p-2">Actions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <div className="flex flex-wrap items-center justify-between mt-4 text-sm text-gray-600">
-                    <div>
-                        {filteredRequests.length > 0 ? (
-                            <>Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, filteredRequests.length)} of {filteredRequests.length}</>
-                        ) : (
-                            <>No results found</>
-                        )}
-                    </div>
-                    <div className="flex gap-2">
-                        <CustomButton
-                            onClick={handlePrevious}
-                            disabled={currentPage === 1}
-                            className="px-3 py-1"
-                        >Previous</CustomButton>
-                        <CustomButton 
-                            onClick={handleNext}
-                            disabled={currentPage === totalPages || totalPages === 0}
-                            className="px-3 py-1"
-                        >Next</CustomButton>
+                        </thead>
+                        <tbody>
+                            {requests.map((r, i) => (
+                                <tr key={`${r.id}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
+                                    <td className="p-3 font-medium">{r._id}</td>
+                                    <td className="p-3 hidden md:table-cell">{r.request_type}</td>
+                                    <td className="p-3 hidden lg:table-cell">{new Date(r.createdAt).toLocaleString()}</td>
+                                    <td className="p-3 hidden lg:table-cell">{new Date(r.updatedAt).toLocaleString()}</td>
+                                    <td className="p-3">
+                                        <RequestsStatus status={r.status} />
+                                    </td>
+                                    <td className="p-3">
+                                        <i onClick={() => handleDelete(r._id)} className="fa fa-trash cursor-pointer"></i>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2 text-sm text-gray-600">
+                        <div className="text-center sm:text-left">
+
+                        </div>
+                        <div className="flex justify-center sm:justify-end gap-2">
+                            <CustomButton
+                                onClick={() => setPage(p => p - 1)}
+                                disabled={!requestInfo.hasPrevPage}
+                                className="px-3 py-1"
+                            >Previous</CustomButton>
+                            <CustomButton
+                                onClick={() => setPage(p => p + 1)}
+                                disabled={!requestInfo.hasNextPage}
+                                className="px-3 py-1"
+                            >Next</CustomButton>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <CustomModal isOpen={isOpen} setIsOpen={setIsOpen}>
+                <h2 className="text-2xl font-semibold mb-4">Create new request</h2>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Nome richiedente</label>
+                        <input
+                            readOnly
+                            type="text"
+                            name="name"
+                            value={`${user.first_name} ${user.last_name}`}
+                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Testo della richiesta</label>
+                        <textarea
+                            type="text"
+                            name="request_type"
+                            value={form.request_type}
+                            onChange={handleChange}
+                            required
+                            rows={8}
+                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+                        ></textarea>
+                    </div>
+                    <CustomButton type="submit">Invia</CustomButton>
+                </form>
+            </CustomModal>
+        </>
     );
 }
 

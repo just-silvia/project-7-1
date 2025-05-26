@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import logo from "../assets/img-nav-footer/logosara.png";
-import CustomButton from "../components/shared/CustomButton";
+import CustomButton from "./shared/CustomButton";
+import { useSettings } from "../hooks/useSettings";
 
 const Navbar = () => {
+    const { settings: { darkMode }, toggleDarkMode } = useSettings();
     // Stato per gestire la visibilità del menu
     const [isOpen, setIsOpen] = useState(false);
-    // Stato per gestire la dark mode
-    const [darkMode, setDarkMode] = useState(false);
     const location = useLocation();
     
     
@@ -16,28 +16,9 @@ const Navbar = () => {
         setIsOpen(false);
     }, [location.pathname]);
     
-    useEffect(() => {
-
-        const isDarkMode = document.documentElement.classList.contains('dark');
-        setDarkMode(isDarkMode);
-        
-        const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-        if (savedDarkMode) {
-            document.documentElement.classList.add('dark');
-            setDarkMode(true);
-        }
-    }, []);
-    
     // Funzione per toggleare la dark mode
-    const toggleDarkMode = () => {
-        if (darkMode) {
-            document.documentElement.classList.remove('dark');
-        } else {
-            document.documentElement.classList.add('dark');
-        }
-        setDarkMode(!darkMode);
-
-        localStorage.setItem('darkMode', !darkMode ? 'true' : 'false');
+    const handleToggleDarkMode = () => {
+        toggleDarkMode(!darkMode);
     };
    
     const toggleMenu = () => {
@@ -45,8 +26,8 @@ const Navbar = () => {
     };
     
     return (
-        <nav className="relative z-10 border-b py-4 bg-white dark:bg-dark">
-            <div className="w-[1168px] px-5 mx-auto flex items-center justify-between">
+        <nav className="w-full z-10 fixed border-b py-4 bg-white dark:bg-dark">
+            <div className="w-full px-5 mx-auto flex items-center justify-between">
                 {/* Sezione Logo */}
                 <div className="flex items-center space-x-2">
                     <img 
@@ -54,7 +35,7 @@ const Navbar = () => {
                         alt="Logo Aquatic Paradise"
                         className="h-8 w-8" 
                     />
-                    <span className="text-xl font-bold text-primary hover:text-accent cursor-pointer dark:text-accent dark:hover:text-primary">
+                    <span className="text-xl font-bold !text-primary hover:!text-accent cursor-pointer dark:text-accent dark:hover:!text-primary">
                         Aquatic Paradise
                     </span>
                 </div>
@@ -63,7 +44,7 @@ const Navbar = () => {
                 <div className="md:hidden flex items-center">
                     {/* Bottone Dark Mode (mobile) */}
                     <button 
-                        onClick={toggleDarkMode} 
+                        onClick={handleToggleDarkMode} 
                         className="p-2 mr-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
                         aria-label="Toggle Dark Mode"
                     >
@@ -129,7 +110,7 @@ const Navbar = () => {
             {isOpen && (
                 <div className="md:hidden fixed inset-x-0 top-16 bg-white dark:bg-dark border-t border-gray-200 dark:border-gray-700 shadow-lg">
                     <div className="flex flex-col items-center py-4 space-y-4">
-                        <Link to="/" className="text-dark hover:text-accent transition-colors dark:text-gray-200 dark:hover:text-accent">Home</Link>
+                        <Link to="/" className="text-dark hover:!text-accent transition-colors dark:text-gray-200 dark:hover:!text-accent">Home</Link>
                         <Link to="/login">
                             <CustomButton type="default">Login</CustomButton>
                         </Link>

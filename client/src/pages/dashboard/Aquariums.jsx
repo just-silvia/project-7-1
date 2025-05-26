@@ -1,213 +1,207 @@
+import { useState, useEffect } from "react";
+import CustomButton from "../../components/shared/CustomButton";
 
-import { useState, useEffect } from "react"
+// Componente per lo stato degli acquari
+const TanksStatus = ({ status }) => {
+    const statusColor =
+        status === "Last save"
+            ? "bg-accent !text-white"
+            : status === "First save"
+                ? "bg-accent !text-white"
+                : status === "Canceled"
+                    ? "bg-accent !text-white"
+                    : status === "Edit"
+                        ? "bg-accent !text-white"
+                        : status === "Delete"
+                            ? "bg-accent !text-white"
+                            : "bg-gray-200 !text-gray-800";
 
-
-
-
-
+    return (
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColor}`}>
+            {status}
+        </span>
+    );
+};
 
 const Aquariums = () => {
+    // Stato iniziale degli acquari - simulazione in attesa dei dati da API
+    const [tanks, setTanks] = useState([
+        { id: 1, tank: "Tropical Aquarium", status: "Last save" },
+        { id: 2, tank: "Marine Reef", status: "First save" },
+        { id: 3, tank: "Planted Tank", status: "Canceled" },
+    ]);
 
-    const [value, setValue] = useState();
-    const [searchTerm, setSearchTerm] = useState('');
-    const [counter, setCounter] = useState(0)
+    const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [filter, setFilter] = useState("All");
+    const [newTankName, setNewTankName] = useState("");
+    const [showAddForm, setShowAddForm] = useState(false);
 
-    const [acquari, setAcquari] = useState();
-    // Stato per il nuovo acquario o quello in modifica
-    const [nomeAcquario, setNomeAcquario] = useState("");
-    // Stato per tenere traccia dell'acquario in modifica
-    const [editIndex, setEditIndex] = useState(null);
+    const itemsPerPage = 5;
 
-    const handleChange = (event) => {
-        console.log(event.target.value);
-    }
     // Funzione per aggiungere un nuovo acquario
-    // Funzione per aggiungere un nuovo acquario
-    const aggiungiAcquario = () => {
-        if (nomeAcquario.trim() === '') return; // Evita inserimenti vuoti
-        setAcquari([...acquari, nomeAcquario]);
-        setNomeAcquario('');
-    };
-
-    // Funzione per eliminare un acquario dato l'indice
-    const eliminaAcquario = (index) => {
-        const nuoviAcquari = [...acquari];
-        if (index >= 0 && index < nuoviAcquari.length) {
-            nuoviAcquari.splice(index, 1);
-            setAcquari(nuoviAcquari);
+    const addTank = () => {
+        if (newTankName.trim() === "") {
+            alert("Please enter a tank name");
+            return;
         }
+
+        const newTank = {
+            id: tanks.length + 1,
+            tank: newTankName,
+            status: "First save"
+        };
+
+        setTanks([...tanks, newTank]);
+        setNewTankName("");
+        setShowAddForm(false);
     };
 
-    // Funzione per iniziare la modifica di un acquario
-    const modificaAcquario = (index) => {
-        if (index >= 0 && index < acquari.length) {
-            setNomeAcquario(acquari[index]);
-            setEditIndex(index);
+    // Filtraggio e paginazione
+    const filteredTanks = tanks
+        .filter((r) => filter === "All" || r.status === filter)
+        .filter((r) => r.tank.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    const pageCount = Math.ceil(filteredTanks.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedTanks = filteredTanks.slice(startIndex, startIndex + itemsPerPage);
+
+    // Assicurarsi che la pagina corrente sia valida
+    useEffect(() => {
+        if (currentPage > pageCount && pageCount > 0) {
+            setCurrentPage(pageCount);
         }
-    };
-
-    // Funzione per salvare la modifica dell'acquario
-    const salvaModifica = () => {
-        if (nomeAcquario.trim() === '' || editIndex === null) return;
-
-        const nuoviAcquari = [...acquari];
-        if (editIndex >= 0 && editIndex < nuoviAcquari.length) {
-            nuoviAcquari[editIndex] = nomeAcquario;
-            setAcquari(nuoviAcquari);
-            setNomeAcquario('');
-            setEditIndex(null);
-        }
-    };
-
-    // counter collegato a pagine numero:...
-    const [pages, setPages] = useState([]);
-    const newPages = { id: Date.now(), name: `Page #${pages.length + 1}`  };
-    setPages([...pages, newPages]);
-    setCounter(prev => prev + 1);
-
-
-    useEffect(() => {
-        console.log("aggiornato valore");
-        setValue();
-
-    }, [value]);
-
-    useEffect(() => {
-        console.log("aggiornato acquario");
-
-        setAcquari();
-
-    }, [acquari]);
-
-    useEffect(() => {
-        console.log("aggiornato nome ");
-
-        setNomeAcquario('');
-
-    }, [nomeAcquario]);
-
-    useEffect(() => {
-        console.log("aggiornata ricerca");
-
-        setSearchTerm('');
-    }, [searchTerm]);
+    }, [filteredTanks.length, currentPage, pageCount]);
 
     return (
         <>
-            <thead>
-                <div className="flex flex-auto w-full md:w-auto md:w-auto ">
-                    <div className="flex flex-row  w-full md:w-auto md:w-auto bg-[#f5f5f5ff] text-[#1f1f1fff] left:0">
-                        <div>
-                            <h1 className="flex flex-col w-full md:w-auto md:w-auto  bg-[#f5f5f5ff] text-[#1f1f1fff] ">My Tanks</h1>
-                            <div className="flex flex-col ">
-                                <div className="flex flex-col  w-full md:w-auto bg-[#f5f5f5ff] text-[#1f1f1fff] ">
-                                    <h1 className="flex flex-col  w-full md:w-auto bg-[#f5f5f5ff] text-[#1f1f1fff] ">All Tanks</h1>
-                                    <p>VIEW ALL</p>
-                                    <input className="flex flex-col  items-center border border-gray-600 rounded px-4 py-2 w-full md:w-auto bg-[#f5f5f5ff] text-[#1f1f1fff] left:0 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        type="text"
-                                        placeholder="Search..."
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)} />
-                                    <input className="flex flex-col border border-gray-600 rounded px-4 py-2 items-center w-full md:w-auto bg-[#f5f5f5ff] text-[#1f1f1fff] focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" onInput={searchTerm} />
-                                </div>
-                            </div>
-                        </div>
+            <h1>My Tanks</h1>
+            <div className="bg-light max-w-7xl dark:bg-gray-800 rounded-2xl shadow p-4 mb-6 transition-colors duration-300 dark:border-gray-700 dark:text-gray-200 flex flex-col md:flex-row items-center justify-between px-4 m-container py-4">
+                <h2>All Tanks</h2>
 
-                        <div className="flex flex-col w-full md:w-auto bg-[#f5f5f5ff] text-[#1f1f1fff]">
-                            <div className="flex flex-row">
-                                <h2 className="flex flex-row   w-full md:w-auto bg-[#f5f5f5ff] text-[#1f1f1fff]">Aquarium Management</h2>
-
-                                <div className="bg-[#1f1f1fff] text-[white] border border-gray-600 rounded px-4 py-2">
-                                    <button className="bg-[#1f1f1fff] text-[white] focus:outline-none focus:ring-2 focus:ring-blue-500" >Filter
-                                        <select className="focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#1f1f1fff] text-[white]" onChange="">
-                                            <option className="focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#1f1f1fff] text-[white]" value="one">tanks</option>
-                                            <option className="focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#1f1f1fff] text-[white]" value="two">plants</option>
-                                            <option className="focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#1f1f1fff] text-[white]" value="three">light</option>
-                                        </select>
-                                    </button>
-                                    <input className="flex flex-row  items-center w-full md:w-auto bg-[#1f1f1fff] text-[white] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        type="text"
-                                        value={nomeAcquario}
-                                        onChange={(e) => setNomeAcquario(e.target.value)}
-                                        placeholder="My new tank" />
-                                    {editIndex !== null ? (
-                                        <button className="focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#1f1f1fff] text-[white]" onClick={salvaModifica}>Save Tank</button>
-                                    ) : (
-                                        <button className="focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#1f1f1fff] text-[white]" onClick={aggiungiAcquario}>
-                                            Add Tank</button>
-                                    )}
-
-                                    <ul className="flex flex-col columns-3 items-center w-[1260] bg-[#0f192eff] text-[#4281a4ff]">
-                                        {acquari.map((acquario, index) => (
-                                            <li key={index}>
-                                                {acquario}
-                                                <button onClick={() => modificaAcquario(index)}>Edit</button>
-                                                <button onClick={() => eliminaAcquario(index)}>Delete</button>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
+                <div className="flex items-center space-x-2 dark:bg-gray-800 dark:text-gray-200">
+                    {/* Pulsante Add Tank */}
+                    {!showAddForm ? (
+                        <CustomButton
+                            type="default"
+                            onClick={() => setShowAddForm(true)}
+                        >
+                            Add Tank
+                        </CustomButton>
+                    ) : (
+                        <div className="flex items-center space-x-2 dark:bg-gray-800 dark:text-gray-200">
+                            <input
+                                type="text"
+                                placeholder="New Tank Name"
+                                value={newTankName}
+                                onChange={(e) => setNewTankName(e.target.value)}
+                                className="border border-neutral-300 rounded-md px-3 py-1 text-sm shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-accent"
+                            />
+                            <CustomButton
+                                type="default"
+                                onClick={addTank}
+                            >
+                                Save
+                            </CustomButton>
+                            <CustomButton
+                                type="inverse"
+                                onClick={() => {
+                                    setShowAddForm(false);
+                                    setNewTankName("");
+                                }}
+                            >
+                                Cancel
+                            </CustomButton>
                         </div>
-                        <div className="flex flex-row  items-center w-full md:w-auto bg-[#f5f5f5ff] text-[#1f1f1fff]">
-                        </div>
-                    </div>
+                    )}
                 </div>
+            </div>
 
-            </thead>
-            <tbody>
-                <table className="flex  border border-solid border-[#50b99a] bg-[] text-[]">
-                    <thead className="flex  border border-solid border-[#50b99a]">
-                        <tr className="flex  border border-solid border-[#50b99a]">
-                            <th className="flex  border border-solid border-[#50b99a]">Name Tank
-                                <select className="focus:outline-none focus:ring-2 focus:ring-blue-500 flex  border border-solid border-[#50b99a]" onChange={handleChange}>
-                                    <option className="focus:outline-none focus:ring-2 focus:ring-blue-500 flex  border border-solid border-[#50b99a]" value="one">tank</option>
-                                    <option className="ffocus:outline-none focus:ring-2 focus:ring-blue-500 lex  border border-solid border-[#50b99a]" value="two">plants</option>
-                                    <option className="focus:outline-none focus:ring-2 focus:ring-blue-500 flex  border border-solid border-[#50b99a]" value="three">lights</option>
-                                </select>
-                            </th>
-                            <th>Actions</th>
+            <div className="bg-light max-w-7xl dark:bg-gray-800 rounded-2xl shadow p-4 mb-6 transition-colors duration-300 dark:text-gray-200 flex flex-wrap items-center justify-between px-4 m-container py-4">
+                <div className="flex flex-wrap gap-2 mb-4 dark:bg-gray-800 dark:text-gray-200">
+                    <h3 className="w-full mb-2">Filter by Status:</h3>
+                    {["All", "Last save", "First save", "Canceled", "Edit", "Delete"].map((st) => (
+                        <CustomButton
+                            key={st}
+                            onClick={() => {
+                                setFilter(st);
+                                setCurrentPage(1);
+                            }}
+                            className={`inline-flex items-center justify-center px-4 py-1 rounded-full text-sm border border-neutral-200 shadow-md
+                            ${filter === st ? "bg-black text-white" : "bg-light"}`}
+                        >
+                            {st}
+                        </CustomButton>
+                    ))}
+                </div>
+            </div>
+
+            <div className="m-container dark:bg-gray-800 rounded-2xl shadow p-4 mb-6 transition-colors duration-300 dark:text-gray-200">
+                <table className="w-full border-1 text-dark bg-light dark:bg-gray-800 dark:text-gray-200">
+                    <thead>
+                        <tr className="border-b border-neutral-200 dark:border-gray-700">
+                            <th className="font-medium text-left p-3">Name Tank</th>
+                            <th className="text-left p-3">Status</th>
                         </tr>
                     </thead>
-                    <tbody className="flex  border border-solid border-[#50b99a]" >
-                        {Array.isArray(value) && value.map((item) =>
-                            <tr key={item.NameTank}>
-                                <td>{item.NameTank}</td>
-                                <td>{item.Actions}</td>
+                    <tbody>
+                        {paginatedTanks.length > 0 ? (
+                            paginatedTanks.map((r) => (
+                                <tr key={r.id} className="border-b border-neutral-200 dark:border-gray-700">
+                                    <td className="p-3 flex items-center gap-3">
+                                        <span className="font-medium">{r.tank}</span>
+                                    </td>
+                                    <td className="p-3">
+                                        <TanksStatus status={r.status} />
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="2" className="p-3 text-center dark:bg-gray-800 dark:text-gray-200">
+                                    No tanks found matching your criteria
+                                </td>
                             </tr>
                         )}
                     </tbody>
                 </table>
-            </tbody>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>TANK PAGE</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {pages.map(page => (
-                        <tr key={page.id}>
-                            <td>{page.id}</td>
-                            <td>{page.tankpage}</td>
-                            <td>{page.actions}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <div className="flex flex-auto items-end space-y-2">
-                <span>
-                    <p>Pages added:{[...pages, newPages]}</p>
-                    <button className="flex flex-auto  w-full md:w-auto border-1 border-gray-500 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" onClick={() => setCounter(counter - 1)}>previous {counter}</button>
-                    <button className="flex flex-auto  w-full md:w-auto border-1 border-gray-500 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 " onClick={() => setCounter(counter + 1)}>next{counter}</button>
-                    <button className="flex flex-auto  w-full md:w-auto border-1 border-gray-500 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 " onClick={() => setCounter(counter == 0)}>reset {counter}</button>
-                </span>
             </div>
 
-        </>
-    )
-}
+            <footer className="m-container py-4 bg-light dark:bg-gray-800 rounded-2xl shadow p-4 transition-colors duration-300 dark:text-gray-200 text-dark">
+                <div className="flex flex-col md:flex-row justify-between items-center dark:bg-gray-800 dark:text-gray-200">
+                    <div>
+                        {filteredTanks.length > 0 ? (
+                            <>Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, filteredTanks.length)} of {filteredTanks.length}</>
+                        ) : (
+                            <>No results found</>
+                        )}
+                    </div>
 
+                    <div className="flex items-center space-x-2 mt-4 md:mt-0 dark:bg-gray-800 dark:text-gray-200">
+                        <CustomButton
+                            type="default"
+                            onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                            disabled={currentPage === 1}
+                        >
+                            Previous
+                        </CustomButton>
+                        
+                        <span className="px-2 dark:bg-gray-800 dark:text-gray-200">
+                            Page {currentPage} of {Math.max(1, pageCount)}
+                        </span>
+                        
+                        <CustomButton
+                            type="default"
+                            onClick={() => setCurrentPage(Math.min(pageCount, currentPage + 1))}
+                            disabled={currentPage >= pageCount}
+                        >
+                            Next
+                        </CustomButton>
+                    </div>
+                </div>
+            </footer>
+        </>
+    );
+};
 
 export default Aquariums;

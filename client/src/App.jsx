@@ -1,4 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -8,8 +10,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import Aquariums from "./pages/dashboard/Aquariums";
 import Consultancy from "./pages/dashboard/Consultancy";
-import { useSelector } from "react-redux";
 import Calculator from './pages/dashboard/Calculator';
+import RequestNewBrands from "./pages/dashboard/RequestNewBrands";
 
 const ProtectedRoute = ({ children }) => {
     const { token } = useSelector((state) => state.auth);
@@ -38,8 +40,9 @@ const App = () => {
                 }>
                     <Route path="" element={<DashboardHome />} />
                     <Route path="tanks" element={<Aquariums />} />
-                    <Route path="/dashboard/calculator" element={<Calculator />} />
+                    <Route path="calculator" element={<Calculator />} />
                     <Route path="consultancy" element={<Consultancy />} />
+                    <Route path="brands" element={<RequestNewBrands />} />
                 </Route>
             </Routes>
         </>
