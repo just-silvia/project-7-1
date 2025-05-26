@@ -7,7 +7,7 @@ import imgLogo from "../assets/img-nav-footer/logosara.png";
 
 const Footer = () => {
     return (
-        <footer className="bg-[#0f192eff] dark:bg-black text-[#4281a4ff] dark:text-[#50b99aff] pt-12 pb-8">
+        <footer className="bg-secondary dark:bg-black text-primary dark:text-accent pt-12 pb-8">
             <div className="w-full max-w-[1168px] mx-auto px-5">
                 <div className="flex flex-col items-center justify-between md:flex-row md:items-center mb-8">
                     <div className="flex items-center mb-4 md:mb-0">
@@ -16,21 +16,21 @@ const Footer = () => {
                             alt="Aquatic Paradise Logo"
                             className="h-12 w-auto mr-4"
                         />
-                        <h4 className="text-2xl !text-light">Aquatic Paradise</h4>
+                        <h4 className="text-2xl !text-light dark:text-secondary">Aquatic Paradise</h4>
                     </div>
-                    <p className="text-base text-gray-400 dark:text-gray-300">Ten years in one click</p>
+                    <h6 className=" !text-light dark:text-secondary">Ten years in one click</h6>
                 </div>
                 <div className="flex flex-col md:flex-row justify-between border-t border-b border-gray-700 dark:border-gray-600 py-8 mb-8">
                     <div className="w-full md:w-1/3 mb-8 md:mb-0">
-                        <h3 className="text-lg font-semibold mb-4 dark:text-gray-200">Quick Links</h3>
+                        <h5 className="text-lg mb-4 !text-primary dark:text-secondary">Quick Links</h5>
                         <ul className="space-y-2">
-                            <li><a href="#" className="hover:text-white dark:hover:text-white transition-colors duration-300">Leave a review!</a></li>
-                            <li><a href="#" className="hover:text-white dark:hover:text-white transition-colors duration-300">Latest news</a></li>
-                            <li><a href="#" className="hover:text-white dark:hover:text-white transition-colors duration-300">They say about us</a></li>
+                            <li><a href="#" className="!text-light hover:!text-accent dark:text-secondary transition-colors duration-300">Leave a review!</a></li>
+                            <li><a href="#" className="!text-light hover:!text-accent dark:text-secondary transition-colors duration-300">Latest news</a></li>
+                            <li><a href="#" className="!text-light hover:!text-accent dark:text-secondary transition-colors duration-300">They say about us</a></li>
                         </ul>
                     </div>
                     <div className="w-full md:w-1/3 flex flex-col items-start md:items-center">
-                         <h3 className="text-lg font-semibold mb-4 dark:text-gray-200">Follow Us</h3>
+                         <h5 className="text-lg !text-primary mb-4 dark:text-secondary">Follow Us</h5>
                         <div className="flex space-x-4 items-center">
                             {/* SEZIONE ICONE SOCIAL AGGIORNATA */}
                             {/* Sostituisci il valore dell'attributo src="" con il percorso reale di ogni logo */}
@@ -53,7 +53,7 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className="text-center text-sm text-gray-500 dark:text-gray-400">
-                    <p>© 2025 Aquatic Paradise. All rights reserved.</p>
+                    <p className="!text-primary dark:text-secondary">© 2025 Aquatic Paradise. All rights reserved.</p>
                 </div>
             </div>
         </footer>
