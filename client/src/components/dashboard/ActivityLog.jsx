@@ -1,38 +1,59 @@
-import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useApi } from "../../hooks/useApi";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { setActivities } from ;
 
-function ActivityLog() {
-  const [activities, setActivities] = useState([]);
+const ActivityLog = () => {
+  const { get } = useApi();
+  const dispatch = useDispatch();
+
+  // Prendo activities dallo store redux
+  const activities = useSelector(state => state.activitiesState.activities);
 
   useEffect(() => {
-    // Simulazione fetch, da rimuovere se hai già dati reali
-    setActivities([
-      { date: '2025-05-15', action: 'Cambio acqua 20%' },
-      { date: '2025-05-14', action: 'Controllo GH/KH' },
-    ]);
-  }, []);
+    const fetchActivities = async () => {
+      try {
+        const data = await get("/activities"); 
+        dispatch(setActivities(data)); 
+      } catch (error) {
+        toast.error("Errore nel caricamento delle attività");
+        console.error("Failed to fetch activities:", error);
+      }
+    };
+
+    fetchActivities();
+  }, [get, dispatch]);
+
+  if (!activities || activities.length === 0) {
+    return (
+      <div className="p-4 bg-white dark:bg-gray-800 rounded-2xl text-center transition-colors duration-300">
+        <h2 className="text-xl mb-4 font-semibold">Activity Log</h2>
+        <p className="text-gray-500 dark:text-gray-400">No activity available</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full bg-white dark:bg-gray-800 text-black dark:text-white rounded-2xl transition-colors duration-300 p-4">
-      <h2 className="text-xl mb-4 font-semibold">Registro attività</h2>
-      {activities.length === 0 ? (
-        <p className="text-gray-500 dark:text-gray-400">Nessuna attività registrata.</p>
-      ) : (
-        <ul className="space-y-3">
-          {activities.map((item, index) => (
-            <li
-              key={index}
-              className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 shadow-sm transition-colors duration-300"
-            >
-              <p className="font-medium">{item.date}</p>
-              <p>{item.action}</p>
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className="p-4 bg-white dark:bg-gray-800 rounded-2xl transition-colors duration-300">
+      <h2 className="text-xl mb-4 font-semibold">Activity Log</h2>
+      <ul className="space-y-3 max-h-96 overflow-y-auto">
+        {activities.map((item, index) => (
+          <li
+            key={index}
+            className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 shadow-sm"
+          >
+            <p className="font-medium">{item.date}</p>
+            <p>{item.action}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
-}
+};
 
 export default ActivityLog;
+
+
 
 
