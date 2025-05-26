@@ -185,22 +185,22 @@ const Consultancy = () => {
                 </div>
             </div>
 
-            <CustomModal isOpen={isOpen} setIsOpen={setIsOpen}>
-                <h2 className="text-2xl font-semibold mb-4">Create new request</h2>
+            <CustomModal isOpen={isOpen} setIsOpen={setIsOpen} className="dark:bg-gray-900 dark:text-white">
+                <h2 className="text-2xl font-semibold mb-4 dark:bg-gray-900 dark:text-white">Create new request</h2>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4 dark:bg-gray-900 dark:text-white">
                     <div>
-                        <label className="block text-sm font-medium mb-1">Nome richiedente</label>
+                        <label className="block text-sm font-medium mb-1 dark:bg-gray-900 dark:text-white">Nome richiedente</label>
                         <input
                             readOnly
                             type="text"
                             name="name"
                             value={`${user.first_name} ${user.last_name}`}
-                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm dark:bg-gray-900 dark:text-white"
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium mb-1">Testo della richiesta</label>
+                        <label className="block text-sm font-medium mb-1 dark:bg-gray-900 dark:text-white">Testo della richiesta</label>
                         <textarea
                             type="text"
                             name="request_type"
@@ -208,7 +208,7 @@ const Consultancy = () => {
                             onChange={handleChange}
                             required
                             rows={8}
-                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm dark:bg-gray-900 dark:text-white"
                         ></textarea>
                     </div>
                     <CustomButton type="submit">Invia</CustomButton>
