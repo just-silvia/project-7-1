@@ -13,6 +13,7 @@ import Consultancy from "./pages/dashboard/Consultancy";
 import Calculator from './pages/dashboard/Calculator';
 import RequestNewBrands from "./pages/dashboard/RequestNewBrands";
 import Lights from "./pages/dashboard/Lights";
+import Plants from "./pages/dashboard/Plants";
 
 const ProtectedRoute = ({ children }) => {
     const { token } = useSelector((state) => state.auth);
@@ -45,6 +46,7 @@ const App = () => {
                     <Route path="lights" element={<Lights />} />
                     <Route path="consultancy" element={<Consultancy />} />
                     <Route path="brands" element={<RequestNewBrands />} />
+                    <Route path="plants" element={<Plants />} />
                 </Route>
             </Routes>
         </>
