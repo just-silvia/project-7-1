@@ -17,7 +17,7 @@ const Navbar = () => {
     
     // Funzione per toggleare la dark mode
     const handleToggleDarkMode = () => {
-        toggleDarkMode(!darkMode);
+        toggleDarkMode(darkMode == false);
     };
    
     const toggleMenu = () => {
