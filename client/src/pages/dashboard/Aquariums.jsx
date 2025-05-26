@@ -76,10 +76,10 @@ const Aquariums = () => {
     return (
         <>
             <h1>My Tanks</h1>
-            <div className="bg-light max-w-7xl dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200 border-b dark:border-gray-700 flex flex-col md:flex-row items-center justify-between px-4 m-container py-4">
+            <div className="bg-light max-w-7xl dark:bg-gray-800 rounded-2xl shadow p-4 mb-6 transition-colors duration-300 dark:border-gray-700 dark:text-gray-200 flex flex-col md:flex-row items-center justify-between px-4 m-container py-4">
                 <h2>All Tanks</h2>
 
-                <div className="flex items-center space-x-2 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
+                <div className="flex items-center space-x-2 dark:bg-gray-800 dark:text-gray-200">
                     {/* Pulsante Add Tank */}
                     {!showAddForm ? (
                         <CustomButton
@@ -89,13 +89,13 @@ const Aquariums = () => {
                             Add Tank
                         </CustomButton>
                     ) : (
-                        <div className="flex items-center space-x-2 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
+                        <div className="flex items-center space-x-2 dark:bg-gray-800 dark:text-gray-200">
                             <input
                                 type="text"
                                 placeholder="New Tank Name"
                                 value={newTankName}
                                 onChange={(e) => setNewTankName(e.target.value)}
-                                className="border border-neutral-300 rounded-md px-3 py-1 text-sm shadow-sm dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200focus:outline-none focus:ring-2 focus:ring-accent"
+                                className="border border-neutral-300 rounded-md px-3 py-1 text-sm shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-accent"
                             />
                             <CustomButton
                                 type="default"
@@ -117,8 +117,8 @@ const Aquariums = () => {
                 </div>
             </div>
 
-            <div className="bg-light max-w-7xl dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200 border-b dark:border-gray-700 flex flex-wrap items-center justify-between px-4 m-container py-4">
-                <div className="flex flex-wrap gap-2 mb-4 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
+            <div className="bg-light max-w-7xl dark:bg-gray-800 rounded-2xl shadow p-4 mb-6 transition-colors duration-300 dark:text-gray-200 flex flex-wrap items-center justify-between px-4 m-container py-4">
+                <div className="flex flex-wrap gap-2 mb-4 dark:bg-gray-800 dark:text-gray-200">
                     <h3 className="w-full mb-2">Filter by Status:</h3>
                     {["All", "Last save", "First save", "Canceled", "Edit", "Delete"].map((st) => (
                         <CustomButton
@@ -136,8 +136,8 @@ const Aquariums = () => {
                 </div>
             </div>
 
-            <div className="m-container dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
-                <table className="w-full border-1 text-dark bg-light dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200 dark:text-gray-200">
+            <div className="m-container dark:bg-gray-800 rounded-2xl shadow p-4 mb-6 transition-colors duration-300 dark:text-gray-200">
+                <table className="w-full border-1 text-dark bg-light dark:bg-gray-800 dark:text-gray-200">
                     <thead>
                         <tr className="border-b border-neutral-200 dark:border-gray-700">
                             <th className="font-medium text-left p-3">Name Tank</th>
@@ -158,7 +158,7 @@ const Aquariums = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="2" className="p-3 text-center dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
+                                <td colSpan="2" className="p-3 text-center dark:bg-gray-800 dark:text-gray-200">
                                     No tanks found matching your criteria
                                 </td>
                             </tr>
@@ -167,8 +167,8 @@ const Aquariums = () => {
                 </table>
             </div>
 
-            <footer className="m-container py-4 bg-light dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200 text-dark dark:text-gray-200">
-                <div className="flex flex-col md:flex-row justify-between items-center dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
+            <footer className="m-container py-4 bg-light dark:bg-gray-800 rounded-2xl shadow p-4 transition-colors duration-300 dark:text-gray-200 text-dark">
+                <div className="flex flex-col md:flex-row justify-between items-center dark:bg-gray-800 dark:text-gray-200">
                     <div>
                         {filteredTanks.length > 0 ? (
                             <>Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, filteredTanks.length)} of {filteredTanks.length}</>
@@ -177,7 +177,7 @@ const Aquariums = () => {
                         )}
                     </div>
 
-                    <div className="flex items-center space-x-2 mt-4 md:mt-0 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
+                    <div className="flex items-center space-x-2 mt-4 md:mt-0 dark:bg-gray-800 dark:text-gray-200">
                         <CustomButton
                             type="default"
                             onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
@@ -186,7 +186,7 @@ const Aquariums = () => {
                             Previous
                         </CustomButton>
                         
-                        <span className="px-2 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
+                        <span className="px-2 dark:bg-gray-800 dark:text-gray-200">
                             Page {currentPage} of {Math.max(1, pageCount)}
                         </span>
                         

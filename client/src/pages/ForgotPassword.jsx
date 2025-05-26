@@ -33,7 +33,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-light dark:bg-dark">
+    <div className="flex justify-center items-center min-h-screen bg-light dark:bg-dark dark:text-gray-100">
       {/* Logo in alto a sinistra */}
       <div className="absolute top-4 left-4">
         <Link to="/">
@@ -47,19 +47,19 @@ const ForgotPassword = () => {
 
       <div className="flex flex-col md:flex-row w-full">
         {/* Lato sinistro - Form Reset Pass */}
-        <div className="w-full md:w-1/2 flex items-center justify-center">
+        <div className="w-full md:w-1/2 flex items-center justify-center bg-light dark:bg-dark">
           <div className="max-w-md min-w-[448px]">
             <h1 className="mb-10">Reset Password</h1>
 
             <form onSubmit={handleSubmit}>
               <div className="mb-6">
-                <label htmlFor="email" className="block mb-2 text-dark dark:text-gray-200">
-                  Email Address <span className="!text-red-500">*</span>
+                <label htmlFor="email" className="block mb-2 font-medium">
+                  Email Address <span className="!text-red-500 dark:!text-red-800">*</span>
                 </label>
                 <input
                   type="email"
                   id="email"
-                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-accent dark:bg-gray-700 dark:text-white"
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-accent dark:bg-gray-700 dark:text-gray-200"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -67,7 +67,7 @@ const ForgotPassword = () => {
               </div>
 
               <div className="flex justify-between items-center mb-8">
-                <Link to="/login" className="text-accent dark:text-accent hover:text-dark dark:hover:text-gray-300">
+                <Link to="/login" className="!text-accent hover:!text-primary transition-colors">
                   Back to Login
                 </Link>
                 <CustomButton
