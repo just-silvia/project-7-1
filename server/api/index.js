@@ -31,4 +31,9 @@ app.use("/lights", require("./routes/lights"));
  */
 app.use("/consultancies", require("./routes/consultancies"));
 
+/**
+ * @path /api/brands
+ */
+app.use("/brands", require("./routes/brands"));
+
 module.exports = app;
