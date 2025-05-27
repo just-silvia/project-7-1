@@ -6,6 +6,7 @@ import plantsSlice from "./slices/plantsSlice";
 import tanksSlice from "./slices/tanksSlice";
 import lightsSlice from "./slices/lightsSlice";
 import analyticsSlice from "./slices/analyticsSlice";
+import calculationsSlice from "./slices/calculationsSlice";
 
 export default configureStore({
     reducer: {
@@ -16,6 +17,7 @@ export default configureStore({
         tanks: tanksSlice,
         lights: lightsSlice,
         analytics: analyticsSlice,
+        calculations: calculationsSlice,
     }
 })
 

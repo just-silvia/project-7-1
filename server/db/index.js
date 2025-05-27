@@ -36,6 +36,7 @@ const models = {
     Light: require("./models/Light"),
     Consultancy: require("./models/Consultancy"),
     Brand: require("./models/Brand"),
+    Calculator: require("./models/Calculator"),
 };
 
 module.exports = {

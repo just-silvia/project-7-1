@@ -14,6 +14,8 @@ import Calculator from './pages/dashboard/Calculator';
 import RequestNewBrands from "./pages/dashboard/RequestNewBrands";
 import Lights from "./pages/dashboard/Lights";
 import Plants from "./pages/dashboard/Plants";
+import NewCalculator from "./pages/dashboard/NewCalculator";
+import EditCalculator from "./pages/dashboard/EditCalculator";
 
 const ProtectedRoute = ({ children }) => {
     const { token } = useSelector((state) => state.auth);
@@ -43,6 +45,8 @@ const App = () => {
                     <Route path="" element={<DashboardHome />} />
                     <Route path="tanks" element={<Aquariums />} />
                     <Route path="calculator" element={<Calculator />} />
+                    <Route path="calculator/new" element={<NewCalculator />} />
+                    <Route path="calculator/edit" element={<EditCalculator />} />
                     <Route path="lights" element={<Lights />} />
                     <Route path="consultancy" element={<Consultancy />} />
                     <Route path="brands" element={<RequestNewBrands />} />

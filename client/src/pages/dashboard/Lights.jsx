@@ -5,7 +5,7 @@ import CustomButton from "../../components/shared/CustomButton";
 import CustomModal from "../../components/dashboard/CustomModal";
 import { toast } from "react-toastify";
 import { setAllTanks } from "../../store/slices/tanksSlice";
-import { addNewLight, deleteOneLight } from "../../store/slices/lightsSlice";
+import { addNewLight, deleteOneLight, setAllLights } from "../../store/slices/lightsSlice";
 
 const Lights = () => {
     const dispatch = useDispatch();
@@ -15,6 +15,7 @@ const Lights = () => {
     const [form, setForm] = useState({
         name: "",
         description: "",
+        lumen: 0,
         tank: "",
     });
 
@@ -33,12 +34,13 @@ const Lights = () => {
         setForm({
             name: "",
             description: "",
+            lumen: 0,
             tank: "",
         });
     }
 
     const handleChange = ({ target: { value, name } }) => {
-        setForm((f) => ({ ...f, [name]: value }));
+        setForm((f) => ({ ...f, [name]: name == "lumen" ? Number(value) : value }));
     }
 
     const handleSubmit = async (e) => {
@@ -46,9 +48,9 @@ const Lights = () => {
 
         try {
             const data = await post("/lights", { ...form });
-            dispatch(addNewLight(data));
             setIsOpen(false);
             clearForm();
+            fetchLights();
         } catch (error) {
             toast.error("Internal server error, try again later");
         }
@@ -139,7 +141,9 @@ const Lights = () => {
                         <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
                             <tr className="border-b border-neutral-200 dark:border-neutral-700">
                                 <th className="p-2">Id</th>
+                                <th className="p-2 hidden md:table-cell">Tank</th>
                                 <th className="p-2 hidden md:table-cell">Name</th>
+                                <th className="p-2 hidden md:table-cell">Lumen</th>
                                 <th className="p-2 hidden lg:table-cell">Description</th>
                                 <th className="p-2 hidden lg:table-cell">Actions</th>
                             </tr>
@@ -148,7 +152,9 @@ const Lights = () => {
                             {lights.map((light, i) => (
                                 <tr key={`${light._id}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
                                     <td className="p-3 font-medium">{light._id}</td>
+                                    <td className="p-3 hidden md:table-cell">{light.tank.name}</td>
                                     <td className="p-3 hidden md:table-cell">{light.name}</td>
+                                    <td className="p-3 hidden md:table-cell">{light.lumen}</td>
                                     <td className="p-3 hidden lg:table-cell">{light.description}</td>
                                     <td className="p-3">
                                         <i onClick={() => handleDelete(light._id)} className="fa fa-trash cursor-pointer"></i>
@@ -185,7 +191,6 @@ const Lights = () => {
                     <div>
                         <label className="block text-sm font-medium mb-1">Name</label>
                         <input
-                            readOnly
                             type="text"
                             name="name"
                             value={form.name}
@@ -193,6 +198,20 @@ const Lights = () => {
                             required
                             className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
                             placeholder="Es. Anubias barteri"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Name</label>
+                        <input
+                            type="number"
+                            name="lumen"
+                            value={form.lumen}
+                            onInput={handleChange}
+                            required
+                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+                            placeholder="30000"
+                            min={1}
+                            step={1}
                         />
                     </div>
                     <div>
@@ -220,6 +239,7 @@ const Lights = () => {
                             className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
                             placeholder="Es. Anubias barteri"
                         >
+                            <option value="">Select a Tank...</option>
                             {
                                 tanks?.map(tank => (
                                     <option key={tank._id} value={tank._id}>{tank.name}</option>
