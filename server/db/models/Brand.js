@@ -1,24 +1,25 @@
 const { Schema, model } = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
 
-const PlantSchema = new Schema({
+const BrandSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: "User",
         requried: true,
     },
-    name: {
+    request_type: {
         type: String,
         required: true,
     },
-    description: {
+    status: {
         type: String,
-        required: true,
+        enum: ["Pending", "Canceled", "Completed"],
+        default: "Pending",
     },
 }, { strict: true, timestamps: true, versionKey: false });
 
-PlantSchema.plugin(mongoosePaginate);
+BrandSchema.plugin(mongoosePaginate);
 
-const Plant = model("Plant", PlantSchema);
+const Brand = model("Brand", BrandSchema);
 
-module.exports = Plant;
+module.exports = Brand;

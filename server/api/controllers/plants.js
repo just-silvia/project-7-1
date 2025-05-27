@@ -19,7 +19,7 @@ const getPlants = async (req, res) => {
     try {
         const { limit, page } = await schema.validateAsync(req.query);
 
-        const plants = await Plant.paginate({ user: user._id }, { limit, page, lean: true, populate: ["plants", "lights"] });
+        const plants = await Plant.paginate({ user: user._id }, { limit, page, lean: true });
 
         return res.status(200).json(plants);
     } catch (error) {
@@ -124,6 +124,8 @@ const deletePlantById = async (req, res) => {
 
     try {
         await Plant.deleteOne({ user: user._id, _id: plant_id });
+
+        await Tank.updateOne({ user: user._id }, { $pull: { plants: plant_id } });
 
         return res.status(200).json({ message: "Plant deleted" });
     } catch (error) {
