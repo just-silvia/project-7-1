@@ -151,7 +151,7 @@ const RequestNewBrands = () => {
                 </button>
               ))}
             </div>
-            <div>
+            <div className="ml-auto">
               <CustomButton onClick={() => setIsOpen((io) => !io)}>
                 New Request
               </CustomButton>
