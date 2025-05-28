@@ -132,7 +132,7 @@ const RequestNewBrands = () => {
           </div>
 
           <div className="flex gap-2 overflow-x-auto pb-2 mb-4 justify-between">
-            <div className="flex gap-2">
+            <div className="flex flex-wrap sm:flex-nowrap gap-2">
               {["All", "Pending", "Completed", "Canceled"].map((st) => (
                 <button
                   key={st}
