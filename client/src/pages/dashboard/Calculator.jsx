@@ -78,7 +78,6 @@ const Calculator = () => {
 
                     <div className="flex gap-2 overflow-x-auto pb-2 mb-4 justify-between">
                         <div className="flex flex-wrap sm:flex-nowrap gap-2">
-
                         </div>
                         <div>
                             <Link to="/app/calculator/new">
