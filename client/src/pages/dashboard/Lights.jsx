@@ -117,45 +117,34 @@ const Lights = () => {
                     </div>
 
                     <div className="flex gap-2 overflow-x-auto pb-2 mb-4 justify-between">
-                        <div className="flex flex-wrap sm:flex-nowrap gap-2">
-                            {["All", "Pending", "Completed", "Canceled"].map((st) => (
-                                <button
-                                    key={st}
-                                    onClick={() => {
-                                        setFilter(st);
-                                        setPage(1);
-                                    }}
-                                    className={`whitespace-nowrap px-4 py-1 rounded-full text-sm border border-neutral-200 shadow-md dark:bg-gray-800 dark:text-white dark:border-neutral-600 cursor-pointer
-                                ${filter === st ? "bg-black text-white dark:text-light" : "bg-light dark:bg-neutral-950"}`}
-                                >
-                                    {st}
-                                </button>
-                            ))}
+                        <div className="flex flex-wrap sm:flex-no-wrap gap-2">
+
                         </div>
                         <div>
                             <CustomButton onClick={() => setIsOpen(true)}>Add Light</CustomButton>
                         </div>
                     </div>
 
-                    <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
+                    <div className="overflow-x-auto w-full">
+                        <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
                         <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
                             <tr className="border-b border-neutral-200 dark:border-neutral-700">
                                 <th className="p-2">Id</th>
-                                <th className="p-2 hidden md:table-cell">Tank</th>
-                                <th className="p-2 hidden md:table-cell">Name</th>
-                                <th className="p-2 hidden md:table-cell">Lumen</th>
-                                <th className="p-2 hidden lg:table-cell">Description</th>
-                                <th className="p-2 hidden lg:table-cell">Actions</th>
+                                <th className="p-2">Tank</th>
+                                <th className="p-2">Name</th>
+                                <th className="p-2">Lumen</th>
+                                <th className="p-2">Description</th>
+                                <th className="p-2">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {lights.map((light, i) => (
                                 <tr key={`${light._id}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
                                     <td className="p-3 font-medium">{light._id}</td>
-                                    <td className="p-3 hidden md:table-cell">{light.tank.name}</td>
-                                    <td className="p-3 hidden md:table-cell">{light.name}</td>
-                                    <td className="p-3 hidden md:table-cell">{light.lumen}</td>
-                                    <td className="p-3 hidden lg:table-cell">{light.description}</td>
+                                    <td className="p-3">{light.tank.name}</td>
+                                    <td className="p-3">{light.name}</td>
+                                    <td className="p-3">{light.lumen}</td>
+                                    <td className="p-3">{light.description}</td>
                                     <td className="p-3">
                                         <i onClick={() => handleDelete(light._id)} className="fa fa-trash cursor-pointer"></i>
                                     </td>
@@ -163,6 +152,7 @@ const Lights = () => {
                             ))}
                         </tbody>
                     </table>
+                    </div>
 
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2 text-sm text-gray-600">
                         <div className="text-center sm:text-left">
@@ -201,7 +191,7 @@ const Lights = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium mb-1">Name</label>
+                        <label className="block text-sm font-medium mb-1">Lumen</label>
                         <input
                             type="number"
                             name="lumen"

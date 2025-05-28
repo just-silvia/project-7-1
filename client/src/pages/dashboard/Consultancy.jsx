@@ -52,7 +52,7 @@ const Consultancy = () => {
     const handleChange = ({ target: { value, name } }) => {
         setForm((f) => ({ ...f, [name]: value }));
     }
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -69,7 +69,7 @@ const Consultancy = () => {
 
     const handleDelete = async (consultancy_id) => {
         if (!confirm("Are you sure to delete this consultancy request?")) return;
-        
+
         try {
             await del(`/consultancies/${consultancy_id}`);
             dispatch(deleteOneConsultancy(consultancy_id));
@@ -115,8 +115,8 @@ const Consultancy = () => {
                         </div>
                     </div>
 
-                    <div className="flex gap-2 overflow-x-auto pb-2 mb-4 justify-between">
-                        <div className="flex flex-wrap sm:flex-nowrap gap-2">
+                    <div className="flex flex-col gap-2 overflow-x-auto pb-2 mb-4 justify-between sm:flex-row items-stretch sm:items-center">
+                        <div className="flex flex-wrap sm:flex-no-wrap   gap-2">
                             {["All", "Pending", "Completed", "Canceled"].map((st) => (
                                 <button
                                     key={st}
@@ -136,34 +136,36 @@ const Consultancy = () => {
                         </div>
                     </div>
 
-                    <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
-                        <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
-                            <tr className="border-b border-neutral-200 dark:border-neutral-700">
-                                <th className="p-2">Id</th>
-                                <th className="p-2 hidden md:table-cell">Request Type</th>
-                                <th className="p-2 hidden lg:table-cell">Created At</th>
-                                <th className="p-2 hidden lg:table-cell">Last Update</th>
-                                <th className="p-2">Status</th>
-                                <th className="p-2">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {requests.map((r, i) => (
-                                <tr key={`${r.id}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
-                                    <td className="p-3 font-medium">{r._id}</td>
-                                    <td className="p-3 hidden md:table-cell">{r.request_type}</td>
-                                    <td className="p-3 hidden lg:table-cell">{new Date(r.createdAt).toLocaleString()}</td>
-                                    <td className="p-3 hidden lg:table-cell">{new Date(r.updatedAt).toLocaleString()}</td>
-                                    <td className="p-3">
-                                        <RequestsStatus status={r.status} />
-                                    </td>
-                                    <td className="p-3">
-                                        <i onClick={() => handleDelete(r._id)} className="fa fa-trash cursor-pointer"></i>
-                                    </td>
+                    <div className="overflow-x-auto w-full">
+                        <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
+                            <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
+                                <tr className="border-b border-neutral-200 dark:border-neutral-700">
+                                    <th className="p-2">Id</th>
+                                    <th className="p-2">Request Type</th>
+                                    <th className="p-2">Created At</th>
+                                    <th className="p-2">Last Update</th>
+                                    <th className="p-2">Status</th>
+                                    <th className="p-2">Actions</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {requests.map((r, i) => (
+                                    <tr key={`${r.id}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
+                                        <td className="p-3 font-medium">{r._id}</td>
+                                        <td className="p-3">{r.request_type}</td>
+                                        <td className="p-3">{new Date(r.createdAt).toLocaleString()}</td>
+                                        <td className="p-3">{new Date(r.updatedAt).toLocaleString()}</td>
+                                        <td className="p-3">
+                                            <RequestsStatus status={r.status} />
+                                        </td>
+                                        <td className="p-3">
+                                            <i onClick={() => handleDelete(r._id)} className="fa fa-trash cursor-pointer"></i>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
 
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2 text-sm text-gray-600">
                         <div className="text-center sm:text-left">
