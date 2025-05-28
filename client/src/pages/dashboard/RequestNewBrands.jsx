@@ -31,7 +31,7 @@ const RequestsStatus = ({ status }) => {
 const RequestNewBrands = () => {
   const dispatch = useDispatch();
   const { get, post, del } = useApi();
-  const { user } = useSelector(state => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const { all: requests } = useSelector((state) => state.consultancies);
 
   const [form, setForm] = useState({
@@ -131,8 +131,8 @@ const RequestNewBrands = () => {
             </div>
           </div>
 
-          <div className="flex gap-2 overflow-x-auto pb-2 mb-4 justify-between">
-            <div className="flex gap-2">
+          <div className="flex flex-col gap-2 overflow-x-auto pb-2 mb-4 justify-between sm:flex-row items-stretch sm:items-center">
+            <div className="flex flex-wrap gap-2 sm:flex-no-wrap">
               {["All", "Pending", "Completed", "Canceled"].map((st) => (
                 <button
                   key={st}
@@ -158,44 +158,48 @@ const RequestNewBrands = () => {
             </div>
           </div>
 
-          <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
-            <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
-              <tr className="border-b border-neutral-200 dark:border-neutral-700">
-                <th className="p-2">Id</th>
-                <th className="p-2 hidden md:table-cell">Request Type</th>
-                <th className="p-2 hidden lg:table-cell">Created At</th>
-                <th className="p-2 hidden lg:table-cell">Last Update</th>
-                <th className="p-2">Status</th>
-                <th className="p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {requests.map((r, i) => (
-                <tr
-                  key={`${r.id}-${i}`}
-                  className="border-b border-neutral-200 dark:border-neutral-700"
-                >
-                  <td className="p-3 font-medium">{r._id}</td>
-                  <td className="p-3 hidden md:table-cell">{r.request_type}</td>
-                  <td className="p-3 hidden lg:table-cell">
-                    {new Date(r.createdAt).toLocaleString()}
-                  </td>
-                  <td className="p-3 hidden lg:table-cell">
-                    {new Date(r.updatedAt).toLocaleString()}
-                  </td>
-                  <td className="p-3">
-                    <RequestsStatus status={r.status} />
-                  </td>
-                  <td className="p-3">
-                    <i
-                      onClick={() => handleDelete(r._id)}
-                      className="fa fa-trash cursor-pointer"
-                    ></i>
-                  </td>
+          <div className="overflow-x-auto w-full">
+            <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
+              <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
+                <tr className="border-b border-neutral-200 dark:border-neutral-700">
+                  <th className="p-2">Id</th>
+                  <th className="p-2">Request Type</th>
+                  <th className="p-2">Created At</th>
+                  <th className="p-2">Last Update</th>
+                  <th className="p-2">Status</th>
+                  <th className="p-2">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {requests.map((r, i) => (
+                  <tr
+                    key={`${r.id}-${i}`}
+                    className="border-b border-neutral-200 dark:border-neutral-700"
+                  >
+                    <td className="p-3 font-medium">{r._id}</td>
+                    <td className="p-3">
+                      {r.request_type}
+                    </td>
+                    <td className="p-3">
+                      {new Date(r.createdAt).toLocaleString()}
+                    </td>
+                    <td className="p-3">
+                      {new Date(r.updatedAt).toLocaleString()}
+                    </td>
+                    <td className="p-3">
+                      <RequestsStatus status={r.status} />
+                    </td>
+                    <td className="p-3">
+                      <i
+                        onClick={() => handleDelete(r._id)}
+                        className="fa fa-trash cursor-pointer"
+                      ></i>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2 text-sm text-gray-600">
             <div className="text-center sm:text-left"></div>
@@ -230,29 +234,31 @@ const RequestNewBrands = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-                <label className="block text-sm font-medium mb-1">Your name</label>
-                <input
-                    readOnly
-                    type="text"
-                    name="name"
-                    value={`${user.first_name} ${user.last_name}`}
-                    className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
-                />
-            </div>
-            <div>
-                <label className="block text-sm font-medium mb-1">Elaborate your request</label>
-                <textarea
-                    type="text"
-                    name="request_type"
-                    value={form.request_type}
-                    onChange={handleChange}
-                    required
-                    rows={8}
-                    className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
-                ></textarea>
-            </div>
-            <CustomButton type="submit">Submit</CustomButton>
+          <div>
+            <label className="block text-sm font-medium mb-1">Your name</label>
+            <input
+              readOnly
+              type="text"
+              name="name"
+              value={`${user.first_name} ${user.last_name}`}
+              className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Elaborate your request
+            </label>
+            <textarea
+              type="text"
+              name="request_type"
+              value={form.request_type}
+              onChange={handleChange}
+              required
+              rows={8}
+              className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+            ></textarea>
+          </div>
+          <CustomButton type="submit">Submit</CustomButton>
         </form>
       </CustomModal>
     </>
