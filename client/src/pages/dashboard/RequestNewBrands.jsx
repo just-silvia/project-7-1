@@ -71,7 +71,9 @@ const RequestNewBrands = () => {
       setIsOpen(false);
     } catch (error) {
       console.log(error);
-      toast.error("Internal server error, try again later");
+      toast.error("Internal server error, try again later!", {
+        theme: "dark",
+      });
     }
   };
 
@@ -84,7 +86,9 @@ const RequestNewBrands = () => {
       dispatch(deleteOneConsultancy(id));
     } catch (error) {
       console.log(error);
-      toast.error("Internal server error, try again later");
+      toast.error("Internal server error, try again later!", {
+        theme: "dark",
+      });
     }
   };
 
@@ -102,7 +106,9 @@ const RequestNewBrands = () => {
       });
     } catch (error) {
       console.log(error);
-      toast.error("Internal server error, try again later");
+      toast.error("Internal server error, try again later!", {
+        theme: "dark",
+      });
     }
   };
 
@@ -177,9 +183,7 @@ const RequestNewBrands = () => {
                     className="border-b border-neutral-200 dark:border-neutral-700"
                   >
                     <td className="p-3 font-medium">{r._id}</td>
-                    <td className="p-3">
-                      {r.request_type}
-                    </td>
+                    <td className="p-3">{r.request_type}</td>
                     <td className="p-3">
                       {new Date(r.createdAt).toLocaleString()}
                     </td>

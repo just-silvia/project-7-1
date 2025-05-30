@@ -55,7 +55,9 @@ const Plants = () => {
       setIsOpen(false);
       clearForm();
     } catch (error) {
-      toast.error("Internal server error, try again later");
+      toast.error("Internal server error, try again later!", {
+        theme: "dark",
+      });
     }
   };
 
@@ -66,7 +68,9 @@ const Plants = () => {
       dispatch(deleteOnePlant(id));
     } catch {
       console.log(error);
-      toast.error("Internal server error, try again later");
+      toast.error("Internal server error, try again later!", {
+        theme: "dark",
+      });
     }
   };
 
@@ -84,7 +88,9 @@ const Plants = () => {
       });
     } catch (error) {
       console.log(error);
-      toast.error("Internal server error, try again later");
+      toast.error("Internal server error, try again later!", {
+        theme: "dark",
+      });
     }
   };
 
@@ -98,7 +104,9 @@ const Plants = () => {
       });
     } catch (error) {
       console.log(error);
-      toast.error("Internal server error, try again later");
+      toast.error("Internal server error, try again later!", {
+        theme: "dark",
+      });
     }
   };
 
@@ -155,9 +163,7 @@ const Plants = () => {
                   >
                     <td className="p-3 font-medium">{plant._id}</td>
                     <td className="p-3">{plant.name}</td>
-                    <td className="p-3">
-                      {plant.description}
-                    </td>
+                    <td className="p-3">{plant.description}</td>
                     <td className="p-3">
                       <i
                         onClick={() => handleDelete(plant._id)}
