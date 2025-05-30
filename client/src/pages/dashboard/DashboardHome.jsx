@@ -1,20 +1,19 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import TanksTable from '../../components/dashboard/TanksTable';
-import GhKhGraph from '../../components/dashboard/GhKhGraph';
-import ActivityLog from '../../components/dashboard/ActivityLog';
-import AquariumList from '../../components/dashboard/AquariumList';
-import HistoryTable from '../../components/dashboard/HistoryTable';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import TanksTable from "../../components/dashboard/TanksTable";
+import GhKhGraph from "../../components/dashboard/GhKhGraph";
+import ActivityLog from "../../components/dashboard/ActivityLog";
+import AquariumList from "../../components/dashboard/AquariumList";
+import HistoryTable from "../../components/dashboard/HistoryTable";
 
 const DashboardHome = () => {
   const dispatch = useDispatch();
 
-  const tanks = [];// useSelector(state => state.tanks.list);
-  const history = [];// useSelector(state => state.history.data);
-  const selectedTank = [];// useSelector(state => state.selectedTank);
+  const tanks = []; // useSelector(state => state.tanks.list);
+  const history = []; // useSelector(state => state.history.data);
+  const selectedTank = []; // useSelector(state => state.selectedTank);
 
-  useEffect(() => {
-  }, [dispatch]);
+  useEffect(() => {}, [dispatch]);
 
   // Seleziona il primo tank di default se non si ha
   useEffect(() => {
@@ -36,7 +35,11 @@ const DashboardHome = () => {
 
         {/* Lista Acquari */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow p-4 mb-6 transition-colors duration-300">
-          <AquariumList tanks={tanks} selectedTank={selectedTank} setSelectedTank={(id) => dispatch(setSelectedTank(id))} />
+          <AquariumList
+            tanks={tanks}
+            selectedTank={selectedTank}
+            setSelectedTank={(id) => dispatch(setSelectedTank(id))}
+          />
         </div>
 
         {/* Tabella Storico */}
@@ -64,5 +67,3 @@ const DashboardHome = () => {
 };
 
 export default DashboardHome;
-
-
