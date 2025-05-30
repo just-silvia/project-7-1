@@ -52,7 +52,9 @@ const Lights = () => {
             clearForm();
             fetchLights();
         } catch (error) {
-            toast.error("Internal server error, try again later");
+            toast.error("Internal server error, try again later", {
+                theme: "dark",
+            });
         }
     }
 
@@ -64,7 +66,9 @@ const Lights = () => {
             dispatch(deleteOneLight(id));
         } catch (error) {
             console.log(error);
-            toast.error("Internal server error, try again later");
+            toast.error("Internal server error, try again later", {
+                theme: "dark",
+            });
         }
     }
 
@@ -75,7 +79,9 @@ const Lights = () => {
             setRequestInfo({ hasNextPage: data.hasNextPage, hasPrevPage: data.hasPrevPage });
         } catch (error) {
             console.log(error);
-            toast.error("Internal server error, try again later");
+            toast.error("Internal server error, try again later", {
+                theme: "dark",
+            });
         }
     };
 
@@ -86,7 +92,9 @@ const Lights = () => {
             setRequestInfo({ hasNextPage: data.hasNextPage, hasPrevPage: data.hasPrevPage });
         } catch (error) {
             console.log(error);
-            toast.error("Internal server error, try again later");
+            toast.error("Internal server error, try again later", {
+                theme: "dark",
+            });
         }
     }
 

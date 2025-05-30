@@ -63,11 +63,15 @@ const Register = () => {
         try {
             await post("/users", { first_name, last_name, email, password, is_privacy_accepted }, "API");
 
-            toast.success("Register done successfully!");
+            toast.success("Register done successfully!", {
+                theme: "dark",
+            });
             navigate("/app");
         } catch (error) {
             console.log(error);
-            toast.error("Error during registration, try again!");
+            toast.error("Error during registration, try again!", {
+                theme: "dark",
+            });
         }
     };
 

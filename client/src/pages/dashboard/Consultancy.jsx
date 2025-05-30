@@ -63,7 +63,9 @@ const Consultancy = () => {
             clearForm();
         } catch (error) {
             console.log(error);
-            toast.error("Internal server error, try again later");
+            toast.error("Internal server error, try again later", {
+                theme: "dark",
+            });
         }
     }
 
@@ -75,7 +77,9 @@ const Consultancy = () => {
             dispatch(deleteOneConsultancy(consultancy_id));
         } catch (error) {
             console.log(error);
-            toast.error("Internal server error, try again later");
+            toast.error("Internal server error, try again later", {
+                theme: "dark",
+            });
         }
     }
 
@@ -86,7 +90,9 @@ const Consultancy = () => {
             setRequestInfo({ hasNextPage: data.hasNextPage, hasPrevPage: data.hasPrevPage });
         } catch (error) {
             console.log(error);
-            toast.error("Internal server error, try again later");
+            toast.error("Internal server error, try again later", {
+                theme: "dark",
+            });
         }
     }
 
@@ -134,7 +140,7 @@ const Consultancy = () => {
                         <div className="ml-auto">
                             <CustomButton onClick={() => setIsOpen(true)}>Add Request</CustomButton>
                         </div>
-                    </div> 
+                    </div>
 
                     <div className="overflow-x-auto w-full">
                         <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
