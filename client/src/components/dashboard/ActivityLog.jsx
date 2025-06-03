@@ -1,52 +1,20 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useApi } from "../../hooks/useApi";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
-
-const ActivityLog = () => {
-  const { get } = useApi();
-  const dispatch = useDispatch();
-
-  // Prendo activities dallo store redux
-  const activities = []; // useSelector(state => state.activitiesState.activities);
-
-  useEffect(() => {
-    const fetchActivities = async () => {
-      try {
-        const data = await get("/activities");
-      } catch (error) {
-        toast.error("Internal server error, try again later!", {
-          theme: "dark",
-        });
-        console.error("Failed to fetch activities:", error);
-      }
-    };
-
-    fetchActivities();
-  }, []);
-
+const ActivityLog = ({ activities = [] }) => {
   if (!activities || activities.length === 0) {
     return (
       <div className="p-4 bg-white dark:bg-gray-800 rounded-2xl text-center transition-colors duration-300">
         <h2 className="text-xl mb-4 font-semibold">Activity Log</h2>
-        <p className="text-gray-500 dark:text-gray-400">
-          No activity available
-        </p>
+        <p className="dark:text-white">No recent activities.</p>
       </div>
     );
   }
 
   return (
     <div className="p-4 bg-white dark:bg-gray-800 rounded-2xl transition-colors duration-300">
-      <h2 className="text-xl mb-4 font-semibold">Activity Log</h2>
-      <ul className="space-y-3 max-h-96 overflow-y-auto">
-        {activities.map((item, index) => (
-          <li
-            key={index}
-            className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 shadow-sm"
-          >
-            <p className="font-medium">{item.date}</p>
-            <p>{item.action}</p>
+      <h2 className="text-xl mb-4 font-semibold dark:text-white">Activity Log</h2>
+      <ul className="list-disc pl-5 space-y-2 dark:text-white">
+        {activities.map((act, i) => (
+          <li key={i}>
+            <span className="font-medium">{act.date}:</span> {act.action}
           </li>
         ))}
       </ul>
@@ -55,3 +23,7 @@ const ActivityLog = () => {
 };
 
 export default ActivityLog;
+
+
+
+

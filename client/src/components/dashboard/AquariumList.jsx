@@ -1,12 +1,6 @@
-import { useSelector, useDispatch } from 'react-redux';
-
-const AquariumList = () => {
-  const tanks = []; // useSelector(state => state.tanks.list);
-  const selectedTank = []; // useSelector(state => state.selectedTank);
-  const dispatch = useDispatch();
-
+const AquariumList = ({ tanks = [], selectedTank, setSelectedTank }) => {
   const handleSelect = (id) => {
-    dispatch();
+    if (setSelectedTank) setSelectedTank(id);
   };
 
   return (
@@ -19,16 +13,20 @@ const AquariumList = () => {
             onClick={() => handleSelect(tank.id)}
             className={`cursor-pointer bg-white dark:bg-gray-700 shadow-md rounded-2xl p-4 border ${
               selectedTank === tank.id
-                ? 'border-blue-500 dark:border-blue-400'
-                : 'border-gray-200 dark:border-gray-600'
+                ? "border-blue-500 dark:border-blue-400"
+                : "border-gray-200 dark:border-gray-600"
             } transition-colors duration-300`}
           >
             <h3 className="text-xl mb-2">{tank.name}</h3>
-            <p><span className="font-medium">Type:</span> {tank.type}</p>
-            <p><span className="font-medium">Volume:</span> {tank.volume}L</p>
             <p>
-              <span className="font-medium">Dimensions:</span>{' '}
-              {tank?.dimensions?.h}h x {tank?.dimensions?.l}l x {tank?.dimensions?.d}d
+              <span className="font-medium">Type:</span> {tank.type}
+            </p>
+            <p>
+              <span className="font-medium">Volume:</span> {tank.volume}L
+            </p>
+            <p>
+              <span className="font-medium">Dimensions:</span> {tank?.dimensions?.h}h x {tank?.dimensions?.l}l x{" "}
+              {tank?.dimensions?.d}d
             </p>
           </div>
         ))}
@@ -38,6 +36,10 @@ const AquariumList = () => {
 };
 
 export default AquariumList;
+
+
+
+
 
 
 
