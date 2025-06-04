@@ -19,7 +19,7 @@ const getLights = async (req, res) => {
     try {
         const { limit, page } = await schema.validateAsync(req.query);
 
-        const lights = await Light.paginate({ user: user._id }, { limit, page, lean: true });
+        const lights = await Light.paginate({ user: user._id }, { limit, page, lean: true, populate: ["tank"] });
 
         return res.status(200).json(lights);
     } catch (error) {
@@ -38,7 +38,7 @@ const getLightById = async (req, res) => {
     const light_id = req.params.light_id;
 
     try {
-        const light = await Light.findOne({ user: user._id, _id: light_id }, null, { lean: true });
+        const light = await Light.findOne({ user: user._id, _id: light_id }, null, { lean: true, populate: ["tank"] });
 
         return res.status(200).json(light);
     } catch (error) {
@@ -69,7 +69,6 @@ const createLight = async (req, res) => {
 
         if (data.tank) {
             tank = data.tank;
-            delete data.tank;
         }
 
         const light = (await new Light({ user: user._id, ...data }).save()).toObject();

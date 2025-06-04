@@ -29,16 +29,13 @@ const RequestsStatus = ({ status }) => {
 };
 
 const RequestNewBrands = () => {
-  const { get, post, del } = useApi();
   const dispatch = useDispatch();
+  const { get, post, del } = useApi();
+  const { user } = useSelector(state => state.auth);
   const { all: requests } = useSelector((state) => state.consultancies);
 
   const [form, setForm] = useState({
-    applicantName: "",
-    trademarkName: "",
-    description: "",
-    category: "",
-    submissionDate: "",
+    request_type: "",
   });
 
   const [isOpen, setIsOpen] = useState(false);
@@ -55,11 +52,7 @@ const RequestNewBrands = () => {
 
   const clearForm = () => {
     setForm({
-      applicantName: "",
-      trademarkName: "",
-      description: "",
-      category: "",
-      submissionDate: "",
+      request_type: "",
     });
     setSubmitted(false);
   };
@@ -71,7 +64,7 @@ const RequestNewBrands = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = await post("/newconsultancies", form);
+      const data = await post("/brands", form);
       dispatch(addNewConsultancy(data));
       setSubmitted(true);
       clearForm();
@@ -87,7 +80,7 @@ const RequestNewBrands = () => {
       return;
 
     try {
-      await del(`/newconsultancies/${id}`);
+      await del(`/brands/${id}`);
       dispatch(deleteOneConsultancy(id));
     } catch (error) {
       console.log(error);
@@ -98,7 +91,7 @@ const RequestNewBrands = () => {
   const fetchNewConsultancies = async () => {
     try {
       const data = await get(
-        `/newconsultancies?limit=${limit}&page=${page}${
+        `/brands?limit=${limit}&page=${page}${
           filter === "All" ? "" : `&status=${filter}`
         }`
       );
@@ -237,55 +230,29 @@ const RequestNewBrands = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Your Name
-            </label>
-            <input
-              type="text"
-              name="applicantName"
-              value={form.applicantName}
-              onChange={handleChange}
-              className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Brand name</label>
-            <input
-              type="text"
-              name="trademarkName"
-              value={form.trademarkName}
-              onChange={handleChange}
-              className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Description
-            </label>
-            <textarea
-              name="description"
-              value={form.description}
-              onChange={handleChange}
-              rows={3}
-              className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Category</label>
-            <input
-              type="text"
-              name="category"
-              value={form.category}
-              onChange={handleChange}
-              className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
-            />
-          </div>
-
-          <CustomButton type="submit">Send request</CustomButton>
+            <div>
+                <label className="block text-sm font-medium mb-1">Your name</label>
+                <input
+                    readOnly
+                    type="text"
+                    name="name"
+                    value={`${user.first_name} ${user.last_name}`}
+                    className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+                />
+            </div>
+            <div>
+                <label className="block text-sm font-medium mb-1">Elaborate your request</label>
+                <textarea
+                    type="text"
+                    name="request_type"
+                    value={form.request_type}
+                    onChange={handleChange}
+                    required
+                    rows={8}
+                    className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+                ></textarea>
+            </div>
+            <CustomButton type="submit">Submit</CustomButton>
         </form>
       </CustomModal>
     </>

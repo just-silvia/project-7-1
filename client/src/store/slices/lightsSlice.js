@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const lightsSlice = createSlice({
-    name: "light",
+    name: "lights",
     initialState: {
         all: [],
     },

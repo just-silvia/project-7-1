@@ -1,33 +1,28 @@
 const { Schema, model } = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
 
-const LightSchema = new Schema({
+const CalculatorSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: "User",
-        requried: true,
-    },
-    tank: {
-        type: Schema.Types.ObjectId,
-        ref: "Tank",
         requried: true,
     },
     name: {
         type: String,
         required: true,
     },
-    description: {
-        type: String,
+    parameters: {
+        type: Object,
         required: true,
     },
-    lumen: {
-        type: Number,
-        requried: true,
+    results: {
+        type: Array,
+        required: true,
     },
 }, { strict: true, timestamps: true, versionKey: false });
 
-LightSchema.plugin(mongoosePaginate);
+CalculatorSchema.plugin(mongoosePaginate);
 
-const Light = model("Light", LightSchema);
+const Calculator = model("Calculator", CalculatorSchema);
 
-module.exports = Light;
+module.exports = Calculator;
