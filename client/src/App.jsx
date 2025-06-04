@@ -16,6 +16,7 @@ import Lights from "./pages/dashboard/Lights";
 import Plants from "./pages/dashboard/Plants";
 import NewCalculator from "./pages/dashboard/NewCalculator";
 import EditCalculator from "./pages/dashboard/EditCalculator";
+import { ToastContainer } from "react-toastify";
 
 const ProtectedRoute = ({ children }) => {
     const { token } = useSelector((state) => state.auth);
@@ -26,6 +27,7 @@ const ProtectedRoute = ({ children }) => {
 }
 
 const App = () => {
+    const {darkMode} = useSelector((state) => state.settings);
     return (
         <>
             <Routes>
@@ -53,6 +55,7 @@ const App = () => {
                     <Route path="plants" element={<Plants />} />
                 </Route>
             </Routes>
+            <ToastContainer theme={darkMode ? "dark" : "light"} />
         </>
     );
 };

@@ -21,18 +21,23 @@ const Calculator = () => {
         hasPrevPage: false
     });
 
-    const [filter, setFilter] = useState("All");
     const [searchTerm, setSearchTerm] = useState("");
 
     const handleDelete = async (id) => {
-        if (!confirm("Are you sure to delete this light?")) return;
+        if (!confirm("Are you sure to delete this calculation?")) return;
 
         try {
             await del(`/calculators/${id}`);
             dispatch(deleteOneCalculation(id));
+            // Toast di successo per la cancellazione
+            toast.success("Calculation deleted successfully!", { 
+                theme: "dark" 
+            });
         } catch (error) {
             console.log(error);
-            toast.error("Internal server error, try again later");
+            toast.error("Error during deletion, try again!", {
+                theme: "dark", // Rimosso il "!" che causava errore
+            });
         }
     }
 
@@ -43,25 +48,27 @@ const Calculator = () => {
 
     const fetchCalculations = async () => {
         try {
-            const data = await get(`/calculators?limit=${limit}&page=${page}${filter == "All" ? "" : `&status=${filter}`}`);
+            const data = await get(`/calculators?limit=${limit}&page=${page}`);
             dispatch(setAllCalculations(data.docs));
             setRequestInfo({ hasNextPage: data.hasNextPage, hasPrevPage: data.hasPrevPage });
         } catch (error) {
             console.log(error);
-            toast.error("Internal server error, try again later");
+            toast.error("Error loading calculations, try again later!", {
+                theme: "dark", // Rimosso il "!" che causava errore
+            });
         }
     };
 
     useEffect(() => {
         fetchCalculations();
-    }, [limit, page, filter]);
+    }, [limit, page]);
 
     return (
         <>
             <div className="w-full flex items-start justify-center px-2 dark:bg-gray-900 dark:text-white">
                 <div className="w-full max-w-7xl">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
-                        <h2 className="text-xl font-semibold">Lights</h2>
+                        <h2 className="text-xl font-semibold">Calculator</h2>
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                             <input
                                 type="text"
@@ -79,19 +86,6 @@ const Calculator = () => {
 
                     <div className="flex gap-2 overflow-x-auto pb-2 mb-4 justify-between">
                         <div className="flex flex-wrap sm:flex-nowrap gap-2">
-                            {["All", "Pending", "Completed", "Canceled"].map((st) => (
-                                <button
-                                    key={st}
-                                    onClick={() => {
-                                        setFilter(st);
-                                        setPage(1);
-                                    }}
-                                    className={`whitespace-nowrap px-4 py-1 rounded-full text-sm border border-neutral-200 shadow-md dark:bg-gray-800 dark:text-white dark:border-neutral-600 cursor-pointer
-                                ${filter === st ? "bg-black text-white dark:text-light" : "bg-light dark:bg-neutral-950"}`}
-                                >
-                                    {st}
-                                </button>
-                            ))}
                         </div>
                         <div>
                             <Link to="/app/calculator/new">

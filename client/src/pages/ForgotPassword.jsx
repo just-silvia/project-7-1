@@ -28,69 +28,66 @@ const ForgotPassword = () => {
     } catch (err) {
       console.log(err);
       // Gestisco l'errore mostrando un messaggio appropriato
-      toast.error("Account or email not found");
+      toast.error("Account name not found", {
+        theme: "dark",
+    });
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-light dark:bg-dark dark:text-gray-100">
+    <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 dark:bg-dark dark:text-gray-100">
       {/* Logo in alto a sinistra */}
-      <div className="absolute top-4 left-4">
+      <div className="absolute top-6 left-6">
         <Link to="/">
           <img
             src={logo}
             alt="Logo"
-            className="h-12 w-auto"
+            className="h-10 w-auto"
           />
         </Link>
       </div>
 
-      <div className="flex flex-col md:flex-row w-full">
-        {/* Lato sinistro - Form Reset Pass */}
-        <div className="w-full md:w-1/2 flex items-center justify-center bg-light dark:bg-dark">
-          <div className="max-w-md min-w-[448px]">
-            <h1 className="mb-10">Reset Password</h1>
+      {/* Lato sinistro - Form Reset Pass */}
+      <div className="flex items-center justify-center bg-light dark:bg-dark px-4 py-10 sm:px-6 lg:px-8">
+        <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
+          <h1 className="text-center dark:text-gray-100">Reset Password</h1>
 
-            <form onSubmit={handleSubmit}>
-              <div className="mb-6">
-                <label htmlFor="email" className="block mb-2 font-medium">
-                  Email Address <span className="!text-red-500 dark:!text-red-800">*</span>
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-accent dark:bg-gray-700 dark:text-gray-200"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="flex justify-between items-center mb-8">
-                <Link to="/login" className="!text-accent hover:!text-primary transition-colors">
-                  Back to Login
-                </Link>
-                <CustomButton
-                  type="default"
-                  onClick={handleSubmit}
-                >
-                  Reset Password
-                </CustomButton>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        {/* Lato destro - Immagine */}
-        <div className="w-full h-screen md:w-1/2">
-          <div className="hidden h-full md:block">
-            <img
-              src={imgResetPSW}
-              alt="Pianta"
-              className="w-auto h-full object-cover"
+          <div>
+            <label htmlFor="email" className="block font-medium mb-1">
+              Email Address <span className="!text-red-500 dark:!text-red-800">*</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              placeholder="Email"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
-        </div>
+
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
+            <Link to="/login" className="!text-accent hover:!text-primary transition-colors text-sm">
+              Back to Login
+            </Link>
+            <CustomButton
+              type="submit"
+              className="px-6 py-2"
+            >
+              Reset Password
+            </CustomButton>
+          </div>
+        </form>
+      </div>
+
+      {/* Lato destro - Immagine */}
+      <div className="hidden md:flex items-center justify-center bg-gray-100">
+        <img
+          src={imgResetPSW}
+          alt="Pianta"
+          className="w-full h-full object-cover max-h-screen"
+        />
       </div>
     </div>
   );
