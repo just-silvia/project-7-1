@@ -27,7 +27,9 @@ const Login = () => {
             navigate("/app");
         } catch (err) {
             console.log(err);
-            toast.error("Utente non trovato");
+            toast.error("User not found", {
+                theme: "dark",
+            });
         }
     };
 

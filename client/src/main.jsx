@@ -2,7 +2,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider as ReduxProvider } from 'react-redux'
 import { ApiProvider } from './providers/api.jsx'
-import { ToastContainer } from 'react-toastify'
+
 
 import App from './App.jsx'
 
@@ -16,7 +16,6 @@ createRoot(document.getElementById('root')).render(
             <ApiProvider>
                 <BrowserRouter>
                     <App />
-                    <ToastContainer />
                 </BrowserRouter>
             </ApiProvider>
         </SettingsProvider>

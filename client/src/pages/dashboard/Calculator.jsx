@@ -24,14 +24,20 @@ const Calculator = () => {
     const [searchTerm, setSearchTerm] = useState("");
 
     const handleDelete = async (id) => {
-        if (!confirm("Are you sure to delete this light?")) return;
+        if (!confirm("Are you sure to delete this calculation?")) return;
 
         try {
             await del(`/calculators/${id}`);
             dispatch(deleteOneCalculation(id));
+            // Toast di successo per la cancellazione
+            toast.success("Calculation deleted successfully!", { 
+                theme: "dark" 
+            });
         } catch (error) {
             console.log(error);
-            toast.error("Internal server error, try again later");
+            toast.error("Error during deletion, try again!", {
+                theme: "dark", // Rimosso il "!" che causava errore
+            });
         }
     }
 
@@ -47,7 +53,9 @@ const Calculator = () => {
             setRequestInfo({ hasNextPage: data.hasNextPage, hasPrevPage: data.hasPrevPage });
         } catch (error) {
             console.log(error);
-            toast.error("Internal server error, try again later");
+            toast.error("Error loading calculations, try again later!", {
+                theme: "dark", // Rimosso il "!" che causava errore
+            });
         }
     };
 

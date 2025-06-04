@@ -28,7 +28,9 @@ const ForgotPassword = () => {
     } catch (err) {
       console.log(err);
       // Gestisco l'errore mostrando un messaggio appropriato
-      toast.error("Account or email not found");
+      toast.error("Account name not found", {
+        theme: "dark",
+    });
     }
   };
 
