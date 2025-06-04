@@ -76,10 +76,12 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 dark:bg-dark dark:text-gray-100"> 
+        <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 dark:bg-dark dark:text-gray-100">
             <div className="absolute top-6 left-6">
                 <Link to="/">
-                    <img src={logo} alt="Logo" className="h-10 w-auto" />
+                    <div className="h-12">
+                        <img src={logo} alt="Logo" className="h-full object-contain" />
+                    </div>
                 </Link>
             </div>
             <div className="flex items-center justify-center bg-light dark:bg-dark px-4 py-10 sm:px-6 lg:px-8">
