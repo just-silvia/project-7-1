@@ -156,7 +156,6 @@ const Aquariums = () => {
                 </div>
             </div>
 
-<<<<<<< HEAD
             <div className="m-container dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
                 <table className="w-full text-left border-spacing-y-3 overflow-hidden dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
                     <thead className="text-xs uppercase border-y border-neutral-200 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
@@ -164,14 +163,6 @@ const Aquariums = () => {
                             <th >Id</th>
                             <th >Name</th>
                             <th >Description</th>
-=======
-            <div className="m-container dark:bg-gray-800 rounded-2xl shadow p-4 mb-6 transition-colors duration-300 dark:text-gray-200">
-                <table className="w-full border-1 text-dark bg-light dark:bg-gray-800 dark:text-gray-200">
-                    <thead>
-                        <tr className="border-b border-neutral-200 dark:border-gray-700">
-                            <th className="font-medium text-left p-3">Name Tank</th>
-                            <th className="text-left p-3">Status</th>
->>>>>>> 4854d475dc6b2b2212d033e8a1514b090c09e668
                         </tr>
                     </thead>
                     <tbody>
@@ -218,13 +209,8 @@ const Aquariums = () => {
                         >
                             Previous
                         </CustomButton>
-<<<<<<< HEAD
 
                         <span className="px-2 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
-=======
-                        
-                        <span className="px-2 dark:bg-gray-800 dark:text-gray-200">
->>>>>>> 4854d475dc6b2b2212d033e8a1514b090c09e668
                             Page {currentPage} of {Math.max(1, pageCount)}
                         </span>
 
