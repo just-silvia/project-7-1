@@ -1,243 +1,242 @@
 import { useState, useEffect } from "react";
 import CustomButton from "../../components/shared/CustomButton";
-
-import { NotesContext } from "../../providers/NotesContext";
-
-// Componente per lo stato degli acquari
-const TanksStatus = ({ status }) => {
-    const statusColor =
-        status === "Last save"
-            ? "bg-accent !text-white"
-            : status === "First save"
-                ? "bg-accent !text-white"
-                : status === "Canceled"
-                    ? "bg-accent !text-white"
-                    : status === "Edit"
-                        ? "bg-accent !text-white"
-                        : status === "Delete"
-                            ? "bg-accent !text-white"
-                            : "bg-gray-200 !text-gray-800";
-
-    return (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColor}`}>
-            {status}
-        </span>
-    );
-};
-
+import { useDispatch, useSelector } from "react-redux";
+import { useApi } from "../../hooks/useApi";
+import { addNewTank, deleteOneTank, setAllTanks } from "../../store/slices/tanksSlice";
+import CustomModal from "../../components/dashboard/CustomModal";
+import { toast } from "react-toastify";
 const Aquariums = () => {
-    // Stato iniziale degli acquari - simulazione in attesa dei dati da API
-    const [tanks, setTanks] = useState([
-        { id: 1, tank: "Tropical Aquarium", status: "Last save" },
-        { id: 2, tank: "Marine Reef", status: "First save" },
-        { id: 3, tank: "Planted Tank", status: "Canceled" },
-    ]);
-
-    const [notes, setNotes] = useState([""]);
+    const dispatch = useDispatch();
+    const { get, post, del } = useApi();
+    const { all: tanks } = useSelector((state) => state.tanks);
     const [searchTerm, setSearchTerm] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const [filter, setFilter] = useState("All");
-    const [newTankName, setNewTankName] = useState("");
-    const [showAddForm, setShowAddForm] = useState(false);
+    const [filter] = useState("All");
+    const [isOpen, setIsOpen] = useState(false);
+    const [limit] = useState(10);
+    const [page, setPage] = useState(1);
+    const [requestInfo, setRequestInfo] = useState({
+        hasNextPage: false,
+        hasPrevPage: false,
+    });
 
-    const itemsPerPage = 5;
-
-    // Funzione per aggiungere un nuovo acquario
-    const addTank = () => {
-        if (newTankName.trim() === "") {
-            alert("Please enter a tank name");
-            return;
+    const [form, setForm] = useState({
+        name: "",
+        type: "",
+        volume: 0,
+        dimensions: {
+            h: 0,
+            l: 0,
+            d: 0
         }
+    })
 
-        const newTank = {
-            id: tanks.length + 1,
-            tank: newTankName,
-            status: "First save"
-        };
+    const clearForm = () => {
+        setForm({
+            name: "",
+            type: "",
+            volume: 0,
+            dimensions: {
+                h: 0,
+                l: 0,
+                d: 0
+            }
+        });
+    }
 
-        setTanks([...tanks, newTank]);
-        setNewTankName("");
-        setShowAddForm(false);
+    const handleChange = ({ target: { value, name, number } }) => {
+        setForm((f) => ({ ...f, [name]: value, number }));
     };
 
-    // Filtraggio e paginazione
-    const filteredTanks = tanks
-        .filter((r) => filter === "All" || r.status === filter)
-        .filter((r) => r.tank.toLowerCase().includes(searchTerm.toLowerCase()));
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    const pageCount = Math.ceil(filteredTanks.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const paginatedTanks = filteredTanks.slice(startIndex, startIndex + itemsPerPage);
-
-    // Assicurarsi che la pagina corrente sia valida
-    useEffect(() => {
-        if (currentPage > pageCount && pageCount > 0) {
-            setCurrentPage(pageCount);
+        try {
+            const data = await post("/tanks", { ...form });
+            dispatch(addNewTank(data));
+            setIsOpen(false);
+            clearForm();
+        } catch (error) {
+            console.log(error);
+            toast.error("Error during registration, try again!", {
+                theme: "dark",
+            });
         }
-    }, [filteredTanks.length, currentPage, pageCount]);
+    };
 
+    const handleDelete = async (id) => {
+        if (!confirm("Are you sure to delete this Tank?")) return;
+        try {
+            await del(`/tanks/${id}`);
+            dispatch(deleteOneTank(id));
+        } catch (error) {
+            console.log(error);
+            toast.error("Error during registration, try again!", {
+                theme: "dark",
+            });
+        }
+    };
+    const fetchTanks = async () => {
+        try {
+            const data = await get(`/tanks?limit=${limit}&page=${page}&${filter == "All" ? "" : `&status=${filter}`}`);
+            const tanksArray = Array.isArray(data.docs) ? data.docs : data;
+            dispatch(setAllTanks(tanksArray));
+            setRequestInfo({ hasNextPage: data.hasNextPage, hasPrevPage: data.hasPrevPage });
+        } catch (error) {
+            console.log(error);
+            toast.error("Error during registration, try again!", {
+                theme: "dark",
+            });
+        }
+    };
+    // Assicurarsi che la pagina corrente sia valida
+
+    useEffect(() => {
+        fetchTanks();
+    }, [limit, page, filter]);
     return (
         <>
-            <h1>My Tanks</h1>
-            <div className="bg-light max-w-7xl dark:bg-gray-800 rounded-2xl shadow p-4 mb-6 transition-colors duration-300 dark:border-gray-700 dark:text-gray-200 flex flex-col md:flex-row items-center justify-between px-4 m-container py-4">
-                <h2>All Tanks</h2>
-
-                <div className="flex items-center space-x-2 dark:bg-gray-800 dark:text-gray-200">
-                    {/* Pulsante Add Tank */}
-                    {!showAddForm ? (
-                        <CustomButton
-                            type="default"
-                            onClick={() => setShowAddForm(true)}
-                        >
-                            Add Tank
-                        </CustomButton>
-                    ) : (
-                        <div className="flex items-center space-x-2 dark:bg-gray-800 dark:text-gray-200">
+            <div className="w-full flex items-start justify-center sm:flex-row sm:items-center sm:justify-between px-2 dark:bg-gray-900 dark:text-white">
+                <div className="w-full max-w-7xl">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+                        <h2 className="text-xl font-semibold">Tanks</h2>
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                             <input
                                 type="text"
-                                placeholder="New Tank Name"
-                                value={newTankName}
-                                onChange={(e) => setNewTankName(e.target.value)}
-                                className="border border-neutral-300 rounded-md px-3 py-1 text-sm shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-accent"
-                            />
-                            <CustomButton
-                                type="default"
-                                onClick={addTank}
-                            >
-                                Save
-                            </CustomButton>
-                            <CustomButton
-                                type="inverse"
-                                onClick={() => {
-                                    setShowAddForm(false);
-                                    setNewTankName("");
+                                placeholder="Search..."
+                                value={searchTerm}
+                                onChange={(e) => {
+                                    setSearchTerm(e.target.value);
+                                    setPage(1);;
                                 }}
-                            >
-                                Cancel
-                            </CustomButton>
+                                className="border border-neutral-300 rounded-md px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-accent w-full sm:w-auto dark:bg-gray-800 dark:text-white dark:border-neutral-600"
+                            />
+                            <CustomButton>Search</CustomButton>
                         </div>
-                    )}
+                    </div>
+                    <div className="flex gap-2 overflow-x-auto pb-2 mb-4 justify-between">
+                        <div className="flex flex-wrap sm:flex-no-wrap gap-2">
+
+                        </div>
+                        <div>
+                            <CustomButton onClick={() => setIsOpen(true)}>Add Tank</CustomButton>
+                        </div>
+                    </div>
+                    <div className="overflow-x-auto w-full sm:flex-row sm:items-center sm:justify-between">
+                        <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
+                            <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
+                                <tr className="border-b border-neutral-200 dark:border-neutral-700 ">
+                                    <th className="p-2 sm:flex-row sm:items-center sm:justify-between">Id </th>
+                                    <th className="p-2 sm:flex-row sm:items-center sm:justify-between">Name</th>
+                                    <th className="p-2 sm:flex-row sm:items-center sm:justify-between">Type</th>
+                                    <th className="p-2 sm:flex-row sm:items-center sm:justify-between">Volume</th>
+                                    <th className="p-2 sm:flex-row sm:items-center sm:justify-between">Dimensions</th>
+                                    <th className="p-2 sm:flex-row sm:items-center sm:justify-between">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {tanks.map((tank, i) => (
+                                    <tr key={`${tank._id}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
+                                        <td className="p-3">{tank._id}</td>
+                                        <td className="p-3">{tank.name}</td>
+                                        <td className="p-3">{tank.type}</td>
+                                        <td className="p-3" placeholder = "20 l">{tank.volume}</td>
+                                        <td className="p-3" placeholder="Example: 25x25x30cm">{`${tank.dimensions.h}x${tank.dimensions.l}x${tank.dimensions.d}`}</td>
+                                        <td className="p-3">
+                                            <i onClick={() => handleDelete(tank._id)} className="fa fa-trash cursor-pointer"></i>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2 text-sm text-gray-600">
+                        <div className="text-center sm:text-left">
+
+                            <div className="flex justify-center sm:justify-end gap-2">
+                                <CustomButton
+                                    onClick={() => setPage(p => p - 1)}
+                                    disabled={!requestInfo.hasPrevPage}
+                                    className="px-3 py-1"
+                                >Previous</CustomButton>
+                                <CustomButton
+                                    onClick={() => setPage(p => p + 1)}
+                                    disabled={!requestInfo.hasNextPage}
+                                    className="px-3 py-1"
+                                >Next</CustomButton>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
+            <CustomModal isOpen={isOpen} setIsOpen={setIsOpen} className="dark:bg-gray-900 dark:text-white">
+                <h2 className="text-2xl font-semibold mb-4">Add Tank</h2>
 
-            <div className="bg-light max-w-7xl dark:bg-gray-800 rounded-2xl shadow p-4 mb-6 transition-colors duration-300 dark:text-gray-200 flex flex-wrap items-center justify-between px-4 m-container py-4">
-                <div className="flex flex-wrap gap-2 mb-4 dark:bg-gray-800 dark:text-gray-200">
-                    <h3 className="w-full mb-2">Filter by Status:</h3>
-                    {["All", "Last save", "First save", "Canceled", "Edit", "Delete"].map((st) => (
-                        <button
-                            key={st}
-                            onClick={() => {
-                                setFilter(st);
-                                setCurrentPage(1);
-                            }}
-                            className={`inline-flex items-center justify-center px-4 py-1 rounded-full text-sm border border-neutral-200 shadow-md
-                            ${filter === st ? "bg-black text-white" : "bg-light"}`}
-                        >
-                            {st}
-                        </button>
-                    ))}
-                </div>
-
-                <div className="flex flex-col w-full md:w-auto dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
-                    <NotesContext.Provider value={{ notes, setNotes }}>
-                        <p className="mb-2">Search</p>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Id</label>
                         <input
                             type="text"
-                            placeholder="Search tanks..."
-                            value={searchTerm}
-                            onChange={(e) => {
-                                setSearchTerm(e.target.value);
-                                setCurrentPage(1);
-                            }}
-                            className="border border-neutral-300 rounded-md px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                            name="id"
+                            value={form.id}
+                            onInput={handleChange}
+                            required
+                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+                            placeholder="Example: 01"
                         />
-
-                    </NotesContext.Provider>
-                </div>
-            </div>
-
-<<<<<<< HEAD
-            <div className="m-container dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
-                <table className="w-full text-left border-spacing-y-3 overflow-hidden dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
-                    <thead className="text-xs uppercase border-y border-neutral-200 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
-                        <tr >
-                            <th >Id</th>
-                            <th >Name</th>
-                            <th >Description</th>
-=======
-            <div className="m-container dark:bg-gray-800 rounded-2xl shadow p-4 mb-6 transition-colors duration-300 dark:text-gray-200">
-                <table className="w-full border-1 text-dark bg-light dark:bg-gray-800 dark:text-gray-200">
-                    <thead>
-                        <tr className="border-b border-neutral-200 dark:border-gray-700">
-                            <th className="font-medium text-left p-3">Name Tank</th>
-                            <th className="text-left p-3">Status</th>
->>>>>>> 4854d475dc6b2b2212d033e8a1514b090c09e668
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {paginatedTanks.length > 0 ? (
-                            paginatedTanks.map((r) => (
-                                <tr key={r.id} className="border-b border-neutral-200 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
-                                    <td className="p-3 flex items-center gap-3 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
-                                        <span className="font-medium dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">{r.id}</span>
-                                    </td>
-                                    <td className="p-3 flex items-center gap-3 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
-                                        <span className="font-medium dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">{r.name}</span>
-                                    </td>
-                                    <td className="p-3 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
-                                        <TanksStatus status={r.description} />
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="2" className="p-3 text-center dark:bg-gray-800 dark:text-gray-200">
-                                    No tanks found matching your criteria
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
-
-            <footer className="m-container py-4 bg-light dark:bg-gray-800 rounded-2xl shadow p-4 transition-colors duration-300 dark:text-gray-200 text-dark">
-                <div className="flex flex-col md:flex-row justify-between items-center dark:bg-gray-800 dark:text-gray-200">
+                    </div>
                     <div>
-                        {filteredTanks.length > 0 ? (
-                            <>Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, filteredTanks.length)} of {filteredTanks.length}</>
-                        ) : (
-                            <>No results found</>
-                        )}
+                        <label className="block text-sm font-medium mb-1">Name</label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={form.name}
+                            onInput={handleChange}
+                            required
+                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+                            placeholder="Example: Anubias barteri"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Type</label>
+                        <input
+                            type="text"
+                            name="type"
+                            value={form.type}
+                            onInput={handleChange}
+                            required
+                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+                            placeholder="Example: plants"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Volume</label>
+                        <input
+                            type="text"
+                            name="volume"
+                            value={form.volume}
+                            onInput={handleChange}
+                            required
+                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+                            placeholder="Example: 20 litres"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Dimensions</label>
+                        <input
+                            type="text"
+                            name="dimensions"
+                            value={form.dimensions}
+                            onInput={handleChange}
+                            required
+                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+                            placeholder="Example: 25 x 25 x 30 cm"
+                        />
                     </div>
 
-                    <div className="flex items-center space-x-2 mt-4 md:mt-0 dark:bg-gray-800 dark:text-gray-200">
-                        <CustomButton
-                            type="default"
-                            onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                            disabled={currentPage === 1}
-                        >
-                            Previous
-                        </CustomButton>
-<<<<<<< HEAD
-
-                        <span className="px-2 dark:bg-gray-800 border-b dark:border-gray-700 dark:text-gray-200">
-=======
-                        
-                        <span className="px-2 dark:bg-gray-800 dark:text-gray-200">
->>>>>>> 4854d475dc6b2b2212d033e8a1514b090c09e668
-                            Page {currentPage} of {Math.max(1, pageCount)}
-                        </span>
-
-                        <CustomButton
-                            type="default"
-                            onClick={() => setCurrentPage(Math.min(pageCount, currentPage + 1))}
-                            disabled={currentPage >= pageCount}
-                        >
-                            Next
-                        </CustomButton>
-                    </div>
-                </div>
-            </footer>
+                    <CustomButton type="submit">Submit</CustomButton>
+                </form>
+            </CustomModal>
         </>
     );
 };

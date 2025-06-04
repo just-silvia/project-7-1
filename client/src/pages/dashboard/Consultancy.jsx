@@ -190,11 +190,7 @@ const Consultancy = () => {
 
                 <form onSubmit={handleSubmit} className="space-y-4 dark:bg-gray-900 dark:text-white">
                     <div>
-<<<<<<< HEAD
-                        <label className="block text-sm font-medium mb-1 dark:bg-gray-900 dark:text-white">Nome richiedente</label>
-=======
                         <label className="block text-sm font-medium mb-1">Your name</label>
->>>>>>> 4854d475dc6b2b2212d033e8a1514b090c09e668
                         <input
                             readOnly
                             type="text"
@@ -204,11 +200,7 @@ const Consultancy = () => {
                         />
                     </div>
                     <div>
-<<<<<<< HEAD
-                        <label className="block text-sm font-medium mb-1 dark:bg-gray-900 dark:text-white">Testo della richiesta</label>
-=======
                         <label className="block text-sm font-medium mb-1">Elaborate your request</label>
->>>>>>> 4854d475dc6b2b2212d033e8a1514b090c09e668
                         <textarea
                             type="text"
                             name="request_type"
