@@ -102,7 +102,7 @@ const Calculator = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {calculations.map((calculation, i) => (
+                            {calculations && calculations.map((calculation, i) => (
                                 <tr key={`${calculation._id}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
                                     <td className="p-3 font-medium">{calculation._id}</td>
                                     <td className="p-3 hidden md:table-cell">{calculation.name}</td>

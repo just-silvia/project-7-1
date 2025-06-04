@@ -258,7 +258,7 @@ const EditCalculator = () => {
             };
 
             // Eseguiamo la chiamata POST
-            const response = await put("/calculators", dataToSave, "API");
+            const response = await put(`/calculators/${searchParams.get("id")}`, dataToSave, "API");
             
             // Mostriamo un messaggio di successo
             toast.success("Calculation saved successfully!");

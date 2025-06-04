@@ -25,7 +25,7 @@ app.post("/", authUser(["user"]), createCalculator);
  * @path /api/calculators/:calculator_id
  * @method POST
  */
-app.post("/:calculator_id", authUser(["user"]), updateCalculatorById);
+app.put("/:calculator_id", authUser(["user"]), updateCalculatorById);
 
 /**
  * @path /api/calculators/:calculator_id
