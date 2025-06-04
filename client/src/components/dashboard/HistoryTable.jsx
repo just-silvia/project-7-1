@@ -1,9 +1,4 @@
-import { useSelector } from 'react-redux';
-
-const HistoryTable = () => {
-  const history = []; // useSelector(state => state.history.data);
-  const selectedTank = []; // useSelector(state => state.selectedTank);
-
+const HistoryTable = ({ history = {}, selectedTank }) => {
   if (!selectedTank || !history[selectedTank]) {
     return <p className="dark:text-white">No activity available</p>;
   }
@@ -24,7 +19,10 @@ const HistoryTable = () => {
           </thead>
           <tbody>
             {records.map((entry, index) => (
-              <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+              <tr
+                key={index}
+                className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              >
                 <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">{entry.date}</td>
                 <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">{entry.gh}</td>
                 <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">{entry.kh}</td>
@@ -38,5 +36,8 @@ const HistoryTable = () => {
 };
 
 export default HistoryTable;
+
+
+
 
 
