@@ -57,6 +57,14 @@ const RequestNewBrands = () => {
     setSubmitted(false);
   };
 
+  const handleEditClick = (id) => {
+    const item = requests.find((r) => r._id === id); 
+    if (item) {
+      setForm({ request_type: item.request_type });
+      setIsOpen(true);
+    }
+  }
+
   const handleChange = ({ target: { value, name } }) => {
     setForm((f) => ({ ...f, [name]: value }));
   };
@@ -194,6 +202,7 @@ const RequestNewBrands = () => {
                       <RequestsStatus status={r.status} />
                     </td>
                     <td className="p-3">
+                      <i onClick={() => handleEditClick(r._id)} className="fa-solid fa-pen-to-square cursor-pointer mr-3"></i>
                       <i
                         onClick={() => handleDelete(r._id)}
                         className="fa fa-trash cursor-pointer"

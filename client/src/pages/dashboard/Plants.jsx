@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CustomButton from "../../components/shared/CustomButton";
 import CustomModal from "../../components/dashboard/CustomModal";
 import { toast } from "react-toastify";
+import { useCallback } from "react";
 import {
   addNewPlant,
   deleteOnePlant,
@@ -31,7 +32,7 @@ const Plants = () => {
     hasPrevPage: false,
   });
 
-  const [filter, setFilter] = useState("All");
+  const [filter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
 
   const clearForm = () => {
@@ -45,6 +46,19 @@ const Plants = () => {
   const handleChange = ({ target: { value, name } }) => {
     setForm((f) => ({ ...f, [name]: value }));
   };
+
+  const handleEditClick = (plant) => {
+    const item = plant.find((p) => p._id === plant.id);
+    
+    if (item) {
+      setForm({
+        name: item.name,
+        description: item.description,
+        tank: item.tank._id,
+      });
+      setIsOpen(true);
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,15 +80,15 @@ const Plants = () => {
     try {
       await del(`/plants/${id}`);
       dispatch(deleteOnePlant(id));
-    } catch {
-      console.log(error);
+    } catch (error) {
+      // Optionally log error or handle it
       toast.error("Internal server error, try again later!", {
         theme: "dark",
       });
     }
   };
 
-  const fetchPlants = async () => {
+  const fetchPlants = useCallback(async () => {
     try {
       const data = await get(
         `/plants?limit=${limit}&page=${page}${
@@ -92,9 +106,9 @@ const Plants = () => {
         theme: "dark",
       });
     }
-  };
+  }, [get, limit, page, filter, dispatch]);
 
-  const fetchTanks = async () => {
+  const fetchTanks = useCallback(async () => {
     try {
       const data = await get(`/tanks?limit=0`);
       dispatch(setAllTanks(data));
@@ -108,12 +122,12 @@ const Plants = () => {
         theme: "dark",
       });
     }
-  };
+  }, [get, dispatch]);
 
   useEffect(() => {
     fetchTanks();
     fetchPlants();
-  }, [limit, page, filter]);
+  }, [limit, page, filter, fetchPlants, fetchTanks]);
 
   return (
     <>
@@ -165,6 +179,7 @@ const Plants = () => {
                     <td className="p-3">{plant.name}</td>
                     <td className="p-3">{plant.description}</td>
                     <td className="p-3">
+                      <i onClick={() => handleEditClick(plant._id)} className="fa-solid fa-pen-to-square cursor-pointer mr-3"></i>
                       <i
                         onClick={() => handleDelete(plant._id)}
                         className="fa fa-trash cursor-pointer"

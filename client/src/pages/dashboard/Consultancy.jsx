@@ -69,6 +69,15 @@ const Consultancy = () => {
         }
     }
 
+    const handleEditClick = (id) => {
+        const item = requests.find((el) => el._id === id);
+        
+        if(item){
+            setForm({ request_type: item.request_type });
+            setIsOpen(true);
+        }
+    }
+
     const handleDelete = async (consultancy_id) => {
         if (!confirm("Are you sure to delete this consultancy request?")) return;
 
@@ -165,6 +174,7 @@ const Consultancy = () => {
                                             <RequestsStatus status={r.status} />
                                         </td>
                                         <td className="p-3">
+                                            <i onClick={() => handleEditClick(r._id)} className="fa-solid fa-pen-to-square cursor-pointer mr-3"></i>
                                             <i onClick={() => handleDelete(r._id)} className="fa fa-trash cursor-pointer"></i>
                                         </td>
                                     </tr>
