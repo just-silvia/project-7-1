@@ -46,6 +46,19 @@ const Plants = () => {
     setForm((f) => ({ ...f, [name]: value }));
   };
 
+  const handleEditClick = (plant) => {
+    const item = plant.find((p) => p._id === plant.id);
+    
+    if (item) {
+      setForm({
+        name: item.name,
+        description: item.description,
+        tank: item.tank._id,
+      });
+      setIsOpen(true);
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -165,6 +178,7 @@ const Plants = () => {
                     <td className="p-3">{plant.name}</td>
                     <td className="p-3">{plant.description}</td>
                     <td className="p-3">
+                      <i onClick={() => handleEditClick(plant._id)} className="fa-solid fa-pen-to-square cursor-pointer mr-3"></i>
                       <i
                         onClick={() => handleDelete(plant._id)}
                         className="fa fa-trash cursor-pointer"
