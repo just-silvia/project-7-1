@@ -1,7 +1,8 @@
 import acquarium from "../assets/immagini/acquario.jpg";
-import calculator from "../assets/immagini/calcolatrice.jpg";
-import lighting from "../assets/immagini/illuminazione.jpg";
-import plants from "../assets/immagini/piante.jpg";
+import calculator from "../assets/immagini/calculator.jpg";
+import lighting from "../assets/immagini/lights.jpg";
+import plants from "../assets/immagini/plants.jpg";
+import management from "../assets/immagini/tools.jpg";
 import CustomButton from "../components/shared/CustomButton";
 import { Link } from "react-router";
 
@@ -32,7 +33,7 @@ const Home = () => {
             <img
               src={acquarium}
               alt="acquario in esposizione"
-              className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full"
+              className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full border-secondary dark:border-gray-500 border-1 p-1"
             />
           </div>
         </div>
@@ -61,7 +62,7 @@ const Home = () => {
               <img
                 src={calculator}
                 alt="sostanze chimiche con pc"
-                className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full"
+                className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full border-secondary dark:border-gray-500 border-1 p-1"
               />
             </div>
           </div>
@@ -88,7 +89,7 @@ const Home = () => {
               <img
                 src={plants}
                 alt="piante varie in acquario"
-                className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full"
+                className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full border-secondary dark:border-gray-500 border-1 p-1"
               />
             </div>
           </div>
@@ -114,7 +115,7 @@ const Home = () => {
               <img
                 src={lighting}
                 alt="acquario con illuminazione"
-                className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full"
+                className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full border-secondary dark:border-gray-500 border-1 p-1"
               />
             </div>
           </div>
@@ -141,9 +142,9 @@ const Home = () => {
             </div>
             <div className="w-full md:w-5/12">
               <img
-                src={lighting}
-                alt="luce"
-                className="rounded-xl shadow-md object-cover w-full h-auto max-h-96 md:max-h-full"
+                src={management}
+                alt="management aquariums"
+                className="rounded-xl shadow-md object-contains w-full h-auto max-w-[350px] md:max-w-[400px] max-h-[450 px] md:max-h-[500px] border-secondary dark:border-gray-500 border-1 p-1"
               />
             </div>
           </div>
