@@ -76,6 +76,32 @@ const createConsultancy = async (req, res) => {
 }
 
 /**
+* Update consultancy by id
+* @param {Request} req
+* @param {Response} res
+* @returns 
+*/
+const updateConsultancyById = async (req, res) => {
+    const user = req.user;
+    const consultancy_id = req.params.consultancy_id;
+
+    const schema = Joi.object().keys({
+        request_type: Joi.string().optional(),
+        status: Joi.string().optional(), // Se ha un campo status
+    });
+
+    try {
+        const data = await schema.validateAsync(req.body);
+
+        await Consultancy.updateOne({ user: user._id, _id: consultancy_id }, data);
+
+        return res.status(200).json({ message: "Consultancy updated" });
+    } catch (error) {
+        return outError(res, error);
+    }
+}
+
+/**
  * Delete consultancy by id
  * @param {Request} req
  * @param {Response} res
@@ -98,5 +124,6 @@ module.exports = {
     getConsultancies,
     getConsultancyById,
     createConsultancy,
+    updateConsultancyById,
     deleteConsultancyById,
 }

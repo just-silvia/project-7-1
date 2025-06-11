@@ -5,14 +5,18 @@ import CustomButton from "../../components/shared/CustomButton";
 import CustomModal from "../../components/dashboard/CustomModal";
 import { toast } from "react-toastify";
 import { setAllTanks } from "../../store/slices/tanksSlice";
-import { addNewLight, deleteOneLight, setAllLights } from "../../store/slices/lightsSlice";
+import { addNewLight, deleteOneLight, setAllLights, setCurrentLight } from "../../store/slices/lightsSlice";
+import { Link } from "react-router-dom";
 
 const Lights = () => {
     const dispatch = useDispatch();
-    const { get, post, del } = useApi();
+    const { get, post, put, del } = useApi();
     const { all: tanks } = useSelector((state) => state.tanks);
     const { all: lights } = useSelector((state) => state.lights);
+    
+    
     const [form, setForm] = useState({
+        _id: "",
         name: "",
         description: "",
         lumen: 0,
@@ -20,6 +24,9 @@ const Lights = () => {
     });
 
     const [isOpen, setIsOpen] = useState(false);
+    
+    const [isEditing, setIsEditing] = useState(false);
+    
     const [limit] = useState(10);
     const [page, setPage] = useState(1);
     const [requestInfo, setRequestInfo] = useState({
@@ -30,13 +37,16 @@ const Lights = () => {
     const [filter, setFilter] = useState("All");
     const [searchTerm, setSearchTerm] = useState("");
 
+    
     const clearForm = () => {
         setForm({
+            _id: "",
             name: "",
             description: "",
             lumen: 0,
             tank: "",
         });
+        setIsEditing(false);
     }
 
     const handleChange = ({ target: { value, name } }) => {
@@ -47,28 +57,52 @@ const Lights = () => {
         e.preventDefault();
 
         try {
-            const data = await post("/lights", { ...form });
+            if (isEditing) {
+                
+                console.log('PUT URL:', `/lights/${form._id}`);
+                console.log('PUT Data:', {
+                    name: form.name,
+                    description: form.description,
+                    lumen: form.lumen,
+                    tank: form.tank
+                });
+                console.log('Form completo:', form);
+                
+                
+                const updateData = {
+                    name: form.name?.trim(),
+                    description: form.description?.trim(),
+                    lumen: Number(form.lumen),
+                    tank: form.tank
+                };
+                
+                console.log('Update data clean:', updateData);
+                
+                await put(`/lights/${form._id}`, updateData);
+                toast.success("Light updated successfully!", {
+                    theme: "dark",
+                });
+            } else {
+                
+                const data = await post("/lights", { 
+                    name: form.name,
+                    description: form.description,
+                    lumen: form.lumen,
+                    tank: form.tank
+                });
+                toast.success("Light created successfully!", {
+                    theme: "dark",
+                });
+            }
             setIsOpen(false);
             clearForm();
             fetchLights();
         } catch (error) {
+            console.error('Submit error:', error);
+            console.error('Error response:', error.response?.data);
             toast.error("Internal server error, try again later", {
                 theme: "dark",
             });
-        }
-    }
-
-    const handleEditClick = (id) => {
-        const item = lights.find((el) => el._id === id);
-
-        if (item) {
-            setForm({
-                name: item.name,
-                description: item.description,
-                lumen: item.lumen,
-                tank: item.tank._id
-            });
-            setIsOpen(true);
         }
     }
 
@@ -78,12 +112,29 @@ const Lights = () => {
         try {
             await del(`/lights/${id}`);
             dispatch(deleteOneLight(id));
+            toast.success("Light deleted successfully!", {
+                theme: "dark",
+            });
         } catch (error) {
             console.log(error);
             toast.error("Internal server error, try again later", {
                 theme: "dark",
             });
         }
+    }
+
+    
+    const handleEdit = (light) => {
+        setForm({
+            _id: light._id,
+            name: light.name,
+            description: light.description,
+            lumen: light.lumen,
+            tank: light.tank._id, 
+        });
+        setIsEditing(true);
+        setIsOpen(true);
+        dispatch(setCurrentLight(light._id));
     }
 
     const fetchLights = async () => {
@@ -149,32 +200,35 @@ const Lights = () => {
 
                     <div className="overflow-x-auto w-full">
                         <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
-                            <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
-                                <tr className="border-b border-neutral-200 dark:border-neutral-700">
-                                    <th className="p-2">Id</th>
-                                    <th className="p-2">Tank</th>
-                                    <th className="p-2">Name</th>
-                                    <th className="p-2">Lumen</th>
-                                    <th className="p-2">Description</th>
-                                    <th className="p-2">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {lights.map((light, i) => (
-                                    <tr key={`${light._id}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
-                                        <td className="p-3 font-medium">{light._id}</td>
-                                        <td className="p-3">{light.tank.name}</td>
-                                        <td className="p-3">{light.name}</td>
-                                        <td className="p-3">{light.lumen}</td>
-                                        <td className="p-3">{light.description}</td>
-                                        <td className="p-3">
-                                            <i onClick={() => handleEditClick(light._id)} className="fa-solid fa-pen-to-square cursor-pointer mr-3"></i>
+                        <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
+                            <tr className="border-b border-neutral-200 dark:border-neutral-700">
+                                <th className="p-2">Id</th>
+                                <th className="p-2">Tank</th>
+                                <th className="p-2">Name</th>
+                                <th className="p-2">Lumen</th>
+                                <th className="p-2">Description</th>
+                                <th className="p-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {lights.map((light, i) => (
+                                <tr key={`${light._id}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
+                                    <td className="p-3 font-medium">{light._id}</td>
+                                    <td className="p-3">{light.tank.name}</td>
+                                    <td className="p-3">{light.name}</td>
+                                    <td className="p-3">{light.lumen}</td>
+                                    <td className="p-3">{light.description}</td>
+                                    <td className="p-3">
+                                        <div>
+                                            
+                                            <i onClick={() => handleEdit(light)} className="fa-solid fa-pen-to-square cursor-pointer mr-3"></i>
                                             <i onClick={() => handleDelete(light._id)} className="fa fa-trash cursor-pointer"></i>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                     </div>
 
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2 text-sm text-gray-600">
@@ -198,7 +252,10 @@ const Lights = () => {
             </div>
 
             <CustomModal isOpen={isOpen} setIsOpen={setIsOpen}>
-                <h2 className="text-2xl font-semibold mb-4">Add new light</h2>
+               
+                <h2 className="text-2xl font-semibold mb-4">
+                    {isEditing ? "Edit light" : "Add new light"}
+                </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
@@ -260,7 +317,10 @@ const Lights = () => {
                             }
                         </select>
                     </div>
-                    <CustomButton type="submit">Submit</CustomButton>
+                    
+                    <CustomButton type="submit">
+                        {isEditing ? "Update" : "Submit"}
+                    </CustomButton>
                 </form>
             </CustomModal>
         </>

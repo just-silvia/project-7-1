@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express.Router();
 const { authUser } = require("../../middleware/authUser");
-const { getConsultancies, getConsultancyById, createConsultancy, deleteConsultancyById } = require("../controllers/consultancies");
+const { getConsultancies, getConsultancyById, createConsultancy, updateConsultancyById, deleteConsultancyById } = require("../controllers/consultancies");
 
 /**
  * @path /api/consultancies
@@ -20,6 +20,12 @@ app.get("/:consultancy_id", authUser(["user"]), getConsultancyById);
  * @method POST
  */
 app.post("/", authUser(["user"]), createConsultancy);
+
+/**
+ * @path /api/consultancies
+ * @method PUT
+ */
+app.put("/:consultancy_id", authUser(["user"]), updateConsultancyById);
 
 /**
  * @path /api/consultancies/:consultancy_id

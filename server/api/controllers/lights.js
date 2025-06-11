@@ -97,10 +97,22 @@ const updateLightById = async (req, res) => {
         name: Joi.string().optional(),
         description: Joi.string().optional(),
         lumen: Joi.number().optional(),
+        tank: Joi.string().optional(), 
     });
 
     try {
         const data = await schema.validateAsync(req.body);
+
+        
+        if (data.tank) {
+            const oldLight = await Light.findOne({ user: user._id, _id: light_id });
+            if (oldLight && oldLight.tank && oldLight.tank.toString() !== data.tank) {
+                
+                await Tank.updateOne({ _id: oldLight.tank }, { $pull: { lights: light_id } });
+                
+                await Tank.updateOne({ _id: data.tank }, { $push: { lights: light_id } });
+            }
+        }
 
         await Light.updateOne({ user: user._id, _id: light_id }, data);
 
