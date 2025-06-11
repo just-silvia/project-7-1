@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import CustomButton from "../../components/shared/CustomButton";
 import { useDispatch, useSelector } from "react-redux";
 import { useApi } from "../../hooks/useApi";
-import { addNewTank, deleteOneTank, setAllTanks } from "../../store/slices/tanksSlice";
+import { deleteOneTank, setAllTanks } from "../../store/slices/tanksSlice";
 import CustomModal from "../../components/dashboard/CustomModal";
 import { toast } from "react-toastify";
 const Aquariums = () => {
@@ -22,29 +22,34 @@ const Aquariums = () => {
     const [form, setForm] = useState({
         name: "",
         type: "",
-        volume: 0,
-        dimensions: {
-            h: 0,
-            l: 0,
-            d: 0
-        }
+        volume: "",
+        h: "",
+        l: "",
+        w: ""
+
     })
 
     const clearForm = () => {
         setForm({
             name: "",
             type: "",
-            volume: 0,
-            dimensions: {
-                h: 0,
-                l: 0,
-                d: 0
-            }
+            volume: "",
+            h: "",
+            l: "",
+            w: ""
+
         });
     }
+    const handleEditClick = (id) => {
+        const item = tanks.find ((el) => el._id ===id);
+        if (item) {
+            setForm({tanks_type : item.tanks_type});
+            setIsOpen(true);
+        }
+    } 
+    const handleChange = ({ target: { value, name } }) => {
+        setForm((f) => ({ ...f, [name]: value }));
 
-    const handleChange = ({ target: { value, name, number } }) => {
-        setForm((f) => ({ ...f, [name]: value, number }));
     };
 
     const handleSubmit = async (e) => {
@@ -52,9 +57,9 @@ const Aquariums = () => {
 
         try {
             const data = await post("/tanks", { ...form });
-            dispatch(addNewTank(data));
             setIsOpen(false);
             clearForm();
+            fetchTanks();
         } catch (error) {
             console.log(error);
             toast.error("Error during registration, try again!", {
@@ -129,8 +134,11 @@ const Aquariums = () => {
                                     <th className="p-2 sm:flex-row sm:items-center sm:justify-between">Name</th>
                                     <th className="p-2 sm:flex-row sm:items-center sm:justify-between">Type</th>
                                     <th className="p-2 sm:flex-row sm:items-center sm:justify-between">Volume</th>
-                                    <th className="p-2 sm:flex-row sm:items-center sm:justify-between">Dimensions</th>
+                                    <th className="p-2 sm:flex-row sm:items-center sm:justify-between">Height</th>
+                                    <th className="p-2 sm:flex-row sm:items-center sm:justify-between">Length</th>
+                                    <th className="p-2 sm:flex-row sm:items-center sm:justify-between">Width</th>
                                     <th className="p-2 sm:flex-row sm:items-center sm:justify-between">Actions</th>
+                                    <th className="p-2 sm:flex-row sm:items-center sm:justify-between"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -139,10 +147,14 @@ const Aquariums = () => {
                                         <td className="p-3">{tank._id}</td>
                                         <td className="p-3">{tank.name}</td>
                                         <td className="p-3">{tank.type}</td>
-                                        <td className="p-3" placeholder = "20 l">{tank.volume}</td>
-                                        <td className="p-3" placeholder="Example: 25x25x30cm">{`${tank.dimensions.h}x${tank.dimensions.l}x${tank.dimensions.d}`}</td>
+                                        <td className="p-3" placeholder="20 l">{tank.volume}</td>
+                                        <td className="p-3" placeholder="Example: 30cm">{tank.height}</td>
+                                        <td className="p-3" placeholder="Example: 30cm">{tank.lenght}</td>
+                                        <td className="p-3" placeholder="Example: 30cm">{tank.width}</td>
                                         <td className="p-3">
                                             <i onClick={() => handleDelete(tank._id)} className="fa fa-trash cursor-pointer"></i>
+
+                                            <i onClick={() => handleEditClick(tank._id)} className="fa-regular fa-pen-to-square"></i>
                                         </td>
                                     </tr>
                                 ))}
@@ -152,23 +164,23 @@ const Aquariums = () => {
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2 text-sm text-gray-600">
                         <div className="text-center sm:text-left">
 
-                            <div className="flex justify-center sm:justify-end gap-2">
-                                <CustomButton
-                                    onClick={() => setPage(p => p - 1)}
-                                    disabled={!requestInfo.hasPrevPage}
-                                    className="px-3 py-1"
-                                >Previous</CustomButton>
-                                <CustomButton
-                                    onClick={() => setPage(p => p + 1)}
-                                    disabled={!requestInfo.hasNextPage}
-                                    className="px-3 py-1"
-                                >Next</CustomButton>
-                            </div>
-
+                        </div>
+                        <div className="flex justify-center sm:justify-end gap-2">
+                            <CustomButton
+                                onClick={() => setPage(p => p - 1)}
+                                disabled={!requestInfo.hasPrevPage}
+                                className="px-3 py-1"
+                            >Previous</CustomButton>
+                            <CustomButton
+                                onClick={() => setPage(p => p + 1)}
+                                disabled={!requestInfo.hasNextPage}
+                                className="px-3 py-1"
+                            >Next</CustomButton>
                         </div>
                     </div>
                 </div>
             </div>
+
             <CustomModal isOpen={isOpen} setIsOpen={setIsOpen} className="dark:bg-gray-900 dark:text-white">
                 <h2 className="text-2xl font-semibold mb-4">Add Tank</h2>
 
@@ -222,19 +234,44 @@ const Aquariums = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium mb-1">Dimensions</label>
+                        <label className="block text-sm font-medium mb-1">Height</label>
                         <input
                             type="text"
-                            name="dimensions"
-                            value={form.dimensions}
+                            name="height"
+                            value={form.height}
                             onInput={handleChange}
                             required
                             className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
-                            placeholder="Example: 25 x 25 x 30 cm"
+                            placeholder="Example: 30 cm"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Length</label>
+                        <input
+                            type="text"
+                            name="length"
+                            value={form.length}
+                            onInput={handleChange}
+                            required
+                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+                            placeholder="Example: 30 cm"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Width</label>
+                        <input
+                            type="text"
+                            name="width"
+                            value={form.width}
+                            onInput={handleChange}
+                            required
+                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+                            placeholder="Example: 30 cm"
                         />
                     </div>
 
-                    <CustomButton type="submit">Submit</CustomButton>
+
+                    <CustomButton type="submit" onClick={handleSubmit}>Submit</CustomButton>
                 </form>
             </CustomModal>
         </>
