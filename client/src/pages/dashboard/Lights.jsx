@@ -58,6 +58,20 @@ const Lights = () => {
         }
     }
 
+    const handleEditClick = (id) => {
+        const item = lights.find((el) => el._id === id);
+
+        if (item) {
+            setForm({
+                name: item.name,
+                description: item.description,
+                lumen: item.lumen,
+                tank: item.tank._id
+            });
+            setIsOpen(true);
+        }
+    }
+
     const handleDelete = async (id) => {
         if (!confirm("Are you sure to delete this light?")) return;
 
@@ -135,31 +149,32 @@ const Lights = () => {
 
                     <div className="overflow-x-auto w-full">
                         <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
-                        <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
-                            <tr className="border-b border-neutral-200 dark:border-neutral-700">
-                                <th className="p-2">Id</th>
-                                <th className="p-2">Tank</th>
-                                <th className="p-2">Name</th>
-                                <th className="p-2">Lumen</th>
-                                <th className="p-2">Description</th>
-                                <th className="p-2">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {lights.map((light, i) => (
-                                <tr key={`${light._id}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
-                                    <td className="p-3 font-medium">{light._id}</td>
-                                    <td className="p-3">{light.tank.name}</td>
-                                    <td className="p-3">{light.name}</td>
-                                    <td className="p-3">{light.lumen}</td>
-                                    <td className="p-3">{light.description}</td>
-                                    <td className="p-3">
-                                        <i onClick={() => handleDelete(light._id)} className="fa fa-trash cursor-pointer"></i>
-                                    </td>
+                            <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
+                                <tr className="border-b border-neutral-200 dark:border-neutral-700">
+                                    <th className="p-2">Id</th>
+                                    <th className="p-2">Tank</th>
+                                    <th className="p-2">Name</th>
+                                    <th className="p-2">Lumen</th>
+                                    <th className="p-2">Description</th>
+                                    <th className="p-2">Actions</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {lights.map((light, i) => (
+                                    <tr key={`${light._id}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
+                                        <td className="p-3 font-medium">{light._id}</td>
+                                        <td className="p-3">{light.tank.name}</td>
+                                        <td className="p-3">{light.name}</td>
+                                        <td className="p-3">{light.lumen}</td>
+                                        <td className="p-3">{light.description}</td>
+                                        <td className="p-3">
+                                            <i onClick={() => handleEditClick(light._id)} className="fa-solid fa-pen-to-square cursor-pointer mr-3"></i>
+                                            <i onClick={() => handleDelete(light._id)} className="fa fa-trash cursor-pointer"></i>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
 
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2 text-sm text-gray-600">
