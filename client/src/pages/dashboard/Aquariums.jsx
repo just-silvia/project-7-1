@@ -152,9 +152,8 @@ const Aquariums = () => {
                                         <td className="p-3" placeholder="Example: 30cm">{tank.lenght}</td>
                                         <td className="p-3" placeholder="Example: 30cm">{tank.width}</td>
                                         <td className="p-3">
+                                            <i onClick={() => handleEditClick(tank._id)} className="fa-solid fa-pen-to-square cursor-pointer mr-3"></i>
                                             <i onClick={() => handleDelete(tank._id)} className="fa fa-trash cursor-pointer"></i>
-
-                                            <i onClick={() => handleEditClick(tank._id)} className="fa-regular fa-pen-to-square"></i>
                                         </td>
                                     </tr>
                                 ))}
@@ -185,18 +184,6 @@ const Aquariums = () => {
                 <h2 className="text-2xl font-semibold mb-4">Add Tank</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Id</label>
-                        <input
-                            type="text"
-                            name="id"
-                            value={form.id}
-                            onInput={handleChange}
-                            required
-                            className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
-                            placeholder="Example: 01"
-                        />
-                    </div>
                     <div>
                         <label className="block text-sm font-medium mb-1">Name</label>
                         <input
