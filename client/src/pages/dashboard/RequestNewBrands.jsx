@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import CustomButton from "../../components/shared/CustomButton";
 import CustomModal from "../../components/dashboard/CustomModal";
 import { useApi } from "../../hooks/useApi";
@@ -30,16 +30,20 @@ const RequestsStatus = ({ status }) => {
 
 const RequestNewBrands = () => {
   const dispatch = useDispatch();
-  const { get, post, del } = useApi();
+  const { get, post, put, del } = useApi(); //aggiunto PUT
   const { user } = useSelector((state) => state.auth);
+
   const { all: requests } = useSelector((state) => state.consultancies);
 
   const [form, setForm] = useState({
+    _id: "",
     request_type: "",
   });
 
   const [isOpen, setIsOpen] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+
+  const [isEditing, setIsEditing] = useState(false);
+
   const [limit] = useState(10);
   const [page, setPage] = useState(1);
   const [requestInfo, setRequestInfo] = useState({
@@ -52,18 +56,23 @@ const RequestNewBrands = () => {
 
   const clearForm = () => {
     setForm({
+      _id: "",
       request_type: "",
     });
-    setSubmitted(false);
+    setIsEditing(false);
   };
 
   const handleEditClick = (id) => {
-    const item = requests.find((r) => r._id === id); 
+    const item = requests.find((r) => r._id === id);
     if (item) {
-      setForm({ request_type: item.request_type });
+      setForm({
+        _id: item._id,
+        request_type: item.request_type,
+      });
+      setIsEditing(true);
       setIsOpen(true);
     }
-  }
+  };
 
   const handleChange = ({ target: { value, name } }) => {
     setForm((f) => ({ ...f, [name]: value }));
@@ -71,19 +80,36 @@ const RequestNewBrands = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const data = await post("/brands", form);
-      dispatch(addNewConsultancy(data));
-      setSubmitted(true);
+      if (isEditing) {
+        //DEBUG: Log per vedere che cosa viene inviato
+        console.log("PUT URL:", `/brands/${form._id}`);
+        console.log("PUT Data:", { request_type: form.request_type });
+
+        await put(`/brands/${form._id}`, { request_type: form.request_type });
+        toast.success("Request updated successfully!", {
+          theme: "dark",
+        });
+        fetchNewConsultancies(); //Refresh della lista
+      } else {
+        const data = await post("/brands", { request_type: form.request_type });
+        dispatch(addNewConsultancy(data));
+        toast.success("Request sent successfully!", {
+          theme: "dark",
+        });
+      }
       clearForm();
       setIsOpen(false);
+
     } catch (error) {
-      console.log(error);
+      console.log('Submit error:', error);
+      console.error("Error details:", error.response ? error.response.data : error);
       toast.error("Internal server error, try again later!", {
         theme: "dark",
       });
     }
-  };
+  }
 
   const handleDelete = async (id) => {
     if (!confirm("Are you sure to delete this new consultancy request?"))
@@ -92,6 +118,9 @@ const RequestNewBrands = () => {
     try {
       await del(`/brands/${id}`);
       dispatch(deleteOneConsultancy(id));
+      toast.success("Request deleted successfully!", {
+        theme: "dark",
+      });
     } catch (error) {
       console.log(error);
       toast.error("Internal server error, try again later!", {
@@ -100,7 +129,8 @@ const RequestNewBrands = () => {
     }
   };
 
-  const fetchNewConsultancies = async () => {
+
+  const fetchNewConsultancies = useCallback(async () => {
     try {
       const data = await get(
         `/brands?limit=${limit}&page=${page}${
@@ -118,11 +148,11 @@ const RequestNewBrands = () => {
         theme: "dark",
       });
     }
-  };
+  }, [get, limit, page, filter, dispatch]);
 
   useEffect(() => {
     fetchNewConsultancies();
-  }, [limit, page, filter]);
+  }, [fetchNewConsultancies]);
 
   return (
     <>
@@ -202,7 +232,10 @@ const RequestNewBrands = () => {
                       <RequestsStatus status={r.status} />
                     </td>
                     <td className="p-3">
-                      <i onClick={() => handleEditClick(r._id)} className="fa-solid fa-pen-to-square cursor-pointer mr-3"></i>
+                      <i
+                        onClick={() => handleEditClick(r._id)}
+                        className="fa-solid fa-pen-to-square cursor-pointer mr-3"
+                      ></i>
                       <i
                         onClick={() => handleDelete(r._id)}
                         className="fa fa-trash cursor-pointer"
@@ -238,13 +271,9 @@ const RequestNewBrands = () => {
 
       {/* Custom Modal da non modificare*/}
       <CustomModal isOpen={isOpen} setIsOpen={setIsOpen}>
-        <h2 className="text-2xl font-semibold mb-4">New Brand Request</h2>
-
-        {submitted && (
-          <div className="mb-4 p-3 bg-green-100 text-green-700 rounded">
-            Request sent successfully!
-          </div>
-        )}
+        <h2 className="text-2xl font-semibold mb-4">
+          {isEditing ? "Edit request" : "Create new request"}
+        </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -271,7 +300,9 @@ const RequestNewBrands = () => {
               className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
             ></textarea>
           </div>
-          <CustomButton type="submit">Submit</CustomButton>
+          <CustomButton type="submit">
+            {isEditing ? "Update" : "Submit"}
+          </CustomButton>
         </form>
       </CustomModal>
     </>
