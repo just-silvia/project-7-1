@@ -24,15 +24,20 @@ const RequestsStatus = ({ status }) => {
 };
 
 const Consultancy = () => {
-    const { get, post, del } = useApi();
+    const { get, post, put, del } = useApi(); // AGGIUNTO: put
     const dispatch = useDispatch();
     const { all: requests } = useSelector(state => state.consultancies);
     const { user } = useSelector(state => state.auth);
 
+    
     const [form, setForm] = useState({
+        _id: "",
         request_type: "",
     });
     const [isOpen, setIsOpen] = useState(false);
+    
+    const [isEditing, setIsEditing] = useState(false);
+    
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     const [requestInfo, setRequestInfo] = useState({
@@ -43,37 +48,66 @@ const Consultancy = () => {
     const [filter, setFilter] = useState("All");
     const [searchTerm, setSearchTerm] = useState("");
 
+    
     const clearForm = () => {
         setForm({
+            _id: "",
             request_type: "",
         });
+        setIsEditing(false);
     }
 
     const handleChange = ({ target: { value, name } }) => {
         setForm((f) => ({ ...f, [name]: value }));
     }
 
+    // MODIFICATO: Gestisce sia creazione che modifica
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const data = await post("/consultancies", { ...form });
-            dispatch(addNewConsultancy(data));
+            if (isEditing) {
+                // DEBUG: Log per vedere cosa invii
+                console.log('PUT URL:', `/consultancies/${form._id}`);
+                console.log('PUT Data:', { request_type: form.request_type });
+                
+                
+                await put(`/consultancies/${form._id}`, { 
+                    request_type: form.request_type
+                });
+                toast.success("Consultancy updated successfully!", {
+                    theme: "dark",
+                });
+                fetchConsultancies(); // Refresh della lista
+            } else {
+                
+                const data = await post("/consultancies", { request_type: form.request_type });
+                dispatch(addNewConsultancy(data));
+                toast.success("Consultancy created successfully!", {
+                    theme: "dark",
+                });
+            }
             setIsOpen(false);
             clearForm();
         } catch (error) {
-            console.log(error);
+            console.error('Submit error:', error);
+            console.error('Error response:', error.response?.data);
             toast.error("Internal server error, try again later", {
                 theme: "dark",
             });
         }
     }
 
+    
     const handleEditClick = (id) => {
         const item = requests.find((el) => el._id === id);
         
         if(item){
-            setForm({ request_type: item.request_type });
+            setForm({ 
+                _id: item._id,
+                request_type: item.request_type 
+            });
+            setIsEditing(true);
             setIsOpen(true);
         }
     }
@@ -84,6 +118,9 @@ const Consultancy = () => {
         try {
             await del(`/consultancies/${consultancy_id}`);
             dispatch(deleteOneConsultancy(consultancy_id));
+            toast.success("Consultancy deleted successfully!", {
+                theme: "dark",
+            });
         } catch (error) {
             console.log(error);
             toast.error("Internal server error, try again later", {
@@ -122,7 +159,7 @@ const Consultancy = () => {
                                 value={searchTerm}
                                 onChange={(e) => {
                                     setSearchTerm(e.target.value);
-                                    setCurrentPage(1);
+                                    setPage(1); // CORRETTO: era setCurrentPage
                                 }}
                                 className="border border-neutral-300 rounded-md px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-accent w-full sm:w-auto dark:bg-gray-800 dark:text-white dark:border-neutral-600"
                             />
@@ -137,7 +174,7 @@ const Consultancy = () => {
                                     key={st}
                                     onClick={() => {
                                         setFilter(st);
-                                        setCurrentPage(1);
+                                        setPage(1); 
                                     }}
                                     className={`whitespace-nowrap px-4 py-1 rounded-full text-sm border border-neutral-200 shadow-md dark:bg-gray-800 dark:text-white dark:border-neutral-600 cursor-pointer
                                 ${filter === st ? "bg-black text-white dark:text-light" : "bg-light dark:bg-neutral-950"}`}
@@ -165,7 +202,7 @@ const Consultancy = () => {
                             </thead>
                             <tbody>
                                 {requests.map((r, i) => (
-                                    <tr key={`${r.id}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
+                                    <tr key={`${r._id}-${i}`} className="border-b border-neutral-200 dark:border-neutral-700">
                                         <td className="p-3 font-medium">{r._id}</td>
                                         <td className="p-3">{r.request_type}</td>
                                         <td className="p-3">{new Date(r.createdAt).toLocaleString()}</td>
@@ -204,7 +241,10 @@ const Consultancy = () => {
             </div>
 
             <CustomModal isOpen={isOpen} setIsOpen={setIsOpen} className="dark:bg-gray-900 dark:text-white">
-                <h2 className="text-2xl font-semibold mb-4 dark:bg-gray-900 dark:text-white">Create new request</h2>
+                
+                <h2 className="text-2xl font-semibold mb-4 dark:bg-gray-900 dark:text-white">
+                    {isEditing ? "Edit request" : "Create new request"}
+                </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4 dark:bg-gray-900 dark:text-white">
                     <div>
@@ -229,7 +269,10 @@ const Consultancy = () => {
                             className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm dark:bg-gray-900 dark:text-white"
                         ></textarea>
                     </div>
-                    <CustomButton type="submit">Submit</CustomButton>
+                    
+                    <CustomButton type="submit">
+                        {isEditing ? "Update" : "Submit"}
+                    </CustomButton>
                 </form>
             </CustomModal>
         </>
