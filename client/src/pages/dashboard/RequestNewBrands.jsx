@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import CustomButton from "../../components/shared/CustomButton";
 import CustomModal from "../../components/dashboard/CustomModal";
 import { useApi } from "../../hooks/useApi";
@@ -30,16 +30,20 @@ const RequestsStatus = ({ status }) => {
 
 const RequestNewBrands = () => {
   const dispatch = useDispatch();
-  const { get, post, del } = useApi();
-  const { user } = useSelector(state => state.auth);
+  const { get, post, put, del } = useApi(); //aggiunto PUT
+  const { user } = useSelector((state) => state.auth);
+
   const { all: requests } = useSelector((state) => state.consultancies);
 
   const [form, setForm] = useState({
+    _id: "",
     request_type: "",
   });
 
   const [isOpen, setIsOpen] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+
+  const [isEditing, setIsEditing] = useState(false);
+
   const [limit] = useState(10);
   const [page, setPage] = useState(1);
   const [requestInfo, setRequestInfo] = useState({
@@ -52,9 +56,22 @@ const RequestNewBrands = () => {
 
   const clearForm = () => {
     setForm({
+      _id: "",
       request_type: "",
     });
-    setSubmitted(false);
+    setIsEditing(false);
+  };
+
+  const handleEditClick = (id) => {
+    const item = requests.find((r) => r._id === id);
+    if (item) {
+      setForm({
+        _id: item._id,
+        request_type: item.request_type,
+      });
+      setIsEditing(true);
+      setIsOpen(true);
+    }
   };
 
   const handleChange = ({ target: { value, name } }) => {
@@ -63,17 +80,36 @@ const RequestNewBrands = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const data = await post("/brands", form);
-      dispatch(addNewConsultancy(data));
-      setSubmitted(true);
+      if (isEditing) {
+        //DEBUG: Log per vedere che cosa viene inviato
+        console.log("PUT URL:", `/brands/${form._id}`);
+        console.log("PUT Data:", { request_type: form.request_type });
+
+        await put(`/brands/${form._id}`, { request_type: form.request_type });
+        toast.success("Request updated successfully!", {
+          theme: "dark",
+        });
+        fetchNewConsultancies(); //Refresh della lista
+      } else {
+        const data = await post("/brands", { request_type: form.request_type });
+        dispatch(addNewConsultancy(data));
+        toast.success("Request sent successfully!", {
+          theme: "dark",
+        });
+      }
       clearForm();
       setIsOpen(false);
+
     } catch (error) {
-      console.log(error);
-      toast.error("Internal server error, try again later");
+      console.log('Submit error:', error);
+      console.error("Error details:", error.response ? error.response.data : error);
+      toast.error("Internal server error, try again later!", {
+        theme: "dark",
+      });
     }
-  };
+  }
 
   const handleDelete = async (id) => {
     if (!confirm("Are you sure to delete this new consultancy request?"))
@@ -82,13 +118,19 @@ const RequestNewBrands = () => {
     try {
       await del(`/brands/${id}`);
       dispatch(deleteOneConsultancy(id));
+      toast.success("Request deleted successfully!", {
+        theme: "dark",
+      });
     } catch (error) {
       console.log(error);
-      toast.error("Internal server error, try again later");
+      toast.error("Internal server error, try again later!", {
+        theme: "dark",
+      });
     }
   };
 
-  const fetchNewConsultancies = async () => {
+
+  const fetchNewConsultancies = useCallback(async () => {
     try {
       const data = await get(
         `/brands?limit=${limit}&page=${page}${
@@ -102,13 +144,15 @@ const RequestNewBrands = () => {
       });
     } catch (error) {
       console.log(error);
-      toast.error("Internal server error, try again later");
+      toast.error("Internal server error, try again later!", {
+        theme: "dark",
+      });
     }
-  };
+  }, [get, limit, page, filter, dispatch]);
 
   useEffect(() => {
     fetchNewConsultancies();
-  }, [limit, page, filter]);
+  }, [fetchNewConsultancies]);
 
   return (
     <>
@@ -131,8 +175,8 @@ const RequestNewBrands = () => {
             </div>
           </div>
 
-          <div className="flex gap-2 overflow-x-auto pb-2 mb-4 justify-between">
-            <div className="flex gap-2">
+          <div className="flex flex-col gap-2 overflow-x-auto pb-2 mb-4 justify-between sm:flex-row items-stretch sm:items-center">
+            <div className="flex flex-wrap gap-2 sm:flex-no-wrap">
               {["All", "Pending", "Completed", "Canceled"].map((st) => (
                 <button
                   key={st}
@@ -151,51 +195,57 @@ const RequestNewBrands = () => {
                 </button>
               ))}
             </div>
-            <div>
+            <div className="ml-auto">
               <CustomButton onClick={() => setIsOpen((io) => !io)}>
                 New Request
               </CustomButton>
             </div>
           </div>
 
-          <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
-            <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
-              <tr className="border-b border-neutral-200 dark:border-neutral-700">
-                <th className="p-2">Id</th>
-                <th className="p-2 hidden md:table-cell">Request Type</th>
-                <th className="p-2 hidden lg:table-cell">Created At</th>
-                <th className="p-2 hidden lg:table-cell">Last Update</th>
-                <th className="p-2">Status</th>
-                <th className="p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {requests.map((r, i) => (
-                <tr
-                  key={`${r.id}-${i}`}
-                  className="border-b border-neutral-200 dark:border-neutral-700"
-                >
-                  <td className="p-3 font-medium">{r._id}</td>
-                  <td className="p-3 hidden md:table-cell">{r.request_type}</td>
-                  <td className="p-3 hidden lg:table-cell">
-                    {new Date(r.createdAt).toLocaleString()}
-                  </td>
-                  <td className="p-3 hidden lg:table-cell">
-                    {new Date(r.updatedAt).toLocaleString()}
-                  </td>
-                  <td className="p-3">
-                    <RequestsStatus status={r.status} />
-                  </td>
-                  <td className="p-3">
-                    <i
-                      onClick={() => handleDelete(r._id)}
-                      className="fa fa-trash cursor-pointer"
-                    ></i>
-                  </td>
+          <div className="overflow-x-auto w-full">
+            <table className="w-full text-left border-spacing-y-3 overflow-hidden text-sm">
+              <thead className="text-xs uppercase border-y border-neutral-200 dark:border-neutral-700">
+                <tr className="border-b border-neutral-200 dark:border-neutral-700">
+                  <th className="p-2">Id</th>
+                  <th className="p-2">Request Type</th>
+                  <th className="p-2">Created At</th>
+                  <th className="p-2">Last Update</th>
+                  <th className="p-2">Status</th>
+                  <th className="p-2">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {requests.map((r, i) => (
+                  <tr
+                    key={`${r.id}-${i}`}
+                    className="border-b border-neutral-200 dark:border-neutral-700"
+                  >
+                    <td className="p-3 font-medium">{r._id}</td>
+                    <td className="p-3">{r.request_type}</td>
+                    <td className="p-3">
+                      {new Date(r.createdAt).toLocaleString()}
+                    </td>
+                    <td className="p-3">
+                      {new Date(r.updatedAt).toLocaleString()}
+                    </td>
+                    <td className="p-3">
+                      <RequestsStatus status={r.status} />
+                    </td>
+                    <td className="p-3">
+                      <i
+                        onClick={() => handleEditClick(r._id)}
+                        className="fa-solid fa-pen-to-square cursor-pointer mr-3"
+                      ></i>
+                      <i
+                        onClick={() => handleDelete(r._id)}
+                        className="fa fa-trash cursor-pointer"
+                      ></i>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2 text-sm text-gray-600">
             <div className="text-center sm:text-left"></div>
@@ -221,38 +271,38 @@ const RequestNewBrands = () => {
 
       {/* Custom Modal da non modificare*/}
       <CustomModal isOpen={isOpen} setIsOpen={setIsOpen}>
-        <h2 className="text-2xl font-semibold mb-4">New Brand Request</h2>
-
-        {submitted && (
-          <div className="mb-4 p-3 bg-green-100 text-green-700 rounded">
-            Request sent successfully!
-          </div>
-        )}
+        <h2 className="text-2xl font-semibold mb-4">
+          {isEditing ? "Edit request" : "Create new request"}
+        </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-                <label className="block text-sm font-medium mb-1">Your name</label>
-                <input
-                    readOnly
-                    type="text"
-                    name="name"
-                    value={`${user.first_name} ${user.last_name}`}
-                    className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
-                />
-            </div>
-            <div>
-                <label className="block text-sm font-medium mb-1">Elaborate your request</label>
-                <textarea
-                    type="text"
-                    name="request_type"
-                    value={form.request_type}
-                    onChange={handleChange}
-                    required
-                    rows={8}
-                    className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
-                ></textarea>
-            </div>
-            <CustomButton type="submit">Submit</CustomButton>
+          <div>
+            <label className="block text-sm font-medium mb-1">Your name</label>
+            <input
+              readOnly
+              type="text"
+              name="name"
+              value={`${user.first_name} ${user.last_name}`}
+              className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Elaborate your request
+            </label>
+            <textarea
+              type="text"
+              name="request_type"
+              value={form.request_type}
+              onChange={handleChange}
+              required
+              rows={8}
+              className="w-full border border-neutral-300 rounded-md px-3 py-2 text-sm"
+            ></textarea>
+          </div>
+          <CustomButton type="submit">
+            {isEditing ? "Update" : "Submit"}
+          </CustomButton>
         </form>
       </CustomModal>
     </>
